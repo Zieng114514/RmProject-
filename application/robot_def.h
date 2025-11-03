@@ -17,12 +17,16 @@
 #include "stdint.h"
 
 /* 开发板类型定义,烧录时注意不要弄错对应功能;修改定义后需要重新编译,只能存在一个定义! */
-#define ONE_BOARD // 单板控制整车
+//#define ONE_BOARD // 单板控制整车
 // #define CHASSIS_BOARD //底盘板
-// #define GIMBAL_BOARD  //云台板
+ #define GIMBAL_BOARD  //云台板
 
 #define VISION_USE_VCP  // 使用虚拟串口发送视觉数据
 // #define VISION_USE_UART // 使用串口发送视觉数据
+
+
+#define pitch_limit_up -24.0f //pitch限制
+#define pitch_limit_down 35.0f
 
 /* 机器人重要参数定义,注意根据不同机器人进行修改,浮点数需要以.0或f结尾,无符号以u结尾 */
 // 云台参数
@@ -92,9 +96,25 @@ typedef enum
 typedef enum
 {
     GIMBAL_ZERO_FORCE = 0, // 电流零输入
-    GIMBAL_FREE_MODE,      // 云台自由运动模式,即与底盘分离(底盘此时应为NO_FOLLOW)反馈值为电机total_angle;似乎可以改为全部用IMU数据?
-    GIMBAL_GYRO_MODE,      // 云台陀螺仪反馈模式,反馈值为陀螺仪pitch,total_yaw_angle,底盘可以为小陀螺和跟随模式
+    GIMBAL_FREE_MODE,      // 云台自由运动模式,即与底盘分离(底盘此时应为NO_FOLLOW)反馈值为电机angle;似乎可以改为全部用IMU数据?
+    GIMBAL_GYRO_MODE,      // 云台陀螺仪反馈模式,反馈值为陀螺仪pitch/yaw单圈角度(无多圈处理),适用于无人机云台
 } gimbal_mode_e;
+
+// 云台遥控器控制模式
+typedef enum
+{
+    GIMBAL_RC_STABILIZE_MODE = 0, // 自稳模式：摇杆回中时云台保持当前IMU角度
+    GIMBAL_RC_MANUAL_MODE,        // 手动模式：摇杆增量式控制，类似穿越机手动模式
+} gimbal_rc_ctrl_mode_e;
+
+// 遥控器开关位置枚举（用于模式绑定配置）
+typedef enum
+{
+    RC_SWITCH_UP = 0,      // 开关上档
+    RC_SWITCH_MID,         // 开关中档
+    RC_SWITCH_DOWN,        // 开关下档
+    RC_SWITCH_NONE,        // 不使用此开关控制模式
+} rc_switch_position_e;
 
 // 发射模式设置
 typedef enum

@@ -169,6 +169,9 @@ DJIMotorInstance *DJIMotorInit(Motor_Init_Config_s *config)
     PIDInit(&instance->motor_controller.current_PID, &config->controller_param_init_config.current_PID);
     PIDInit(&instance->motor_controller.speed_PID, &config->controller_param_init_config.speed_PID);
     PIDInit(&instance->motor_controller.angle_PID, &config->controller_param_init_config.angle_PID);
+    // 初始化IMU外环PID控制器（用于四环串级控制）
+    PIDInit(&instance->motor_controller.imu_angle_PID, &config->controller_param_init_config.imu_angle_PID);
+    PIDInit(&instance->motor_controller.imu_speed_PID, &config->controller_param_init_config.imu_speed_PID);
     instance->motor_controller.other_angle_feedback_ptr = config->controller_param_init_config.other_angle_feedback_ptr;
     instance->motor_controller.other_speed_feedback_ptr = config->controller_param_init_config.other_speed_feedback_ptr;
     instance->motor_controller.current_feedforward_ptr = config->controller_param_init_config.current_feedforward_ptr;
@@ -253,9 +256,34 @@ void DJIMotorControl()
             pid_ref *= -1; // 设置反转
 
         // pid_ref会顺次通过被启用的闭环充当数据的载体
-        // 计算位置环,只有启用位置环且外层闭环为位置时会计算速度环输出
+        // 四环串级控制流程：IMU角度 -> IMU角速度 -> 电机位置 -> 电机速度
+        
+        // 第一环：IMU角度环（最外环）- 仅当设置了other_angle_feedback_ptr且IMU PID有效时启用
+        if (motor_controller->other_angle_feedback_ptr != NULL && motor_controller->imu_angle_PID.Kp != 0)
+        {
+            // 根据imu_reverse_flag决定是否对IMU反馈取反
+            pid_measure = *motor_controller->other_angle_feedback_ptr;
+            if (motor_setting->imu_reverse_flag == MOTOR_DIRECTION_REVERSE)
+                pid_measure = -pid_measure;
+            // IMU角度环输出作为IMU角速度环的设定值
+            pid_ref = PIDCalculate(&motor_controller->imu_angle_PID, pid_measure, pid_ref);
+            
+            // 第二环：IMU角速度环 - 仅当设置了other_speed_feedback_ptr且IMU速度PID有效时启用
+            if (motor_controller->other_speed_feedback_ptr != NULL && motor_controller->imu_speed_PID.Kp != 0)
+            {
+                pid_measure = *motor_controller->other_speed_feedback_ptr;
+                // 如果IMU角度反馈取反，角速度反馈也应该取反（保持一致）
+                if (motor_setting->imu_reverse_flag == MOTOR_DIRECTION_REVERSE)
+                    pid_measure = -pid_measure;
+                // IMU角速度环输出作为电机位置环的设定值
+                pid_ref = PIDCalculate(&motor_controller->imu_speed_PID, pid_measure, pid_ref);
+            }
+        }
+        
+        // 第三环：电机位置环,只有启用位置环且外层闭环为位置时会计算
         if ((motor_setting->close_loop_type & ANGLE_LOOP) && motor_setting->outer_loop_type == ANGLE_LOOP)
         {
+            // 当使用IMU角度环时，位置环使用电机编码器反馈
             if (motor_setting->angle_feedback_source == OTHER_FEED)
                 pid_measure = *motor_controller->other_angle_feedback_ptr;
             else

@@ -43,7 +43,7 @@ void RobotInit()
     // 云台子系统：本项目配置为 yaw=GM6020（DJI 闭环）、pitch=DM4310（力控开环）
     GimbalInit();
     // 发射子系统：如需启用，请打开 ShootInit()
-    // ShootInit();
+    ShootInit();
 #endif
 
     // 底盘子系统：负责底盘运动学解算与功率受限输出
@@ -67,7 +67,7 @@ void RobotTask()
     // 云台核心任务：根据模式（陀螺/自由）与期望值驱动 yaw/pitch
     GimbalTask();
     // 发射核心任务：若启用发射功能，则开启
-    // ShootTask();
+    ShootTask();
 #endif
 
 #if defined(ONE_BOARD) || defined(CHASSIS_BOARD)

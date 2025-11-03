@@ -39,8 +39,8 @@ attitude_t *Chassis_IMU_data;
 static Publisher_t *chassis_pub;                    // 用于发布底盘的数据
 static Subscriber_t *chassis_sub;                   // 用于订阅底盘的控制命令
 #endif                                              // !ONE_BOARD
-static Chassis_Ctrl_Cmd_s chassis_cmd_recv;         // 底盘接收到的控制命令
-static Chassis_Upload_Data_s chassis_feedback_data; // 底盘回传的反馈数据
+// static Chassis_Ctrl_Cmd_s chassis_cmd_recv;         // 底盘接收到的控制命令
+//static Chassis_Upload_Data_s chassis_feedback_data; // 底盘回传的反馈数据
 
 static PIDInstance buffer_PID;             // 用于底盘的缓冲能量PID
 static referee_info_t *referee_data;       // 用于获取裁判系统的数据
@@ -53,8 +53,8 @@ static DJIMotorInstance *motor_lf, *motor_rf, *motor_lb, *motor_rb; // left righ
 // static float t;
 
 /* 私有函数计算的中介变量,设为静态避免参数传递的开销 */
-static float chassis_vx, chassis_vy;                      // 将云台系的速度投影到底盘
-static float vt_lf, vt_rf, vt_lb, vt_rb;                  // 底盘速度解算后的临时输出,待进行限幅
+// static float chassis_vx, chassis_vy;                      // 将云台系的速度投影到底盘
+// static float vt_lf, vt_rf, vt_lb, vt_rb;                  // 底盘速度解算后的临时输出,待进行限幅
 
 void ChassisInit()
 {
@@ -148,116 +148,116 @@ void ChassisInit()
  * @brief 计算每个轮毂电机的输出,正运动学解算
  *        用宏进行预替换减小开销,运动解算具体过程参考教程
  */
-static void MecanumCalculate()
-{
-    vt_lf = -chassis_vx - chassis_vy - chassis_cmd_recv.wz * LF_CENTER;
-    vt_rf = -chassis_vx + chassis_vy - chassis_cmd_recv.wz * RF_CENTER;
-    vt_lb = chassis_vx - chassis_vy - chassis_cmd_recv.wz * LB_CENTER;
-    vt_rb = chassis_vx + chassis_vy - chassis_cmd_recv.wz * RB_CENTER;
-}
+// static void MecanumCalculate()
+// {
+//     vt_lf = -chassis_vx - chassis_vy - chassis_cmd_recv.wz * LF_CENTER;
+//     vt_rf = -chassis_vx + chassis_vy - chassis_cmd_recv.wz * RF_CENTER;
+//     vt_lb = chassis_vx - chassis_vy - chassis_cmd_recv.wz * LB_CENTER;
+//     vt_rb = chassis_vx + chassis_vy - chassis_cmd_recv.wz * RB_CENTER;
+// }
 
 /**
  * @brief 根据裁判系统和电容剩余容量对输出进行限制并设置电机参考值
  *
  */
-static void LimitChassisOutput()
-{
-    // 功率限制待添加
-    // referee_data->PowerHeatData.chassis_power;
-    // referee_data->PowerHeatData.chassis_power_buffer;
-
-    // 完成功率限制后进行电机参考输入设定
-    DJIMotorSetRef(motor_lf, vt_lf);
-    DJIMotorSetRef(motor_rf, vt_rf);
-    DJIMotorSetRef(motor_lb, vt_lb);
-    DJIMotorSetRef(motor_rb, vt_rb);
-}
+// static void LimitChassisOutput()
+// {
+//     // 功率限制待添加
+//     // referee_data->PowerHeatData.chassis_power;
+//     // referee_data->PowerHeatData.chassis_power_buffer;
+//
+//     // 完成功率限制后进行电机参考输入设定
+//     DJIMotorSetRef(motor_lf, vt_lf);
+//     DJIMotorSetRef(motor_rf, vt_rf);
+//     DJIMotorSetRef(motor_lb, vt_lb);
+//     DJIMotorSetRef(motor_rb, vt_rb);
+// }
 
 /**
  * @brief 根据每个轮子的速度反馈,计算底盘的实际运动速度,逆运动解算
  *        对于双板的情况,考虑增加来自底盘板IMU的数据
  *
  */
-static void EstimateSpeed()
-{
-    // 根据电机速度和陀螺仪的角速度进行解算,还可以利用加速度计判断是否打滑(如果有)
-    // chassis_feedback_data.vx vy wz =
-    //  ...
-}
+// static void EstimateSpeed()
+// {
+//     // 根据电机速度和陀螺仪的角速度进行解算,还可以利用加速度计判断是否打滑(如果有)
+//     // chassis_feedback_data.vx vy wz =
+//     //  ...
+// }
 
 /* 机器人底盘控制核心任务 */
 void ChassisTask()
 {
-    // 后续增加没收到消息的处理(双板的情况)
-    // 获取新的控制信息
-#ifdef ONE_BOARD
-    SubGetMessage(chassis_sub, &chassis_cmd_recv);
-#endif
-#ifdef CHASSIS_BOARD
-    chassis_cmd_recv = *(Chassis_Ctrl_Cmd_s *)CANCommGet(chasiss_can_comm);
-#endif // CHASSIS_BOARD
-
-    SetPowerLimit(referee_data->GameRobotState.chassis_power_limit);//设置功率限制
-    if (chassis_cmd_recv.chassis_mode == CHASSIS_ZERO_FORCE)
-    { // 如果出现重要模块离线或遥控器设置为急停,让电机停止
-        DJIMotorStop(motor_lf);
-        DJIMotorStop(motor_rf);
-        DJIMotorStop(motor_lb);
-        DJIMotorStop(motor_rb);
-    }
-    else
-    { // 正常工作
-        DJIMotorEnable(motor_lf);
-        DJIMotorEnable(motor_rf);
-        DJIMotorEnable(motor_lb);
-        DJIMotorEnable(motor_rb);
-    }
-
-    // 根据控制模式设定旋转速度
-    switch (chassis_cmd_recv.chassis_mode)
-    {
-    case CHASSIS_NO_FOLLOW: // 底盘不旋转,但维持全向机动,一般用于调整云台姿态
-        chassis_cmd_recv.wz = 0;
-        break;
-    case CHASSIS_FOLLOW_GIMBAL_YAW: // 跟随云台,不单独设置pid,以误差角度平方为速度输出
-        chassis_cmd_recv.wz = -1.5f * chassis_cmd_recv.offset_angle * abs(chassis_cmd_recv.offset_angle);
-        break;
-    case CHASSIS_ROTATE: // 自旋,同时保持全向机动;当前wz维持定值,后续增加不规则的变速策略
-        chassis_cmd_recv.wz = 4000;
-        break;
-    default:
-        break;
-    }
-
-    // 根据云台和底盘的角度offset将控制量映射到底盘坐标系上
-    // 底盘逆时针旋转为角度正方向;云台命令的方向以云台指向的方向为x,采用右手系(x指向正北时y在正东)
-    static float sin_theta, cos_theta;
-    cos_theta = arm_cos_f32(chassis_cmd_recv.offset_angle * DEGREE_2_RAD);
-    sin_theta = arm_sin_f32(chassis_cmd_recv.offset_angle * DEGREE_2_RAD);
-    chassis_vx = chassis_cmd_recv.vx * cos_theta - chassis_cmd_recv.vy * sin_theta;
-    chassis_vy = chassis_cmd_recv.vx * sin_theta + chassis_cmd_recv.vy * cos_theta;
-
-    // 根据控制模式进行正运动学解算,计算底盘输出
-    MecanumCalculate();
-
-    // 根据裁判系统的反馈数据和电容数据对输出限幅并设定闭环参考值
-    LimitChassisOutput();
-
-    // 根据电机的反馈速度和IMU(如果有)计算真实速度
-    EstimateSpeed();
-
-    // // 获取裁判系统数据   建议将裁判系统与底盘分离，所以此处数据应使用消息中心发送
-    // // 我方颜色id小于7是红色,大于7是蓝色,注意这里发送的是对方的颜色, 0:blue , 1:red
-    // chassis_feedback_data.enemy_color = referee_data->GameRobotState.robot_id > 7 ? 1 : 0;
-    // // 当前只做了17mm热量的数据获取,后续根据robot_def中的宏切换双枪管和英雄42mm的情况
-    // chassis_feedback_data.bullet_speed = referee_data->GameRobotState.shooter_id1_17mm_speed_limit;
-    // chassis_feedback_data.rest_heat = referee_data->PowerHeatData.shooter_heat0;
-
-    // 推送反馈消息
-#ifdef ONE_BOARD
-    PubPushMessage(chassis_pub, (void *)&chassis_feedback_data);
-#endif
-#ifdef CHASSIS_BOARD
-    CANCommSend(chasiss_can_comm, (void *)&chassis_feedback_data);
-#endif // CHASSIS_BOARD
+//     // 后续增加没收到消息的处理(双板的情况)
+//     // 获取新的控制信息
+// #ifdef ONE_BOARD
+//     SubGetMessage(chassis_sub, &chassis_cmd_recv);
+// #endif
+// #ifdef CHASSIS_BOARD
+//     chassis_cmd_recv = *(Chassis_Ctrl_Cmd_s *)CANCommGet(chasiss_can_comm);
+// #endif // CHASSIS_BOARD
+//
+//     SetPowerLimit(referee_data->GameRobotState.chassis_power_limit);//设置功率限制
+//     if (chassis_cmd_recv.chassis_mode == CHASSIS_ZERO_FORCE)
+//     { // 如果出现重要模块离线或遥控器设置为急停,让电机停止
+//         DJIMotorStop(motor_lf);
+//         DJIMotorStop(motor_rf);
+//         DJIMotorStop(motor_lb);
+//         DJIMotorStop(motor_rb);
+//     }
+//     else
+//     { // 正常工作
+//         DJIMotorEnable(motor_lf);
+//         DJIMotorEnable(motor_rf);
+//         DJIMotorEnable(motor_lb);
+//         DJIMotorEnable(motor_rb);
+//     }
+//
+//     // 根据控制模式设定旋转速度
+//     switch (chassis_cmd_recv.chassis_mode)
+//     {
+//     case CHASSIS_NO_FOLLOW: // 底盘不旋转,但维持全向机动,一般用于调整云台姿态
+//         chassis_cmd_recv.wz = 0;
+//         break;
+//     case CHASSIS_FOLLOW_GIMBAL_YAW: // 跟随云台,不单独设置pid,以误差角度平方为速度输出
+//         chassis_cmd_recv.wz = -1.5f * chassis_cmd_recv.offset_angle * abs(chassis_cmd_recv.offset_angle);
+//         break;
+//     case CHASSIS_ROTATE: // 自旋,同时保持全向机动;当前wz维持定值,后续增加不规则的变速策略
+//         chassis_cmd_recv.wz = 4000;
+//         break;
+//     default:
+//         break;
+//     }
+//
+//     // 根据云台和底盘的角度offset将控制量映射到底盘坐标系上
+//     // 底盘逆时针旋转为角度正方向;云台命令的方向以云台指向的方向为x,采用右手系(x指向正北时y在正东)
+//     static float sin_theta, cos_theta;
+//     cos_theta = arm_cos_f32(chassis_cmd_recv.offset_angle * DEGREE_2_RAD);
+//     sin_theta = arm_sin_f32(chassis_cmd_recv.offset_angle * DEGREE_2_RAD);
+//     chassis_vx = chassis_cmd_recv.vx * cos_theta - chassis_cmd_recv.vy * sin_theta;
+//     chassis_vy = chassis_cmd_recv.vx * sin_theta + chassis_cmd_recv.vy * cos_theta;
+//
+//     // 根据控制模式进行正运动学解算,计算底盘输出
+//     MecanumCalculate();
+//
+//     // 根据裁判系统的反馈数据和电容数据对输出限幅并设定闭环参考值
+//     LimitChassisOutput();
+//
+//     // 根据电机的反馈速度和IMU(如果有)计算真实速度
+//     EstimateSpeed();
+//
+//     // // 获取裁判系统数据   建议将裁判系统与底盘分离，所以此处数据应使用消息中心发送
+//     // // 我方颜色id小于7是红色,大于7是蓝色,注意这里发送的是对方的颜色, 0:blue , 1:red
+//     // chassis_feedback_data.enemy_color = referee_data->GameRobotState.robot_id > 7 ? 1 : 0;
+//     // // 当前只做了17mm热量的数据获取,后续根据robot_def中的宏切换双枪管和英雄42mm的情况
+//     // chassis_feedback_data.bullet_speed = referee_data->GameRobotState.shooter_id1_17mm_speed_limit;
+//     // chassis_feedback_data.rest_heat = referee_data->PowerHeatData.shooter_heat0;
+//
+//     // 推送反馈消息
+// #ifdef ONE_BOARD
+//     PubPushMessage(chassis_pub, (void *)&chassis_feedback_data);
+// #endif
+// #ifdef CHASSIS_BOARD
+//     CANCommSend(chasiss_can_comm, (void *)&chassis_feedback_data);
+// #endif // CHASSIS_BOARD
 }

@@ -75,6 +75,7 @@ typedef struct
     Closeloop_Type_e close_loop_type;              // 使用几个闭环(串级)
     Motor_Reverse_Flag_e motor_reverse_flag;       // 是否反转
     Feedback_Reverse_Flag_e feedback_reverse_flag; // 反馈是否反向
+    Motor_Reverse_Flag_e imu_reverse_flag;         // IMU反馈是否反向（用于IMU闭环）
     Feedback_Source_e angle_feedback_source;       // 角度反馈类型
     Feedback_Source_e speed_feedback_source;       // 速度反馈类型
     Feedfoward_Type_e feedforward_flag;            // 前馈标志
@@ -93,6 +94,9 @@ typedef struct
     PIDInstance current_PID;
     PIDInstance speed_PID;
     PIDInstance angle_PID;
+    // IMU外环PID控制器（用于四环串级控制：IMU角度-IMU角速度-电机位置-电机速度）
+    PIDInstance imu_angle_PID;    // IMU角度环PID
+    PIDInstance imu_speed_PID;    // IMU角速度环PID
 
     float pid_ref; // 将会作为每个环的输入和输出顺次通过串级闭环
 } Motor_Controller_s;
@@ -124,6 +128,9 @@ typedef struct
     PID_Init_Config_s current_PID;
     PID_Init_Config_s speed_PID;
     PID_Init_Config_s angle_PID;
+    // IMU外环PID配置（用于四环串级控制）
+    PID_Init_Config_s imu_angle_PID;  // IMU角度环PID配置
+    PID_Init_Config_s imu_speed_PID;  // IMU角速度环PID配置
 } Motor_Controller_Init_s;
 
 /* 用于初始化CAN电机的结构体,各类电机通用 */

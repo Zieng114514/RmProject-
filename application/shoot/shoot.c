@@ -7,7 +7,9 @@
 #include "general_def.h"
 
 /* 对于双发射机构的机器人,将下面的数据封装成结构体即可,生成两份shoot应用实例 */
-static DJIMotorInstance *friction_l, *friction_r, *loader; // 拨盘电机
+static DJIMotorInstance *friction_l;
+static DJIMotorInstance *friction_r;
+static DJIMotorInstance *loader; // 拨盘电机
 // static servo_instance *lid; 需要增加弹舱盖
 
 static Publisher_t *shoot_pub;
@@ -18,6 +20,13 @@ static Shoot_Upload_Data_s shoot_feedback_data; // 来自cmd的发射控制信�
 // dwt定时,计算冷却用
 static float hibernate_time = 0, dead_time = 0;
 
+// 摩擦轮缓启动参数
+#define FRICTION_TARGET_SPEED 30000      // 摩擦轮目标速度
+#define FRICTION_RAMP_RATE 100.0f       // 摩擦轮缓启动加速度(每个任务周期增加的速度值)
+                                          // 任务周期约5ms(200Hz),1500意味着约100ms达到目标速度
+static float current_friction_ref_l = 0; // 左摩擦轮当前设定值
+static float current_friction_ref_r = 0; // 右摩擦轮当前设定值
+
 void ShootInit()
 {
     // 左摩擦轮
@@ -27,7 +36,7 @@ void ShootInit()
         },
         .controller_param_init_config = {
             .speed_PID = {
-                .Kp = 0, // 20
+                .Kp = 5, // 20
                 .Ki = 0, // 1
                 .Kd = 0,
                 .Improve = PID_Integral_Limit,
@@ -35,7 +44,7 @@ void ShootInit()
                 .MaxOut = 15000,
             },
             .current_PID = {
-                .Kp = 0, // 0.7
+                .Kp = 0.5, // 0.7
                 .Ki = 0, // 0.1
                 .Kd = 0,
                 .Improve = PID_Integral_Limit,
@@ -52,42 +61,42 @@ void ShootInit()
             .motor_reverse_flag = MOTOR_DIRECTION_NORMAL,
         },
         .motor_type = M3508};
-    friction_config.can_init_config.tx_id = 1,
+    friction_config.can_init_config.tx_id = 2,
     friction_l = DJIMotorInit(&friction_config);
 
-    friction_config.can_init_config.tx_id = 2; // 右摩擦轮,改txid和方向就行
+    friction_config.can_init_config.tx_id = 3; // 右摩擦轮,改txid和方向就行
     friction_config.controller_setting_init_config.motor_reverse_flag = MOTOR_DIRECTION_REVERSE;
     friction_r = DJIMotorInit(&friction_config);
 
     // 拨盘电机
     Motor_Init_Config_s loader_config = {
         .can_init_config = {
-            .can_handle = &hcan1,
+            .can_handle = &hcan2,
             .tx_id = 4,
         },
         .controller_param_init_config = {
             .angle_PID = {
                 // 如果启用位置环来控制发弹,需要较大的I值保证输出力矩的线性度否则出现接近拨出的力矩大幅下降
-                .Kp = 0, // 10
+                .Kp = 10, // 10
                 .Ki = 0,
                 .Kd = 0,
                 .MaxOut = 200,
             },
             .speed_PID = {
-                .Kp = 0, // 10
-                .Ki = 0, // 1
+                .Kp = 5, // 10
+                .Ki = 1, // 1
                 .Kd = 0,
                 .Improve = PID_Integral_Limit,
                 .IntegralLimit = 5000,
-                .MaxOut = 5000,
+                .MaxOut = 8000,
             },
             .current_PID = {
-                .Kp = 0, // 0.7
-                .Ki = 0, // 0.1
+                .Kp = 1.3, // 0.7
+                .Ki = 0.2, // 0.1
                 .Kd = 0,
                 .Improve = PID_Integral_Limit,
                 .IntegralLimit = 5000,
-                .MaxOut = 5000,
+                .MaxOut = 10000,
             },
         },
         .controller_setting_init_config = {
@@ -154,7 +163,7 @@ void ShootTask()
     // 连发模式,对速度闭环,射频后续修改为可变,目前固定为1Hz
     case LOAD_BURSTFIRE:
         DJIMotorOuterLoop(loader, SPEED_LOOP);
-        DJIMotorSetRef(loader, shoot_cmd_recv.shoot_rate * 360 * REDUCTION_RATIO_LOADER / 8);
+        DJIMotorSetRef(loader, 7000);
         // x颗/秒换算成速度: 已知一圈的载弹量,由此计算出1s需要转的角度,注意换算角速度(DJIMotor的速度单位是angle per second)
         break;
     // 拨盘反转,对速度闭环,后续增加卡弹检测(通过裁判系统剩余热量反馈和电机电流)
@@ -171,42 +180,76 @@ void ShootTask()
     // 确定是否开启摩擦轮,后续可能修改为键鼠模式下始终开启摩擦轮(上场时建议一直开启)
     if (shoot_cmd_recv.friction_mode == FRICTION_ON)
     {
-        // 根据收到的弹速设置设定摩擦轮电机参考值,需实测后填入
+        // 根据收到的弹速设置设定摩擦轮目标值
+        float target_friction_speed = 0;
         switch (shoot_cmd_recv.bullet_speed)
         {
         case SMALL_AMU_15:
-            DJIMotorSetRef(friction_l, 0);
-            DJIMotorSetRef(friction_r, 0);
+            target_friction_speed = 0;
             break;
         case SMALL_AMU_18:
-            DJIMotorSetRef(friction_l, 0);
-            DJIMotorSetRef(friction_r, 0);
+            target_friction_speed = 0;
             break;
         case SMALL_AMU_30:
-            DJIMotorSetRef(friction_l, 0);
-            DJIMotorSetRef(friction_r, 0);
+            target_friction_speed = 0;
             break;
-        default: // 当前为了调试设定的默认值4000,因为还没有加入裁判系统无法读取弹速.
-            DJIMotorSetRef(friction_l, 30000);
-            DJIMotorSetRef(friction_r, 30000);
+        default: // 当前为了调试设定的默认值,因为还没有加入裁判系统无法读取弹速.
+            target_friction_speed = FRICTION_TARGET_SPEED;
             break;
         }
+        
+        // 摩擦轮缓启动: 线性插值逐渐增加到目标速度
+        if (current_friction_ref_l < target_friction_speed)
+        {
+            current_friction_ref_l += FRICTION_RAMP_RATE;
+            if (current_friction_ref_l > target_friction_speed)
+                current_friction_ref_l = target_friction_speed;
+        }
+        else if (current_friction_ref_l > target_friction_speed)
+        {
+            current_friction_ref_l -= FRICTION_RAMP_RATE;
+            if (current_friction_ref_l < target_friction_speed)
+                current_friction_ref_l = target_friction_speed;
+        }
+        
+        if (current_friction_ref_r < target_friction_speed)
+        {
+            current_friction_ref_r += FRICTION_RAMP_RATE;
+            if (current_friction_ref_r > target_friction_speed)
+                current_friction_ref_r = target_friction_speed;
+        }
+        else if (current_friction_ref_r > target_friction_speed)
+        {
+            current_friction_ref_r -= FRICTION_RAMP_RATE;
+            if (current_friction_ref_r < target_friction_speed)
+                current_friction_ref_r = target_friction_speed;
+        }
+        
+        // 设置摩擦轮电机参考值
+        DJIMotorSetRef(friction_l, current_friction_ref_l);
+        DJIMotorSetRef(friction_r, current_friction_ref_r);
     }
     else // 关闭摩擦轮
     {
+        // 快速停止摩擦轮并重置缓启动状态
+        DJIMotorSetRef(loader, 0);
         DJIMotorSetRef(friction_l, 0);
         DJIMotorSetRef(friction_r, 0);
+        current_friction_ref_l = 0;
+        current_friction_ref_r = 0;
+        DJIMotorStop(friction_l);
+        DJIMotorStop(friction_r);
     }
 
-    // 开关弹舱盖
-    if (shoot_cmd_recv.lid_mode == LID_CLOSE)
-    {
-        //...
-    }
-    else if (shoot_cmd_recv.lid_mode == LID_OPEN)
-    {
-        //...
-    }
+    // // 开关弹舱盖
+    // if (shoot_cmd_recv.lid_mode == LID_CLOSE)
+    // {
+    //     //...
+    // }
+    // else if (shoot_cmd_recv.lid_mode == LID_OPEN)
+    // {
+    //     //...
+    // }
 
     // 反馈数据,目前暂时没有要设定的反馈数据,后续可能增加应用离线监测以及卡弹反馈
     PubPushMessage(shoot_pub, (void *)&shoot_feedback_data);
