@@ -85,6 +85,9 @@ void RobotCMDInit()
     
     // 初始化发射控制参数
     shoot_cmd_send.shoot_mode = SHOOT_ON; // 启用发射模式
+    
+    // 初始化CAN视觉通信模块
+
 }
 
 /**
@@ -165,6 +168,7 @@ void RobotCMDTask()
 {
     SubGetMessage(gimbal_feed_sub, &gimbal_fetch_data); // gimbal发布者获取遥控器数据
     SubGetMessage(shoot_feed_sub, &shoot_fetch_data); //shoot发布者获取遥控器数据
+    
     // if (switch_is_up(c.remote_left))
     // {
     //    // AutoControlSet();

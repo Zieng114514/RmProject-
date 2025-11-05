@@ -23,6 +23,7 @@
 #include "gimbal.h"
 #include "shoot.h"
 #include "robot_cmd.h"
+#include "can_vision.h"
 #endif
 
 
@@ -44,6 +45,8 @@ void RobotInit()
     GimbalInit();
     // 发射子系统：如需启用，请打开 ShootInit()
     ShootInit();
+
+    CanVisionInit();
 #endif
 
     // 底盘子系统：负责底盘运动学解算与功率受限输出
@@ -62,6 +65,15 @@ void RobotInit()
 void RobotTask()
 {
 #if defined(ONE_BOARD) || defined(GIMBAL_BOARD)
+    // CAN视觉通信任务：发送四元数数据到上位机
+    static uint8_t can_vision_counter = 0; // 用于控制CAN视觉发送频率（100Hz）
+    can_vision_counter++;
+    if (can_vision_counter >= 2) // 200Hz任务中每2次调用发送一次，实现100Hz频率
+    {
+        can_vision_counter = 0;
+        CanVisionTask(); // 发送四元数数据
+    }
+    
     // 指令分发核心任务：消费外部输入并发布到各子系统
     RobotCMDTask();
     // 云台核心任务：根据模式（陀螺/自由）与期望值驱动 yaw/pitch
