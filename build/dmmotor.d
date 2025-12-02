@@ -42,7 +42,6 @@ build/dmmotor.o: modules/motor/DMmotor/dmmotor.c \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h \
- modules/daemon/daemon.h modules/motor/motor_def.h \
  modules/algorithm/controller.h Inc/main.h bsp/dwt/bsp_dwt.h \
  bsp/log/bsp_log.h Middlewares/Third_Party/SEGGER/RTT/SEGGER_RTT.h \
  Middlewares/Third_Party/SEGGER/RTT/../Config/SEGGER_RTT_Conf.h \
@@ -79,6 +78,7 @@ build/dmmotor.o: modules/motor/DMmotor/dmmotor.c \
  Middlewares/ST/ARM/DSP/Include/dsp/support_functions.h \
  Middlewares/ST/ARM/DSP/Include/dsp/quaternion_math_functions.h \
  Middlewares/ST/ARM/DSP/Include/dsp/window_functions.h \
+ modules/motor/motor_def.h modules/daemon/daemon.h \
  Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  Inc/FreeRTOSConfig.h \
@@ -95,7 +95,9 @@ build/dmmotor.o: modules/motor/DMmotor/dmmotor.c \
  Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
- Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
+ Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
+ modules/general_def.h modules/algorithm/user_lib.h \
+ Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h
 modules/motor/DMmotor/dmmotor.h:
 bsp/can/bsp_can.h:
 Inc/can.h:
@@ -144,8 +146,6 @@ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h:
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h:
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h:
-modules/daemon/daemon.h:
-modules/motor/motor_def.h:
 modules/algorithm/controller.h:
 Inc/main.h:
 bsp/dwt/bsp_dwt.h:
@@ -185,6 +185,8 @@ Middlewares/ST/ARM/DSP/Include/dsp/filtering_functions.h:
 Middlewares/ST/ARM/DSP/Include/dsp/support_functions.h:
 Middlewares/ST/ARM/DSP/Include/dsp/quaternion_math_functions.h:
 Middlewares/ST/ARM/DSP/Include/dsp/window_functions.h:
+modules/motor/motor_def.h:
+modules/daemon/daemon.h:
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 Inc/FreeRTOSConfig.h:
@@ -202,3 +204,6 @@ Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
+modules/general_def.h:
+modules/algorithm/user_lib.h:
+Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h:

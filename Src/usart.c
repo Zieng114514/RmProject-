@@ -21,7 +21,7 @@
 #include "usart.h"
 
 /* USER CODE BEGIN 0 */
-
+#include "robot_def.h"
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart1;
@@ -46,7 +46,13 @@ void MX_USART1_UART_Init(void)
 
   /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
+#if defined USE_CRSF
+
+  huart1.Init.BaudRate = 420000; // ELRS 正常波特率
+#elif   defined UART1_NORMAL
   huart1.Init.BaudRate = 921600;
+#endif
+
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;

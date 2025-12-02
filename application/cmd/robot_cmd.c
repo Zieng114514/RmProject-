@@ -9,9 +9,44 @@
 #include "general_def.h"
 #include "dji_motor.h"
 #include "bmi088.h"
+#include "elrs.h"
 // bsp
 #include "bsp_dwt.h"
 #include "bsp_log.h"
+
+
+/*
+    空中无人机robot_cmd.c说明
+    --------------------------------------------------
+    该任务负责整个机器人的遥控器输入操作命令处理
+
+    实现了SBUS和ELRS接收机的兼容
+    如果使用SBUS接收机只需要去robot_def中修改
+    如果使用ELRS接收机则
+
+    //#define UART1_NORMAL
+    #define USE_CRSF
+    //#define USE_SBUS
+
+    默认ELRS接收机接到了UART1上 如果接到其他接口需要修改串口波特率为
+
+    huart1.Init.BaudRate = 420000; // ELRS 正常波特率
+
+    如果需要使用官方的DT7或者SBUS则使用
+
+    #define UART1_NORMAL
+    //#define USE_CRSF
+    #define USE_SBUS
+
+    如果UART1上需要接其他外设则
+
+    #define UART1_NORMAL
+    //#define USE_CRSF
+    #define USE_SBUS
+
+*/
+
+
 
 // 私有宏,自动将编码器转换成角度值
 #define YAW_ALIGN_ANGLE (YAW_CHASSIS_ALIGN_ECD * ECD_ANGLE_COEF_DJI) // 对齐时的角度,0-360
@@ -29,7 +64,11 @@ static Subscriber_t *chassis_feed_sub; // 底盘反馈信息订阅者
 
 static Chassis_Ctrl_Cmd_s chassis_cmd_send;      // 发送给底盘应用的信息,包括控制信息和UI绘制相关
 
+#if defined USE_SBUS
 static RC_ctrl_t *rc_data;              // 遥控器数据,初始化时返回
+ #elif defined USE_CRSF
+static ELRS_Data *elrs_data_ptr; // ELRS数据指针
+#endif
 
 
 static Publisher_t *gimbal_cmd_pub;            // 云台控制消息发布者
@@ -44,6 +83,8 @@ static Shoot_Upload_Data_s shoot_fetch_data; // 从发射获取的反馈信息
 
 static Robot_Status_e robot_state; // 机器人整体工作状态
 
+
+
 BMI088Instance *bmi088_test; // 云台IMU
 BMI088_Data_t bmi088_data;
 
@@ -53,7 +94,13 @@ BMI088_Data_t bmi088_data;
 
 void RobotCMDInit()
 {
-   rc_data = RemoteControlInit(&huart3);   // 修改为对应串口,注意如果是自研板dbus协议串口需选用添加了反相器的那个
+
+#if defined USE_SBUS
+    rc_data = RemoteControlInit(&huart3);   // 修改为对应串口,注意如果是自研板dbus协议串口需选用添加了反相器的那个
+#elif defined USE_CRSF
+    elrs_data_ptr = ELRS_Init(&huart1); // 初始化ELRS并获取数据指针
+#endif
+
 
 
     gimbal_cmd_pub = PubRegister("gimbal_cmd", sizeof(Gimbal_Ctrl_Cmd_s));
@@ -119,6 +166,10 @@ static void CalcOffsetAngle()
 
 static void RemoteControlSet()
 {
+
+#if defined USE_SBUS
+
+
     // 控制底盘和云台运行模式,云台待添加,云台是否始终使用IMU数据?
     if (switch_is_down(rc_data[TEMP].rc.switch_right)) // 右侧开关状态[下],底盘跟随云台
     {
@@ -157,6 +208,9 @@ static void RemoteControlSet()
     }
     // 射频控制,固定每秒1发,后续可以根据左侧拨轮的值大小切换射频,
     shoot_cmd_send.shoot_rate = 8;
+#elif defined USE_CRSF
+
+#endif
 }
 
 

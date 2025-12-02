@@ -25,6 +25,15 @@
 // #define VISION_USE_UART // 使用串口发送视觉数据
 
 
+
+//////////////////////////////////////////////
+/*决定 C板的UART2 也就是UART1用ELRS接收机还是其他外设*/
+//////////////////////////////////////////////
+//#define UART1_NORMAL
+#define USE_CRSF
+//#define USE_SBUS
+
+
 #define pitch_limit_up -24.0f //pitch限制
 #define pitch_limit_down 35.0f
 

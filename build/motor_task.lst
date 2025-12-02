@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0heoEu.s 			page 1
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccUuLoT0.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0heoEu.s 			page 1
   41              		.loc 1 15 5 view .LVU2
   42 0006 FFF7FEFF 		bl	PowerControl
   43              	.LVL1:
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0heoEu.s 			page 2
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccUuLoT0.s 			page 2
 
 
   16:modules/motor/motor_task.c ****     /* 如果有对应的电机则取消注释,可以加入条件编译或者register对应的idx�
@@ -84,13 +84,13 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0heoEu.s 			page 1
   54              		.file 2 "modules/motor/LKmotor/LK9025.h"
   55              		.file 3 "modules/motor/DJImotor/dji_motor.h"
   56              		.file 4 "modules/motor/power_control.h"
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0heoEu.s 			page 3
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccUuLoT0.s 			page 3
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 motor_task.c
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0heoEu.s:21     .text.MotorControlTask:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0heoEu.s:27     .text.MotorControlTask:00000000 MotorControlTask
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccUuLoT0.s:21     .text.MotorControlTask:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccUuLoT0.s:27     .text.MotorControlTask:00000000 MotorControlTask
 
 UNDEFINED SYMBOLS
 DJIMotorControl

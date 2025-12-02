@@ -24,6 +24,7 @@
 #include "shoot.h"
 #include "robot_cmd.h"
 #include "can_vision.h"
+#include "elrs.h"
 #endif
 
 
@@ -47,6 +48,7 @@ void RobotInit()
     ShootInit();
 
     CanVisionInit();
+
 #endif
 
     // 底盘子系统：负责底盘运动学解算与功率受限输出
