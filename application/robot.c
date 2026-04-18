@@ -23,8 +23,8 @@
 #include "gimbal.h"
 #include "shoot.h"
 #include "robot_cmd.h"
-#include "can_vision.h"
-#include "elrs.h"
+#include "sp_vision/sp_vision.h"
+#include "elrs/elrs.h"
 #endif
 
 
@@ -46,8 +46,7 @@ void RobotInit()
     GimbalInit();
     // 发射子系统：如需启用，请打开 ShootInit()
     ShootInit();
-
-    CanVisionInit();
+    SP_VisionInit();
 
 #endif
 
@@ -67,10 +66,6 @@ void RobotInit()
 void RobotTask()
 {
 #if defined(ONE_BOARD) || defined(GIMBAL_BOARD)
-    // CAN视觉通信任务：发送四元数数据到上位机
-
-    CanVisionTask(); // 发送四元数数据
-    
     // 指令分发核心任务：消费外部输入并发布到各子系统
     RobotCMDTask();
     // 云台核心任务：根据模式（陀螺/自由）与期望值驱动 yaw/pitch

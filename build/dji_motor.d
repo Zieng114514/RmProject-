@@ -78,7 +78,8 @@ build/dji_motor.o: modules/motor/DJImotor/dji_motor.c \
  Middlewares/ST/ARM/DSP/Include/dsp/support_functions.h \
  Middlewares/ST/ARM/DSP/Include/dsp/quaternion_math_functions.h \
  Middlewares/ST/ARM/DSP/Include/dsp/window_functions.h \
- modules/motor/motor_def.h modules/daemon/daemon.h modules/general_def.h
+ modules/motor/motor_def.h modules/algorithm/smc_controller.h \
+ modules/daemon/daemon.h modules/general_def.h
 modules/motor/DJImotor/dji_motor.h:
 bsp/can/bsp_can.h:
 Inc/can.h:
@@ -167,5 +168,6 @@ Middlewares/ST/ARM/DSP/Include/dsp/support_functions.h:
 Middlewares/ST/ARM/DSP/Include/dsp/quaternion_math_functions.h:
 Middlewares/ST/ARM/DSP/Include/dsp/window_functions.h:
 modules/motor/motor_def.h:
+modules/algorithm/smc_controller.h:
 modules/daemon/daemon.h:
 modules/general_def.h:

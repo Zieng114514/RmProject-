@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
   28:Src/spi.c     **** SPI_HandleTypeDef hspi2;
   29:Src/spi.c     **** DMA_HandleTypeDef hdma_spi1_rx;
   30:Src/spi.c     **** DMA_HandleTypeDef hdma_spi1_tx;
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 2
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 2
 
 
   31:Src/spi.c     **** 
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
   64 001c 4FF40072 		mov	r2, #512
   65 0020 8261     		str	r2, [r0, #24]
   50:Src/spi.c     ****   hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 3
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 3
 
 
   66              		.loc 1 50 3 is_stmt 1 view .LVU15
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
  107              		.align	1
  108              		.global	MX_SPI2_Init
  109              		.syntax unified
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 4
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 4
 
 
  110              		.thumb
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
   81:Src/spi.c     ****   hspi2.Init.NSS = SPI_NSS_SOFT;
  148              		.loc 1 81 3 is_stmt 1 view .LVU44
  149              		.loc 1 81 18 is_stmt 0 view .LVU45
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 5
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 5
 
 
  150 001c 4FF40072 		mov	r2, #512
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
  189              		.cfi_endproc
  190              	.LFE236:
  192              		.section	.text.HAL_SPI_MspInit,"ax",%progbits
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 6
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 6
 
 
  193              		.align	1
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
  109:Src/spi.c     ****     __HAL_RCC_GPIOB_CLK_ENABLE();
  110:Src/spi.c     ****     __HAL_RCC_GPIOA_CLK_ENABLE();
  111:Src/spi.c     ****     /**SPI1 GPIO Configuration
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 7
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 7
 
 
  112:Src/spi.c     ****     PB4     ------> SPI1_MISO
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
  166:Src/spi.c     ****     }
  167:Src/spi.c     **** 
  168:Src/spi.c     ****     __HAL_LINKDMA(spiHandle,hdmatx,hdma_spi1_tx);
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 8
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 8
 
 
  169:Src/spi.c     **** 
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
  252              		.cfi_restore_state
  253              		.loc 1 205 1 view .LVU72
  254 0028 0446     		mov	r4, r0
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 9
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 9
 
 
  107:Src/spi.c     **** 
@@ -538,7 +538,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
  294 0058 1A6B     		ldr	r2, [r3, #48]
  295 005a 42F00102 		orr	r2, r2, #1
  296 005e 1A63     		str	r2, [r3, #48]
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 10
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 10
 
 
  110:Src/spi.c     ****     /**SPI1 GPIO Configuration
@@ -598,7 +598,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
  334 008e 8023     		movs	r3, #128
  335 0090 0593     		str	r3, [sp, #20]
  124:Src/spi.c     ****     GPIO_InitStruct.Pull = GPIO_PULLUP;
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 11
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 11
 
 
  336              		.loc 1 124 5 is_stmt 1 view .LVU105
@@ -658,7 +658,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
  137:Src/spi.c     ****     hdma_spi1_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
  372              		.loc 1 137 5 is_stmt 1 view .LVU124
  137:Src/spi.c     ****     hdma_spi1_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 12
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 12
 
 
  373              		.loc 1 137 43 is_stmt 0 view .LVU125
@@ -718,7 +718,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
  408 00da E364     		str	r3, [r4, #76]
  150:Src/spi.c     **** 
  409              		.loc 1 150 5 view .LVU145
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 13
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 13
 
 
  410 00dc 9C63     		str	r4, [r3, #56]
@@ -778,7 +778,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
  445 0102 0262     		str	r2, [r0, #32]
  162:Src/spi.c     ****     if (HAL_DMA_Init(&hdma_spi1_tx) != HAL_OK)
  446              		.loc 1 162 5 is_stmt 1 view .LVU165
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 14
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 14
 
 
  162:Src/spi.c     ****     if (HAL_DMA_Init(&hdma_spi1_tx) != HAL_OK)
@@ -838,7 +838,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
  183:Src/spi.c     **** 
  488              		.loc 1 183 5 view .LVU179
  489 0130 0024     		movs	r4, #0
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 15
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 15
 
 
  490 0132 0394     		str	r4, [sp, #12]
@@ -898,7 +898,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
  194:Src/spi.c     ****     GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
  529              		.loc 1 194 5 view .LVU195
  194:Src/spi.c     ****     GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 16
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 16
 
 
  530              		.loc 1 194 27 is_stmt 0 view .LVU196
@@ -958,7 +958,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
  580              	.LFB238:
  206:Src/spi.c     **** 
  207:Src/spi.c     **** void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle)
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 17
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 17
 
 
  208:Src/spi.c     **** {
@@ -1018,7 +1018,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
  238:Src/spi.c     ****   {
  239:Src/spi.c     ****   /* USER CODE BEGIN SPI2_MspDeInit 0 */
  240:Src/spi.c     **** 
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 18
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 18
 
 
  241:Src/spi.c     ****   /* USER CODE END SPI2_MspDeInit 0 */
@@ -1078,7 +1078,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
  635              	.LVL28:
  232:Src/spi.c     ****   /* USER CODE BEGIN SPI1_MspDeInit 1 */
  636              		.loc 1 232 5 view .LVU219
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 19
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 19
 
 
  637 003c 2320     		movs	r0, #35
@@ -1138,7 +1138,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
  684      00000000 
  685              		.global	hspi2
  686              		.section	.bss.hspi2,"aw",%nobits
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 20
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 20
 
 
  687              		.align	2
@@ -1169,31 +1169,31 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 1
  708              		.file 9 "Inc/spi.h"
  709              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h"
  710              		.file 11 "Inc/main.h"
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s 			page 21
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s 			page 21
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 spi.c
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:21     .text.MX_SPI1_Init:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:27     .text.MX_SPI1_Init:00000000 MX_SPI1_Init
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:101    .text.MX_SPI1_Init:00000040 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:697    .bss.hspi1:00000000 hspi1
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:107    .text.MX_SPI2_Init:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:113    .text.MX_SPI2_Init:00000000 MX_SPI2_Init
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:187    .text.MX_SPI2_Init:00000040 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:690    .bss.hspi2:00000000 hspi2
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:193    .text.HAL_SPI_MspInit:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:199    .text.HAL_SPI_MspInit:00000000 HAL_SPI_MspInit
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:559    .text.HAL_SPI_MspInit:00000188 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:683    .bss.hdma_spi1_rx:00000000 hdma_spi1_rx
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:676    .bss.hdma_spi1_tx:00000000 hdma_spi1_tx
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:572    .text.HAL_SPI_MspDeInit:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:578    .text.HAL_SPI_MspDeInit:00000000 HAL_SPI_MspDeInit
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:664    .text.HAL_SPI_MspDeInit:00000064 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:673    .bss.hdma_spi1_tx:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:680    .bss.hdma_spi1_rx:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:687    .bss.hspi2:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccWcfgem.s:694    .bss.hspi1:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:21     .text.MX_SPI1_Init:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:27     .text.MX_SPI1_Init:00000000 MX_SPI1_Init
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:101    .text.MX_SPI1_Init:00000040 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:697    .bss.hspi1:00000000 hspi1
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:107    .text.MX_SPI2_Init:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:113    .text.MX_SPI2_Init:00000000 MX_SPI2_Init
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:187    .text.MX_SPI2_Init:00000040 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:690    .bss.hspi2:00000000 hspi2
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:193    .text.HAL_SPI_MspInit:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:199    .text.HAL_SPI_MspInit:00000000 HAL_SPI_MspInit
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:559    .text.HAL_SPI_MspInit:00000188 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:683    .bss.hdma_spi1_rx:00000000 hdma_spi1_rx
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:676    .bss.hdma_spi1_tx:00000000 hdma_spi1_tx
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:572    .text.HAL_SPI_MspDeInit:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:578    .text.HAL_SPI_MspDeInit:00000000 HAL_SPI_MspDeInit
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:664    .text.HAL_SPI_MspDeInit:00000064 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:673    .bss.hdma_spi1_tx:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:680    .bss.hdma_spi1_rx:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:687    .bss.hspi2:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchU4ToV.s:694    .bss.hspi1:00000000 $d
 
 UNDEFINED SYMBOLS
 HAL_SPI_Init

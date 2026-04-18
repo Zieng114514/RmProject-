@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
   27:modules/algorithm/user_lib.c **** {
   30              		.loc 1 27 1 view -0
   31              		.cfi_startproc
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 2
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 2
 
 
   32              		@ args = 0, pretend = 0, frame = 0
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
   36:modules/algorithm/user_lib.c ****     float y;
   80              		.loc 1 36 5 is_stmt 1 view .LVU11
   37:modules/algorithm/user_lib.c ****     float delta;
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 3
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 3
 
 
   81              		.loc 1 37 5 view .LVU12
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
  117 003a F0D4     		bmi	.L5
  118              		.loc 1 55 42 is_stmt 0 discriminator 2 view .LVU29
  119 003c B1EE467A 		vneg.f32	s14, s12
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 4
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 4
 
 
  120              		.loc 1 55 31 discriminator 2 view .LVU30
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
   67:modules/algorithm/user_lib.c ****     else if (num < -Limit)
  164              		.loc 1 67 10 is_stmt 1 view .LVU37
  165              		.loc 1 67 20 is_stmt 0 view .LVU38
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 5
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 5
 
 
  166 0012 B1EE600A 		vneg.f32	s0, s1
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
   83:modules/algorithm/user_lib.c ****         return -1.0f;
  207              		.loc 1 83 16 view .LVU47
  208 0010 BFEE000A 		vmov.f32	s0, #-1.0e+0
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 6
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 6
 
 
  209              	.LVL17:
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
  254              		.align	1
  255              		.global	float_constrain
  256              		.syntax unified
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 7
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 7
 
 
  257              		.thumb
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
  302              	.LVL24:
  303              	.LFB279:
  107:modules/algorithm/user_lib.c **** 
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 8
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 8
 
 
  108:modules/algorithm/user_lib.c **** // 限幅函数
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
  345              		@ args = 0, pretend = 0, frame = 0
  346              		@ frame_needed = 0, uses_anonymous_args = 0
  347              		@ link register save eliminated.
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 9
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 9
 
 
  122:modules/algorithm/user_lib.c ****     if (maxValue < minValue)
@@ -538,7 +538,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
  385 002e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
  386 0032 09DD     		ble	.L36
  387              	.LBB3:
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 10
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 10
 
 
  136:modules/algorithm/user_lib.c ****     {
@@ -598,7 +598,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
  429              	.LCFI1:
  430              		.cfi_def_cfa_offset 8
  431              		.cfi_offset 3, -8
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 11
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 11
 
 
  432              		.cfi_offset 14, -4
@@ -658,7 +658,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
  479 0014 83ED000A 		vstr.32	s0, [r3]
  160:modules/algorithm/user_lib.c ****     if (decimal > 0.5f)
  480              		.loc 1 160 5 is_stmt 1 view .LVU113
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 12
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 12
 
 
  481              		.loc 1 160 8 is_stmt 0 view .LVU114
@@ -718,7 +718,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
  530              		.cfi_offset 81, -20
  531              		.cfi_offset 82, -16
  532              		.cfi_offset 83, -12
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 13
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 13
 
 
  533 0006 0446     		mov	r4, r0
@@ -778,7 +778,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
  582              		.global	NormOf3d
  583              		.syntax unified
  584              		.thumb
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 14
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 14
 
 
  585              		.thumb_func
@@ -838,7 +838,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
  182:modules/algorithm/user_lib.c **** void Cross3d(float *v1, float *v2, float *res)
  183:modules/algorithm/user_lib.c **** {
  634              		.loc 1 183 1 is_stmt 1 view -0
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 15
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 15
 
 
  635              		.cfi_startproc
@@ -898,7 +898,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
  686              		.loc 1 186 28 view .LVU177
  687 0058 77EEC77A 		vsub.f32	s15, s15, s14
  688              		.loc 1 186 12 view .LVU178
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 16
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 16
 
 
  689 005c C2ED027A 		vstr.32	s15, [r2, #8]
@@ -958,7 +958,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
  739              		.global	AverageFilter
  740              		.syntax unified
  741              		.thumb
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 17
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 17
 
 
  742              		.thumb_func
@@ -1018,7 +1018,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
  785              		.loc 1 199 27 discriminator 1 view .LVU208
  199:modules/algorithm/user_lib.c ****     for (uint8_t i = 0; i < len - 1; i++)
  786              		.loc 1 199 33 is_stmt 0 discriminator 1 view .LVU209
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 18
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 18
 
 
  787 0020 4A1E     		subs	r2, r1, #1
@@ -1078,7 +1078,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
  834              		@ frame_needed = 0, uses_anonymous_args = 0
  835              		.loc 1 210 1 is_stmt 0 view .LVU221
  836 0000 10B5     		push	{r4, lr}
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 19
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 19
 
 
  837              	.LCFI6:
@@ -1132,52 +1132,52 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 1
  886              		.file 8 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/stdlib.h"
  887              		.file 9 "modules/algorithm/user_lib.h"
  888              		.file 10 "<built-in>"
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s 			page 20
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s 			page 20
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 user_lib.c
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:21     .text.zmalloc:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:27     .text.zmalloc:00000000 zmalloc
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:64     .text.Sqrt:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:70     .text.Sqrt:00000000 Sqrt
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:135    .text.Sqrt:00000054 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:141    .text.abs_limit:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:147    .text.abs_limit:00000000 abs_limit
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:181    .text.sign:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:187    .text.sign:00000000 sign
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:216    .text.float_deadband:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:222    .text.float_deadband:00000000 float_deadband
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:249    .text.float_deadband:0000001c $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:254    .text.float_constrain:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:260    .text.float_constrain:00000000 float_constrain
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:295    .text.int16_constrain:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:301    .text.int16_constrain:00000000 int16_constrain
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:334    .text.loop_float_constrain:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:340    .text.loop_float_constrain:00000000 loop_float_constrain
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:414    .text.theta_format:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:420    .text.theta_format:00000000 theta_format
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:444    .text.theta_format:00000010 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:450    .text.float_rounding:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:456    .text.float_rounding:00000000 float_rounding
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:501    .text.float_rounding:00000038 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:876    .bss.integer.1:00000000 integer.1
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:870    .bss.decimal.0:00000000 decimal.0
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:507    .text.Norm3d:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:513    .text.Norm3d:00000000 Norm3d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:581    .text.NormOf3d:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:587    .text.NormOf3d:00000000 NormOf3d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:625    .text.Cross3d:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:631    .text.Cross3d:00000000 Cross3d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:696    .text.Dot3d:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:702    .text.Dot3d:00000000 Dot3d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:738    .text.AverageFilter:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:744    .text.AverageFilter:00000000 AverageFilter
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:817    .text.AverageFilter:00000048 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:822    .text.MatInit:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:828    .text.MatInit:00000000 MatInit
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:867    .bss.decimal.0:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cciZ1RPa.s:873    .bss.integer.1:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:21     .text.zmalloc:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:27     .text.zmalloc:00000000 zmalloc
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:64     .text.Sqrt:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:70     .text.Sqrt:00000000 Sqrt
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:135    .text.Sqrt:00000054 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:141    .text.abs_limit:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:147    .text.abs_limit:00000000 abs_limit
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:181    .text.sign:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:187    .text.sign:00000000 sign
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:216    .text.float_deadband:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:222    .text.float_deadband:00000000 float_deadband
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:249    .text.float_deadband:0000001c $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:254    .text.float_constrain:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:260    .text.float_constrain:00000000 float_constrain
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:295    .text.int16_constrain:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:301    .text.int16_constrain:00000000 int16_constrain
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:334    .text.loop_float_constrain:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:340    .text.loop_float_constrain:00000000 loop_float_constrain
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:414    .text.theta_format:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:420    .text.theta_format:00000000 theta_format
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:444    .text.theta_format:00000010 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:450    .text.float_rounding:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:456    .text.float_rounding:00000000 float_rounding
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:501    .text.float_rounding:00000038 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:876    .bss.integer.1:00000000 integer.1
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:870    .bss.decimal.0:00000000 decimal.0
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:507    .text.Norm3d:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:513    .text.Norm3d:00000000 Norm3d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:581    .text.NormOf3d:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:587    .text.NormOf3d:00000000 NormOf3d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:625    .text.Cross3d:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:631    .text.Cross3d:00000000 Cross3d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:696    .text.Dot3d:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:702    .text.Dot3d:00000000 Dot3d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:738    .text.AverageFilter:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:744    .text.AverageFilter:00000000 AverageFilter
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:817    .text.AverageFilter:00000048 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:822    .text.MatInit:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:828    .text.MatInit:00000000 MatInit
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:867    .bss.decimal.0:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cci4ABZ2.s:873    .bss.integer.1:00000000 $d
 
 UNDEFINED SYMBOLS
 malloc

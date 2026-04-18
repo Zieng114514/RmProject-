@@ -1,0 +1,663 @@
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"smc_controller.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "modules/algorithm/smc_controller.c"
+  20              		.section	.text.smc_signal,"ax",%progbits
+  21              		.align	1
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	smc_signal:
+  27              	.LVL0:
+  28              	.LFB238:
+   1:modules/algorithm/smc_controller.c **** /**
+   2:modules/algorithm/smc_controller.c ****  * @file smc_controller.c
+   3:modules/algorithm/smc_controller.c ****  * @brief Sliding mode controller definition
+   4:modules/algorithm/smc_controller.c ****  */
+   5:modules/algorithm/smc_controller.c **** #include "smc_controller.h"
+   6:modules/algorithm/smc_controller.c **** #include <string.h>
+   7:modules/algorithm/smc_controller.c **** 
+   8:modules/algorithm/smc_controller.c **** static float smc_sat(float y);
+   9:modules/algorithm/smc_controller.c **** static int8_t smc_signal(float y);
+  10:modules/algorithm/smc_controller.c **** 
+  11:modules/algorithm/smc_controller.c **** void SMCInit(SMCInstance *smc, SMC_Init_Config_s *config)
+  12:modules/algorithm/smc_controller.c **** {
+  13:modules/algorithm/smc_controller.c ****     if (smc == NULL || config == NULL)
+  14:modules/algorithm/smc_controller.c ****     {
+  15:modules/algorithm/smc_controller.c ****         return;
+  16:modules/algorithm/smc_controller.c ****     }
+  17:modules/algorithm/smc_controller.c **** 
+  18:modules/algorithm/smc_controller.c ****     memset(smc, 0, sizeof(SMCInstance));
+  19:modules/algorithm/smc_controller.c **** 
+  20:modules/algorithm/smc_controller.c ****     smc->C = config->C;
+  21:modules/algorithm/smc_controller.c ****     smc->K = config->K;
+  22:modules/algorithm/smc_controller.c ****     smc->Ref = config->Ref;
+  23:modules/algorithm/smc_controller.c ****     smc->ErrorEps = config->ErrorEps;
+  24:modules/algorithm/smc_controller.c ****     smc->MaxOut = config->MaxOut;
+  25:modules/algorithm/smc_controller.c ****     smc->J = config->J;
+  26:modules/algorithm/smc_controller.c ****     smc->Epsilon = config->Epsilon;
+  27:modules/algorithm/smc_controller.c **** }
+  28:modules/algorithm/smc_controller.c **** 
+  29:modules/algorithm/smc_controller.c **** float SMCCalculate(SMCInstance *smc, float angle_now, float angle_vel, float ref)
+  30:modules/algorithm/smc_controller.c **** {
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s 			page 2
+
+
+  31:modules/algorithm/smc_controller.c ****     if (smc == NULL)
+  32:modules/algorithm/smc_controller.c ****     {
+  33:modules/algorithm/smc_controller.c ****         return 0.0f;
+  34:modules/algorithm/smc_controller.c ****     }
+  35:modules/algorithm/smc_controller.c **** 
+  36:modules/algorithm/smc_controller.c ****     smc->Angle = angle_now;
+  37:modules/algorithm/smc_controller.c ****     smc->AngleVel = angle_vel;
+  38:modules/algorithm/smc_controller.c **** 
+  39:modules/algorithm/smc_controller.c ****     smc->Ref = ref;
+  40:modules/algorithm/smc_controller.c **** 
+  41:modules/algorithm/smc_controller.c ****     smc->Error = smc->Angle - smc->Ref;
+  42:modules/algorithm/smc_controller.c ****     smc->DDRef = (smc->Ref - smc->RefLast) - smc->DRef;
+  43:modules/algorithm/smc_controller.c ****     smc->DRef = (smc->Ref - smc->RefLast);
+  44:modules/algorithm/smc_controller.c **** 
+  45:modules/algorithm/smc_controller.c ****     if (fabsf(smc->Error) < smc->ErrorEps)
+  46:modules/algorithm/smc_controller.c ****     {
+  47:modules/algorithm/smc_controller.c ****         smc->Output = 0.0f;
+  48:modules/algorithm/smc_controller.c ****         smc->Surface = 0.0f;
+  49:modules/algorithm/smc_controller.c ****         smc->ErrorLast = smc->Error;
+  50:modules/algorithm/smc_controller.c ****         smc->RefLast = smc->Ref;
+  51:modules/algorithm/smc_controller.c ****         return smc->Output;
+  52:modules/algorithm/smc_controller.c ****     }
+  53:modules/algorithm/smc_controller.c **** 
+  54:modules/algorithm/smc_controller.c ****     smc->Surface = smc->C * smc->Error + (smc->AngleVel - smc->DRef);
+  55:modules/algorithm/smc_controller.c **** 
+  56:modules/algorithm/smc_controller.c ****     smc->Output = smc->J * (smc->DDRef - smc->C * (smc->AngleVel - smc->DRef) - smc->Epsilon * smc_
+  57:modules/algorithm/smc_controller.c **** 
+  58:modules/algorithm/smc_controller.c ****     if (smc->Output > smc->MaxOut)
+  59:modules/algorithm/smc_controller.c ****     {
+  60:modules/algorithm/smc_controller.c ****         smc->Output = smc->MaxOut;
+  61:modules/algorithm/smc_controller.c ****     }
+  62:modules/algorithm/smc_controller.c ****     if (smc->Output < -smc->MaxOut)
+  63:modules/algorithm/smc_controller.c ****     {
+  64:modules/algorithm/smc_controller.c ****         smc->Output = -smc->MaxOut;
+  65:modules/algorithm/smc_controller.c ****     }
+  66:modules/algorithm/smc_controller.c **** 
+  67:modules/algorithm/smc_controller.c ****     smc->ErrorLast = smc->Error;
+  68:modules/algorithm/smc_controller.c ****     smc->RefLast = smc->Ref;
+  69:modules/algorithm/smc_controller.c **** 
+  70:modules/algorithm/smc_controller.c ****     return smc->Output;
+  71:modules/algorithm/smc_controller.c **** }
+  72:modules/algorithm/smc_controller.c **** 
+  73:modules/algorithm/smc_controller.c **** static float smc_sat(float y)
+  74:modules/algorithm/smc_controller.c **** {
+  75:modules/algorithm/smc_controller.c ****     if (fabsf(y) <= 1.0f)
+  76:modules/algorithm/smc_controller.c ****     {
+  77:modules/algorithm/smc_controller.c ****         return y;
+  78:modules/algorithm/smc_controller.c ****     }
+  79:modules/algorithm/smc_controller.c ****     return (float)smc_signal(y);
+  80:modules/algorithm/smc_controller.c **** }
+  81:modules/algorithm/smc_controller.c **** 
+  82:modules/algorithm/smc_controller.c **** static int8_t smc_signal(float y)
+  83:modules/algorithm/smc_controller.c **** {
+  29              		.loc 1 83 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s 			page 3
+
+
+  33              		@ link register save eliminated.
+  84:modules/algorithm/smc_controller.c ****     if (y > 0.0f)
+  34              		.loc 1 84 5 view .LVU1
+  35              		.loc 1 84 8 is_stmt 0 view .LVU2
+  36 0000 B5EEC00A 		vcmpe.f32	s0, #0
+  37 0004 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  38 0008 07DC     		bgt	.L3
+  85:modules/algorithm/smc_controller.c ****     {
+  86:modules/algorithm/smc_controller.c ****         return 1;
+  87:modules/algorithm/smc_controller.c ****     }
+  88:modules/algorithm/smc_controller.c ****     else if (y == 0.0f)
+  39              		.loc 1 88 10 is_stmt 1 view .LVU3
+  40              		.loc 1 88 13 is_stmt 0 view .LVU4
+  41 000a B5EE400A 		vcmp.f32	s0, #0
+  42 000e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  43 0012 04D0     		beq	.L4
+  89:modules/algorithm/smc_controller.c ****     {
+  90:modules/algorithm/smc_controller.c ****         return 0;
+  91:modules/algorithm/smc_controller.c ****     }
+  92:modules/algorithm/smc_controller.c ****     return -1;
+  44              		.loc 1 92 12 view .LVU5
+  45 0014 4FF0FF30 		mov	r0, #-1
+  46 0018 7047     		bx	lr
+  47              	.L3:
+  86:modules/algorithm/smc_controller.c ****     }
+  48              		.loc 1 86 16 view .LVU6
+  49 001a 0120     		movs	r0, #1
+  50 001c 7047     		bx	lr
+  51              	.L4:
+  90:modules/algorithm/smc_controller.c ****     }
+  52              		.loc 1 90 16 view .LVU7
+  53 001e 0020     		movs	r0, #0
+  93:modules/algorithm/smc_controller.c **** }
+  54              		.loc 1 93 1 view .LVU8
+  55 0020 7047     		bx	lr
+  56              		.cfi_endproc
+  57              	.LFE238:
+  59              		.section	.text.smc_sat,"ax",%progbits
+  60              		.align	1
+  61              		.syntax unified
+  62              		.thumb
+  63              		.thumb_func
+  65              	smc_sat:
+  66              	.LVL1:
+  67              	.LFB237:
+  74:modules/algorithm/smc_controller.c ****     if (fabsf(y) <= 1.0f)
+  68              		.loc 1 74 1 is_stmt 1 view -0
+  69              		.cfi_startproc
+  70              		@ args = 0, pretend = 0, frame = 0
+  71              		@ frame_needed = 0, uses_anonymous_args = 0
+  75:modules/algorithm/smc_controller.c ****     {
+  72              		.loc 1 75 5 view .LVU10
+  75:modules/algorithm/smc_controller.c ****     {
+  73              		.loc 1 75 9 is_stmt 0 view .LVU11
+  74 0000 B0EEC07A 		vabs.f32	s14, s0
+  75:modules/algorithm/smc_controller.c ****     {
+  75              		.loc 1 75 8 view .LVU12
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s 			page 4
+
+
+  76 0004 F7EE007A 		vmov.f32	s15, #1.0e+0
+  77 0008 B4EEE77A 		vcmpe.f32	s14, s15
+  78 000c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  79 0010 07D9     		bls	.L9
+  74:modules/algorithm/smc_controller.c ****     if (fabsf(y) <= 1.0f)
+  80              		.loc 1 74 1 view .LVU13
+  81 0012 08B5     		push	{r3, lr}
+  82              	.LCFI0:
+  83              		.cfi_def_cfa_offset 8
+  84              		.cfi_offset 3, -8
+  85              		.cfi_offset 14, -4
+  79:modules/algorithm/smc_controller.c **** }
+  86              		.loc 1 79 5 is_stmt 1 view .LVU14
+  79:modules/algorithm/smc_controller.c **** }
+  87              		.loc 1 79 19 is_stmt 0 view .LVU15
+  88 0014 FFF7FEFF 		bl	smc_signal
+  89              	.LVL2:
+  79:modules/algorithm/smc_controller.c **** }
+  90              		.loc 1 79 19 view .LVU16
+  91 0018 00EE100A 		vmov	s0, r0	@ int
+  79:modules/algorithm/smc_controller.c **** }
+  92              		.loc 1 79 12 discriminator 1 view .LVU17
+  93 001c B8EEC00A 		vcvt.f32.s32	s0, s0
+  80:modules/algorithm/smc_controller.c **** 
+  94              		.loc 1 80 1 view .LVU18
+  95 0020 08BD     		pop	{r3, pc}
+  96              	.LVL3:
+  97              	.L9:
+  98              	.LCFI1:
+  99              		.cfi_def_cfa_offset 0
+ 100              		.cfi_restore 3
+ 101              		.cfi_restore 14
+  80:modules/algorithm/smc_controller.c **** 
+ 102              		.loc 1 80 1 view .LVU19
+ 103 0022 7047     		bx	lr
+ 104              		.cfi_endproc
+ 105              	.LFE237:
+ 107              		.section	.text.SMCInit,"ax",%progbits
+ 108              		.align	1
+ 109              		.global	SMCInit
+ 110              		.syntax unified
+ 111              		.thumb
+ 112              		.thumb_func
+ 114              	SMCInit:
+ 115              	.LVL4:
+ 116              	.LFB235:
+  12:modules/algorithm/smc_controller.c ****     if (smc == NULL || config == NULL)
+ 117              		.loc 1 12 1 is_stmt 1 view -0
+ 118              		.cfi_startproc
+ 119              		@ args = 0, pretend = 0, frame = 0
+ 120              		@ frame_needed = 0, uses_anonymous_args = 0
+  13:modules/algorithm/smc_controller.c ****     {
+ 121              		.loc 1 13 5 view .LVU21
+  13:modules/algorithm/smc_controller.c ****     {
+ 122              		.loc 1 13 8 is_stmt 0 view .LVU22
+ 123 0000 B0B1     		cbz	r0, .L15
+  12:modules/algorithm/smc_controller.c ****     if (smc == NULL || config == NULL)
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s 			page 5
+
+
+ 124              		.loc 1 12 1 view .LVU23
+ 125 0002 38B5     		push	{r3, r4, r5, lr}
+ 126              	.LCFI2:
+ 127              		.cfi_def_cfa_offset 16
+ 128              		.cfi_offset 3, -16
+ 129              		.cfi_offset 4, -12
+ 130              		.cfi_offset 5, -8
+ 131              		.cfi_offset 14, -4
+ 132 0004 0C46     		mov	r4, r1
+ 133 0006 0546     		mov	r5, r0
+  13:modules/algorithm/smc_controller.c ****     {
+ 134              		.loc 1 13 21 discriminator 1 view .LVU24
+ 135 0008 89B1     		cbz	r1, .L12
+  18:modules/algorithm/smc_controller.c **** 
+ 136              		.loc 1 18 5 is_stmt 1 view .LVU25
+ 137 000a 4022     		movs	r2, #64
+ 138 000c 0021     		movs	r1, #0
+ 139              	.LVL5:
+  18:modules/algorithm/smc_controller.c **** 
+ 140              		.loc 1 18 5 is_stmt 0 view .LVU26
+ 141 000e FFF7FEFF 		bl	memset
+ 142              	.LVL6:
+  20:modules/algorithm/smc_controller.c ****     smc->K = config->K;
+ 143              		.loc 1 20 5 is_stmt 1 view .LVU27
+  20:modules/algorithm/smc_controller.c ****     smc->K = config->K;
+ 144              		.loc 1 20 20 is_stmt 0 view .LVU28
+ 145 0012 2368     		ldr	r3, [r4]	@ float
+  20:modules/algorithm/smc_controller.c ****     smc->K = config->K;
+ 146              		.loc 1 20 12 view .LVU29
+ 147 0014 2B60     		str	r3, [r5]	@ float
+  21:modules/algorithm/smc_controller.c ****     smc->Ref = config->Ref;
+ 148              		.loc 1 21 5 is_stmt 1 view .LVU30
+  21:modules/algorithm/smc_controller.c ****     smc->Ref = config->Ref;
+ 149              		.loc 1 21 20 is_stmt 0 view .LVU31
+ 150 0016 6368     		ldr	r3, [r4, #4]	@ float
+  21:modules/algorithm/smc_controller.c ****     smc->Ref = config->Ref;
+ 151              		.loc 1 21 12 view .LVU32
+ 152 0018 6B60     		str	r3, [r5, #4]	@ float
+  22:modules/algorithm/smc_controller.c ****     smc->ErrorEps = config->ErrorEps;
+ 153              		.loc 1 22 5 is_stmt 1 view .LVU33
+  22:modules/algorithm/smc_controller.c ****     smc->ErrorEps = config->ErrorEps;
+ 154              		.loc 1 22 22 is_stmt 0 view .LVU34
+ 155 001a A368     		ldr	r3, [r4, #8]	@ float
+  22:modules/algorithm/smc_controller.c ****     smc->ErrorEps = config->ErrorEps;
+ 156              		.loc 1 22 14 view .LVU35
+ 157 001c AB60     		str	r3, [r5, #8]	@ float
+  23:modules/algorithm/smc_controller.c ****     smc->MaxOut = config->MaxOut;
+ 158              		.loc 1 23 5 is_stmt 1 view .LVU36
+  23:modules/algorithm/smc_controller.c ****     smc->MaxOut = config->MaxOut;
+ 159              		.loc 1 23 27 is_stmt 0 view .LVU37
+ 160 001e E368     		ldr	r3, [r4, #12]	@ float
+  23:modules/algorithm/smc_controller.c ****     smc->MaxOut = config->MaxOut;
+ 161              		.loc 1 23 19 view .LVU38
+ 162 0020 EB60     		str	r3, [r5, #12]	@ float
+  24:modules/algorithm/smc_controller.c ****     smc->J = config->J;
+ 163              		.loc 1 24 5 is_stmt 1 view .LVU39
+  24:modules/algorithm/smc_controller.c ****     smc->J = config->J;
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s 			page 6
+
+
+ 164              		.loc 1 24 25 is_stmt 0 view .LVU40
+ 165 0022 2369     		ldr	r3, [r4, #16]	@ float
+  24:modules/algorithm/smc_controller.c ****     smc->J = config->J;
+ 166              		.loc 1 24 17 view .LVU41
+ 167 0024 2B61     		str	r3, [r5, #16]	@ float
+  25:modules/algorithm/smc_controller.c ****     smc->Epsilon = config->Epsilon;
+ 168              		.loc 1 25 5 is_stmt 1 view .LVU42
+  25:modules/algorithm/smc_controller.c ****     smc->Epsilon = config->Epsilon;
+ 169              		.loc 1 25 20 is_stmt 0 view .LVU43
+ 170 0026 6369     		ldr	r3, [r4, #20]	@ float
+  25:modules/algorithm/smc_controller.c ****     smc->Epsilon = config->Epsilon;
+ 171              		.loc 1 25 12 view .LVU44
+ 172 0028 6B61     		str	r3, [r5, #20]	@ float
+  26:modules/algorithm/smc_controller.c **** }
+ 173              		.loc 1 26 5 is_stmt 1 view .LVU45
+  26:modules/algorithm/smc_controller.c **** }
+ 174              		.loc 1 26 26 is_stmt 0 view .LVU46
+ 175 002a A369     		ldr	r3, [r4, #24]	@ float
+  26:modules/algorithm/smc_controller.c **** }
+ 176              		.loc 1 26 18 view .LVU47
+ 177 002c AB61     		str	r3, [r5, #24]	@ float
+ 178              	.L12:
+  27:modules/algorithm/smc_controller.c **** 
+ 179              		.loc 1 27 1 view .LVU48
+ 180 002e 38BD     		pop	{r3, r4, r5, pc}
+ 181              	.LVL7:
+ 182              	.L15:
+ 183              	.LCFI3:
+ 184              		.cfi_def_cfa_offset 0
+ 185              		.cfi_restore 3
+ 186              		.cfi_restore 4
+ 187              		.cfi_restore 5
+ 188              		.cfi_restore 14
+  27:modules/algorithm/smc_controller.c **** 
+ 189              		.loc 1 27 1 view .LVU49
+ 190 0030 7047     		bx	lr
+ 191              		.cfi_endproc
+ 192              	.LFE235:
+ 194              		.section	.text.SMCCalculate,"ax",%progbits
+ 195              		.align	1
+ 196              		.global	SMCCalculate
+ 197              		.syntax unified
+ 198              		.thumb
+ 199              		.thumb_func
+ 201              	SMCCalculate:
+ 202              	.LVL8:
+ 203              	.LFB236:
+  30:modules/algorithm/smc_controller.c ****     if (smc == NULL)
+ 204              		.loc 1 30 1 is_stmt 1 view -0
+ 205              		.cfi_startproc
+ 206              		@ args = 0, pretend = 0, frame = 0
+ 207              		@ frame_needed = 0, uses_anonymous_args = 0
+  31:modules/algorithm/smc_controller.c ****     {
+ 208              		.loc 1 31 5 view .LVU51
+  31:modules/algorithm/smc_controller.c ****     {
+ 209              		.loc 1 31 8 is_stmt 0 view .LVU52
+ 210 0000 0028     		cmp	r0, #0
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s 			page 7
+
+
+ 211 0002 70D0     		beq	.L26
+  30:modules/algorithm/smc_controller.c ****     if (smc == NULL)
+ 212              		.loc 1 30 1 view .LVU53
+ 213 0004 10B5     		push	{r4, lr}
+ 214              	.LCFI4:
+ 215              		.cfi_def_cfa_offset 8
+ 216              		.cfi_offset 4, -8
+ 217              		.cfi_offset 14, -4
+ 218 0006 2DED068B 		vpush.64	{d8, d9, d10}
+ 219              	.LCFI5:
+ 220              		.cfi_def_cfa_offset 32
+ 221              		.cfi_offset 80, -32
+ 222              		.cfi_offset 81, -28
+ 223              		.cfi_offset 82, -24
+ 224              		.cfi_offset 83, -20
+ 225              		.cfi_offset 84, -16
+ 226              		.cfi_offset 85, -12
+ 227 000a B0EE419A 		vmov.f32	s18, s2
+ 228 000e 0446     		mov	r4, r0
+  36:modules/algorithm/smc_controller.c ****     smc->AngleVel = angle_vel;
+ 229              		.loc 1 36 5 is_stmt 1 view .LVU54
+  36:modules/algorithm/smc_controller.c ****     smc->AngleVel = angle_vel;
+ 230              		.loc 1 36 16 is_stmt 0 view .LVU55
+ 231 0010 80ED070A 		vstr.32	s0, [r0, #28]
+  37:modules/algorithm/smc_controller.c **** 
+ 232              		.loc 1 37 5 is_stmt 1 view .LVU56
+  37:modules/algorithm/smc_controller.c **** 
+ 233              		.loc 1 37 19 is_stmt 0 view .LVU57
+ 234 0014 C0ED080A 		vstr.32	s1, [r0, #32]
+  39:modules/algorithm/smc_controller.c **** 
+ 235              		.loc 1 39 5 is_stmt 1 view .LVU58
+  39:modules/algorithm/smc_controller.c **** 
+ 236              		.loc 1 39 14 is_stmt 0 view .LVU59
+ 237 0018 80ED021A 		vstr.32	s2, [r0, #8]
+  41:modules/algorithm/smc_controller.c ****     smc->DDRef = (smc->Ref - smc->RefLast) - smc->DRef;
+ 238              		.loc 1 41 5 is_stmt 1 view .LVU60
+  41:modules/algorithm/smc_controller.c ****     smc->DDRef = (smc->Ref - smc->RefLast) - smc->DRef;
+ 239              		.loc 1 41 29 is_stmt 0 view .LVU61
+ 240 001c 30EE418A 		vsub.f32	s16, s0, s2
+  41:modules/algorithm/smc_controller.c ****     smc->DDRef = (smc->Ref - smc->RefLast) - smc->DRef;
+ 241              		.loc 1 41 16 view .LVU62
+ 242 0020 80ED0A8A 		vstr.32	s16, [r0, #40]
+  42:modules/algorithm/smc_controller.c ****     smc->DRef = (smc->Ref - smc->RefLast);
+ 243              		.loc 1 42 5 is_stmt 1 view .LVU63
+  42:modules/algorithm/smc_controller.c ****     smc->DRef = (smc->Ref - smc->RefLast);
+ 244              		.loc 1 42 33 is_stmt 0 view .LVU64
+ 245 0024 90ED0E7A 		vldr.32	s14, [r0, #56]
+  42:modules/algorithm/smc_controller.c ****     smc->DRef = (smc->Ref - smc->RefLast);
+ 246              		.loc 1 42 28 view .LVU65
+ 247 0028 31EE477A 		vsub.f32	s14, s2, s14
+  42:modules/algorithm/smc_controller.c ****     smc->DRef = (smc->Ref - smc->RefLast);
+ 248              		.loc 1 42 49 view .LVU66
+ 249 002c D0ED0C7A 		vldr.32	s15, [r0, #48]
+  42:modules/algorithm/smc_controller.c ****     smc->DRef = (smc->Ref - smc->RefLast);
+ 250              		.loc 1 42 44 view .LVU67
+ 251 0030 77EE677A 		vsub.f32	s15, s14, s15
+  42:modules/algorithm/smc_controller.c ****     smc->DRef = (smc->Ref - smc->RefLast);
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s 			page 8
+
+
+ 252              		.loc 1 42 16 view .LVU68
+ 253 0034 C0ED0D7A 		vstr.32	s15, [r0, #52]
+  43:modules/algorithm/smc_controller.c **** 
+ 254              		.loc 1 43 5 is_stmt 1 view .LVU69
+  43:modules/algorithm/smc_controller.c **** 
+ 255              		.loc 1 43 15 is_stmt 0 view .LVU70
+ 256 0038 80ED0C7A 		vstr.32	s14, [r0, #48]
+  45:modules/algorithm/smc_controller.c ****     {
+ 257              		.loc 1 45 5 is_stmt 1 view .LVU71
+  45:modules/algorithm/smc_controller.c ****     {
+ 258              		.loc 1 45 9 is_stmt 0 view .LVU72
+ 259 003c B0EEC86A 		vabs.f32	s12, s16
+  45:modules/algorithm/smc_controller.c ****     {
+ 260              		.loc 1 45 32 view .LVU73
+ 261 0040 D0ED036A 		vldr.32	s13, [r0, #12]
+  45:modules/algorithm/smc_controller.c ****     {
+ 262              		.loc 1 45 8 view .LVU74
+ 263 0044 B4EEE66A 		vcmpe.f32	s12, s13
+ 264 0048 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 265 004c 40D4     		bmi	.L35
+  54:modules/algorithm/smc_controller.c **** 
+ 266              		.loc 1 54 5 is_stmt 1 view .LVU75
+  54:modules/algorithm/smc_controller.c **** 
+ 267              		.loc 1 54 23 is_stmt 0 view .LVU76
+ 268 004e D0ED006A 		vldr.32	s13, [r0]
+  54:modules/algorithm/smc_controller.c **** 
+ 269              		.loc 1 54 27 view .LVU77
+ 270 0052 68EE269A 		vmul.f32	s19, s16, s13
+  54:modules/algorithm/smc_controller.c **** 
+ 271              		.loc 1 54 57 view .LVU78
+ 272 0056 70EEC70A 		vsub.f32	s1, s1, s14
+ 273              	.LVL9:
+  54:modules/algorithm/smc_controller.c **** 
+ 274              		.loc 1 54 40 view .LVU79
+ 275 005a 79EEA09A 		vadd.f32	s19, s19, s1
+  54:modules/algorithm/smc_controller.c **** 
+ 276              		.loc 1 54 18 view .LVU80
+ 277 005e C0ED0F9A 		vstr.32	s19, [r0, #60]
+  56:modules/algorithm/smc_controller.c **** 
+ 278              		.loc 1 56 5 is_stmt 1 view .LVU81
+  56:modules/algorithm/smc_controller.c **** 
+ 279              		.loc 1 56 22 is_stmt 0 view .LVU82
+ 280 0062 90ED05AA 		vldr.32	s20, [r0, #20]
+  56:modules/algorithm/smc_controller.c **** 
+ 281              		.loc 1 56 49 view .LVU83
+ 282 0066 66EEA06A 		vmul.f32	s13, s13, s1
+  56:modules/algorithm/smc_controller.c **** 
+ 283              		.loc 1 56 40 view .LVU84
+ 284 006a 77EEE68A 		vsub.f32	s17, s15, s13
+  56:modules/algorithm/smc_controller.c **** 
+ 285              		.loc 1 56 84 view .LVU85
+ 286 006e D0ED06AA 		vldr.32	s21, [r0, #24]
+  56:modules/algorithm/smc_controller.c **** 
+ 287              		.loc 1 56 96 view .LVU86
+ 288 0072 B0EE690A 		vmov.f32	s0, s19
+ 289              	.LVL10:
+  56:modules/algorithm/smc_controller.c **** 
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s 			page 9
+
+
+ 290              		.loc 1 56 96 view .LVU87
+ 291 0076 FFF7FEFF 		bl	smc_sat
+ 292              	.LVL11:
+  56:modules/algorithm/smc_controller.c **** 
+ 293              		.loc 1 56 94 discriminator 1 view .LVU88
+ 294 007a 6AEE80AA 		vmul.f32	s21, s21, s0
+  56:modules/algorithm/smc_controller.c **** 
+ 295              		.loc 1 56 79 discriminator 1 view .LVU89
+ 296 007e 78EEEA7A 		vsub.f32	s15, s17, s21
+  56:modules/algorithm/smc_controller.c **** 
+ 297              		.loc 1 56 123 discriminator 1 view .LVU90
+ 298 0082 94ED017A 		vldr.32	s14, [r4, #4]
+  56:modules/algorithm/smc_controller.c **** 
+ 299              		.loc 1 56 127 discriminator 1 view .LVU91
+ 300 0086 69EE879A 		vmul.f32	s19, s19, s14
+  56:modules/algorithm/smc_controller.c **** 
+ 301              		.loc 1 56 118 discriminator 1 view .LVU92
+ 302 008a 77EEE97A 		vsub.f32	s15, s15, s19
+  56:modules/algorithm/smc_controller.c **** 
+ 303              		.loc 1 56 26 discriminator 1 view .LVU93
+ 304 008e 2AEE277A 		vmul.f32	s14, s20, s15
+  56:modules/algorithm/smc_controller.c **** 
+ 305              		.loc 1 56 17 discriminator 1 view .LVU94
+ 306 0092 84ED097A 		vstr.32	s14, [r4, #36]
+  58:modules/algorithm/smc_controller.c ****     {
+ 307              		.loc 1 58 5 is_stmt 1 view .LVU95
+  58:modules/algorithm/smc_controller.c ****     {
+ 308              		.loc 1 58 26 is_stmt 0 view .LVU96
+ 309 0096 D4ED047A 		vldr.32	s15, [r4, #16]
+  58:modules/algorithm/smc_controller.c ****     {
+ 310              		.loc 1 58 8 view .LVU97
+ 311 009a B4EEE77A 		vcmpe.f32	s14, s15
+ 312 009e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 313 00a2 01DD     		ble	.L22
+  60:modules/algorithm/smc_controller.c ****     }
+ 314              		.loc 1 60 9 is_stmt 1 view .LVU98
+  60:modules/algorithm/smc_controller.c ****     }
+ 315              		.loc 1 60 21 is_stmt 0 view .LVU99
+ 316 00a4 C4ED097A 		vstr.32	s15, [r4, #36]
+ 317              	.L22:
+  62:modules/algorithm/smc_controller.c ****     {
+ 318              		.loc 1 62 5 is_stmt 1 view .LVU100
+  62:modules/algorithm/smc_controller.c ****     {
+ 319              		.loc 1 62 12 is_stmt 0 view .LVU101
+ 320 00a8 94ED097A 		vldr.32	s14, [r4, #36]
+  62:modules/algorithm/smc_controller.c ****     {
+ 321              		.loc 1 62 23 view .LVU102
+ 322 00ac F1EE677A 		vneg.f32	s15, s15
+  62:modules/algorithm/smc_controller.c ****     {
+ 323              		.loc 1 62 8 view .LVU103
+ 324 00b0 B4EEE77A 		vcmpe.f32	s14, s15
+ 325 00b4 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 326 00b8 01D5     		bpl	.L24
+  64:modules/algorithm/smc_controller.c ****     }
+ 327              		.loc 1 64 9 is_stmt 1 view .LVU104
+  64:modules/algorithm/smc_controller.c ****     }
+ 328              		.loc 1 64 21 is_stmt 0 view .LVU105
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s 			page 10
+
+
+ 329 00ba C4ED097A 		vstr.32	s15, [r4, #36]
+ 330              	.L24:
+  67:modules/algorithm/smc_controller.c ****     smc->RefLast = smc->Ref;
+ 331              		.loc 1 67 5 is_stmt 1 view .LVU106
+  67:modules/algorithm/smc_controller.c ****     smc->RefLast = smc->Ref;
+ 332              		.loc 1 67 20 is_stmt 0 view .LVU107
+ 333 00be 84ED0B8A 		vstr.32	s16, [r4, #44]
+  68:modules/algorithm/smc_controller.c **** 
+ 334              		.loc 1 68 5 is_stmt 1 view .LVU108
+  68:modules/algorithm/smc_controller.c **** 
+ 335              		.loc 1 68 18 is_stmt 0 view .LVU109
+ 336 00c2 84ED0E9A 		vstr.32	s18, [r4, #56]
+  70:modules/algorithm/smc_controller.c **** }
+ 337              		.loc 1 70 5 is_stmt 1 view .LVU110
+  70:modules/algorithm/smc_controller.c **** }
+ 338              		.loc 1 70 15 is_stmt 0 view .LVU111
+ 339 00c6 94ED090A 		vldr.32	s0, [r4, #36]
+ 340              	.L18:
+  71:modules/algorithm/smc_controller.c **** 
+ 341              		.loc 1 71 1 view .LVU112
+ 342 00ca BDEC068B 		vldm	sp!, {d8-d10}
+ 343              	.LCFI6:
+ 344              		.cfi_remember_state
+ 345              		.cfi_restore 84
+ 346              		.cfi_restore 85
+ 347              		.cfi_restore 82
+ 348              		.cfi_restore 83
+ 349              		.cfi_restore 80
+ 350              		.cfi_restore 81
+ 351              		.cfi_def_cfa_offset 8
+ 352              	.LVL12:
+  71:modules/algorithm/smc_controller.c **** 
+ 353              		.loc 1 71 1 view .LVU113
+ 354 00ce 10BD     		pop	{r4, pc}
+ 355              	.LVL13:
+ 356              	.L35:
+ 357              	.LCFI7:
+ 358              		.cfi_restore_state
+  47:modules/algorithm/smc_controller.c ****         smc->Surface = 0.0f;
+ 359              		.loc 1 47 9 is_stmt 1 view .LVU114
+  47:modules/algorithm/smc_controller.c ****         smc->Surface = 0.0f;
+ 360              		.loc 1 47 21 is_stmt 0 view .LVU115
+ 361 00d0 9FED060A 		vldr.32	s0, .L36
+ 362              	.LVL14:
+  47:modules/algorithm/smc_controller.c ****         smc->Surface = 0.0f;
+ 363              		.loc 1 47 21 view .LVU116
+ 364 00d4 80ED090A 		vstr.32	s0, [r0, #36]
+  48:modules/algorithm/smc_controller.c ****         smc->ErrorLast = smc->Error;
+ 365              		.loc 1 48 9 is_stmt 1 view .LVU117
+  48:modules/algorithm/smc_controller.c ****         smc->ErrorLast = smc->Error;
+ 366              		.loc 1 48 22 is_stmt 0 view .LVU118
+ 367 00d8 80ED0F0A 		vstr.32	s0, [r0, #60]
+  49:modules/algorithm/smc_controller.c ****         smc->RefLast = smc->Ref;
+ 368              		.loc 1 49 9 is_stmt 1 view .LVU119
+  49:modules/algorithm/smc_controller.c ****         smc->RefLast = smc->Ref;
+ 369              		.loc 1 49 24 is_stmt 0 view .LVU120
+ 370 00dc 80ED0B8A 		vstr.32	s16, [r0, #44]
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s 			page 11
+
+
+  50:modules/algorithm/smc_controller.c ****         return smc->Output;
+ 371              		.loc 1 50 9 is_stmt 1 view .LVU121
+  50:modules/algorithm/smc_controller.c ****         return smc->Output;
+ 372              		.loc 1 50 22 is_stmt 0 view .LVU122
+ 373 00e0 80ED0E1A 		vstr.32	s2, [r0, #56]
+  51:modules/algorithm/smc_controller.c ****     }
+ 374              		.loc 1 51 9 is_stmt 1 view .LVU123
+  51:modules/algorithm/smc_controller.c ****     }
+ 375              		.loc 1 51 19 is_stmt 0 view .LVU124
+ 376 00e4 F1E7     		b	.L18
+ 377              	.LVL15:
+ 378              	.L26:
+ 379              	.LCFI8:
+ 380              		.cfi_def_cfa_offset 0
+ 381              		.cfi_restore 4
+ 382              		.cfi_restore 14
+ 383              		.cfi_restore 80
+ 384              		.cfi_restore 81
+ 385              		.cfi_restore 82
+ 386              		.cfi_restore 83
+ 387              		.cfi_restore 84
+ 388              		.cfi_restore 85
+  33:modules/algorithm/smc_controller.c ****     }
+ 389              		.loc 1 33 16 view .LVU125
+ 390 00e6 9FED010A 		vldr.32	s0, .L36
+ 391              	.LVL16:
+  71:modules/algorithm/smc_controller.c **** 
+ 392              		.loc 1 71 1 view .LVU126
+ 393 00ea 7047     		bx	lr
+ 394              	.L37:
+ 395              		.align	2
+ 396              	.L36:
+ 397 00ec 00000000 		.word	0
+ 398              		.cfi_endproc
+ 399              	.LFE236:
+ 401              		.text
+ 402              	.Letext0:
+ 403              		.file 2 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_ty
+ 404              		.file 3 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_stdint.h"
+ 405              		.file 4 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/lib/gcc/arm-none-eabi/13.3.1/include/stdd
+ 406              		.file 5 "modules/algorithm/smc_controller.h"
+ 407              		.file 6 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/string.h"
+ 408              		.file 7 "<built-in>"
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 smc_controller.c
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s:21     .text.smc_signal:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s:26     .text.smc_signal:00000000 smc_signal
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s:60     .text.smc_sat:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s:65     .text.smc_sat:00000000 smc_sat
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s:108    .text.SMCInit:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s:114    .text.SMCInit:00000000 SMCInit
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s:195    .text.SMCCalculate:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s:201    .text.SMCCalculate:00000000 SMCCalculate
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLKbu91.s:397    .text.SMCCalculate:000000ec $d
+
+UNDEFINED SYMBOLS
+memset

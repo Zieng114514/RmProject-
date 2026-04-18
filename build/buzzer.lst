@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 1
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 1
   40              		.loc 1 16 5 view .LVU1
   41              		.loc 1 16 23 is_stmt 0 view .LVU2
   42 0004 0023     		movs	r3, #0
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 2
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s 			page 2
 
 
   43 0006 0093     		str	r3, [sp]
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 1
   89              		.cfi_startproc
   90              		@ args = 0, pretend = 0, frame = 0
   91              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 3
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s 			page 3
 
 
   27:modules/alarm/buzzer.c ****     if (config->alarm_level > BUZZER_DEVICE_CNT) // 超过最大实例数,考虑增加或查看是�
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 1
   36:modules/alarm/buzzer.c ****     buzzer_temp->alarm_state = ALARM_OFF;
  136              		.loc 1 36 5 is_stmt 1 view .LVU27
   37:modules/alarm/buzzer.c **** 
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 4
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s 			page 4
 
 
   38:modules/alarm/buzzer.c ****     buzzer_list[config->alarm_level] = buzzer_temp;
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 1
   48:modules/alarm/buzzer.c **** {
  185              		.loc 1 48 1 is_stmt 1 view -0
  186              		.cfi_startproc
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 5
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s 			page 5
 
 
  187              		@ args = 0, pretend = 0, frame = 0
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 1
  225 0020 20       		.byte	(.L21-.L19)/2
  226 0021 27       		.byte	(.L20-.L19)/2
  227 0022 2E       		.byte	(.L18-.L19)/2
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 6
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s 			page 6
 
 
  228 0023 00       		.p2align 1
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 1
  251              		.loc 1 71 17 view .LVU52
  252 003e F7E7     		b	.L13
  253              	.L23:
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 7
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s 			page 7
 
 
   73:modules/alarm/buzzer.c ****                 break;
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 1
  298              	.L15:
   50:modules/alarm/buzzer.c ****     {
  299              		.loc 1 50 47 discriminator 2 view .LVU63
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 8
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s 			page 8
 
 
  300 0086 0134     		adds	r4, r4, #1
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 1
  344              		.cfi_endproc
  345              	.LFE241:
  347              		.section	.bss.buzzer_list,"aw",%nobits
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 9
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s 			page 9
 
 
  348              		.align	2
@@ -506,29 +506,29 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 1
  370              		.file 11 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/string.h"
  371              		.file 12 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/stdlib.h"
  372              		.file 13 "Inc/tim.h"
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s 			page 10
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s 			page 10
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 buzzer.c
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:21     .text.BuzzerInit:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:27     .text.BuzzerInit:00000000 BuzzerInit
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:72     .text.BuzzerInit:00000030 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:357    .bss.buzzer:00000000 buzzer
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:79     .text.BuzzerRegister:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:85     .text.BuzzerRegister:00000000 BuzzerRegister
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:149    .text.BuzzerRegister:0000002c $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:351    .bss.buzzer_list:00000000 buzzer_list
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:154    .text.AlarmSetStatus:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:160    .text.AlarmSetStatus:00000000 AlarmSetStatus
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:177    .text.BuzzerTask:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:183    .text.BuzzerTask:00000000 BuzzerTask
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:221    .text.BuzzerTask:0000001c $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:333    .text.BuzzerTask:000000ac $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:348    .bss.buzzer_list:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:354    .bss.buzzer:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:228    .text.BuzzerTask:00000023 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccNWYCaR.s:228    .text.BuzzerTask:00000024 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:21     .text.BuzzerInit:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:27     .text.BuzzerInit:00000000 BuzzerInit
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:72     .text.BuzzerInit:00000030 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:357    .bss.buzzer:00000000 buzzer
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:79     .text.BuzzerRegister:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:85     .text.BuzzerRegister:00000000 BuzzerRegister
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:149    .text.BuzzerRegister:0000002c $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:351    .bss.buzzer_list:00000000 buzzer_list
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:154    .text.AlarmSetStatus:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:160    .text.AlarmSetStatus:00000000 AlarmSetStatus
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:177    .text.BuzzerTask:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:183    .text.BuzzerTask:00000000 BuzzerTask
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:221    .text.BuzzerTask:0000001c $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:333    .text.BuzzerTask:000000ac $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:348    .bss.buzzer_list:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:354    .bss.buzzer:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:228    .text.BuzzerTask:00000023 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cceaQNoF.s:228    .text.BuzzerTask:00000024 $t
 
 UNDEFINED SYMBOLS
 PWMRegister

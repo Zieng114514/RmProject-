@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
   27:modules/referee/crc_ref.c **** uint16_t CRC_INIT = 0xffff;
   28:modules/referee/crc_ref.c **** const uint16_t wCRC_Table[256] =
   29:modules/referee/crc_ref.c **** {
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 2
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 2
 
 
   30:modules/referee/crc_ref.c **** 		0x0000, 0x1189, 0x2312, 0x329b, 0x4624, 0x57ad, 0x6536, 0x74bf,
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
   33              		@ frame_needed = 0, uses_anonymous_args = 0
   34              		@ link register save eliminated.
   35              		.loc 1 80 1 is_stmt 0 view .LVU1
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 3
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 3
 
 
   36 0000 0346     		mov	r3, r0
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
   77              	.LFE3:
   79              		.section	.text.Verify_CRC8_Check_Sum,"ax",%progbits
   80              		.align	1
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 4
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 4
 
 
   81              		.global	Verify_CRC8_Check_Sum
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
  118              	.LVL10:
  107:modules/referee/crc_ref.c **** 		
  108:modules/referee/crc_ref.c **** 		return ( ucExpected == pchMessage[dwLength-1] );
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 5
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 5
 
 
  119              		.loc 1 108 3 is_stmt 1 view .LVU25
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
  170              		.thumb_func
  172              	Append_CRC8_Check_Sum:
  173              	.LVL18:
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 6
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 6
 
 
  174              	.LFB5:
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
  208              	.L14:
  129:modules/referee/crc_ref.c **** }
  209              		.loc 1 129 1 view .LVU46
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 7
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 7
 
 
  210 0016 38BD     		pop	{r3, r4, r5, pc}
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
  250              		.loc 1 138 1 view .LVU55
  251 0008 10B4     		push	{r4}
  252              	.LCFI5:
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 8
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 8
 
 
  253              		.cfi_def_cfa_offset 4
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
  294              		.loc 1 142 10 view .LVU69
  295 002c 4FF6FF72 		movw	r2, #65535
  296              	.LVL33:
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 9
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 9
 
 
  297              	.L28:
@@ -538,7 +538,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
  165:modules/referee/crc_ref.c ****         	return FALSE;
  166:modules/referee/crc_ref.c **** 		}
  167:modules/referee/crc_ref.c **** 		
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 10
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 10
 
 
  168:modules/referee/crc_ref.c **** 		wExpected = Get_CRC16_Check_Sum ( pchMessage, dwLength - 2, CRC_INIT);
@@ -598,7 +598,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
  383              	.LCFI8:
  384              		.cfi_def_cfa_offset 0
  385              		.cfi_restore 4
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 11
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 11
 
 
  386              		.cfi_restore 5
@@ -658,7 +658,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
  182:modules/referee/crc_ref.c **** 	
  183:modules/referee/crc_ref.c **** 		if ((pchMessage == NULL) || (dwLength <= 2))
  429              		.loc 1 183 3 view .LVU97
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 12
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 12
 
 
  430              		.loc 1 183 6 is_stmt 0 view .LVU98
@@ -718,7 +718,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
  474              		.cfi_def_cfa_offset 0
  475              		.cfi_restore 4
  476              		.cfi_restore 5
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 13
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 13
 
 
  477              		.cfi_restore 6
@@ -778,7 +778,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
  534 0050 4AAD     		.short	-21174
  535 0052 C3BC     		.short	-17213
  536 0054 588E     		.short	-29096
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 14
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 14
 
 
  537 0056 D19F     		.short	-24623
@@ -838,7 +838,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
  591 00c2 8F72     		.short	29327
  592 00c4 1440     		.short	16404
  593 00c6 9D51     		.short	20893
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 15
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 15
 
 
  594 00c8 2225     		.short	9506
@@ -898,7 +898,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
  648 0134 D33B     		.short	15315
  649 0136 5A2A     		.short	10842
  650 0138 E55E     		.short	24293
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 16
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 16
 
 
  651 013a 6C4F     		.short	20332
@@ -958,7 +958,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
  705 01a6 16E4     		.short	-7146
  706 01a8 A990     		.short	-28503
  707 01aa 2081     		.short	-32480
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 17
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 17
 
 
  708 01ac BBB3     		.short	-19525
@@ -1018,7 +1018,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
  763      A3FD1F41 
  763      9DC3
  764 0012 217FFCA2 		.ascii	"!\177\374\242@\036_\001\343\275>`\202\334#}\237\301"
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 18
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 18
 
 
  764      401E5F01 
@@ -1078,7 +1078,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
  775 00db 77F4AA48 		.ascii	"w\364\252H\026\351\267U\013\210\3264j+u\227\311J\024"
  775      16E9B755 
  775      0B88D634 
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 19
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 19
 
 
  775      6A2B7597 
@@ -1096,33 +1096,33 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 1
  785              	.Letext0:
  786              		.file 2 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_ty
  787              		.file 3 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_stdint.h"
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s 			page 20
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s 			page 20
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 crc_ref.c
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:21     .text.Get_CRC8_Check_Sum:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:27     .text.Get_CRC8_Check_Sum:00000000 Get_CRC8_Check_Sum
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:75     .text.Get_CRC8_Check_Sum:00000020 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:762    .rodata.CRC8_TAB:00000000 CRC8_TAB
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:80     .text.Verify_CRC8_Check_Sum:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:86     .text.Verify_CRC8_Check_Sum:00000000 Verify_CRC8_Check_Sum
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:166    .text.Append_CRC8_Check_Sum:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:172    .text.Append_CRC8_Check_Sum:00000000 Append_CRC8_Check_Sum
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:225    .text.Get_CRC16_Check_Sum:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:231    .text.Get_CRC16_Check_Sum:00000000 Get_CRC16_Check_Sum
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:304    .text.Get_CRC16_Check_Sum:00000034 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:493    .rodata.wCRC_Table:00000000 wCRC_Table
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:309    .text.Verify_CRC16_Check_Sum:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:315    .text.Verify_CRC16_Check_Sum:00000000 Verify_CRC16_Check_Sum
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:410    .text.Verify_CRC16_Check_Sum:00000044 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:755    .data.CRC_INIT:00000000 CRC_INIT
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:415    .text.Append_CRC16_Check_Sum:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:421    .text.Append_CRC16_Check_Sum:00000000 Append_CRC16_Check_Sum
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:484    .text.Append_CRC16_Check_Sum:00000028 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:490    .rodata.wCRC_Table:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:752    .data.CRC_INIT:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:759    .rodata.CRC8_TAB:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc0U17CW.s:782    .rodata.CRC8_INIT:00000000 CRC8_INIT
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:21     .text.Get_CRC8_Check_Sum:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:27     .text.Get_CRC8_Check_Sum:00000000 Get_CRC8_Check_Sum
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:75     .text.Get_CRC8_Check_Sum:00000020 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:762    .rodata.CRC8_TAB:00000000 CRC8_TAB
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:80     .text.Verify_CRC8_Check_Sum:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:86     .text.Verify_CRC8_Check_Sum:00000000 Verify_CRC8_Check_Sum
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:166    .text.Append_CRC8_Check_Sum:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:172    .text.Append_CRC8_Check_Sum:00000000 Append_CRC8_Check_Sum
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:225    .text.Get_CRC16_Check_Sum:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:231    .text.Get_CRC16_Check_Sum:00000000 Get_CRC16_Check_Sum
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:304    .text.Get_CRC16_Check_Sum:00000034 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:493    .rodata.wCRC_Table:00000000 wCRC_Table
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:309    .text.Verify_CRC16_Check_Sum:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:315    .text.Verify_CRC16_Check_Sum:00000000 Verify_CRC16_Check_Sum
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:410    .text.Verify_CRC16_Check_Sum:00000044 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:755    .data.CRC_INIT:00000000 CRC_INIT
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:415    .text.Append_CRC16_Check_Sum:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:421    .text.Append_CRC16_Check_Sum:00000000 Append_CRC16_Check_Sum
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:484    .text.Append_CRC16_Check_Sum:00000028 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:490    .rodata.wCRC_Table:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:752    .data.CRC_INIT:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:759    .rodata.CRC8_TAB:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccbEipnw.s:782    .rodata.CRC8_INIT:00000000 CRC8_INIT
 
 NO UNDEFINED SYMBOLS

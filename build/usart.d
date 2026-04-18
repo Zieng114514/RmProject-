@@ -40,7 +40,45 @@ build/usart.o: Src/usart.c Inc/usart.h Inc/main.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
- Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h \
+ application/robot_def.h modules/imu/ins_task.h \
+ modules/imu/BMI088driver.h Inc/main.h modules/algorithm/QuaternionEKF.h \
+ modules/algorithm/kalman_filter.h \
+ Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h \
+ Middlewares/ST/ARM/DSP/Include/arm_math.h \
+ Middlewares/ST/ARM/DSP/Include/arm_math_types.h \
+ Drivers/CMSIS/Include/cmsis_compiler.h \
+ Middlewares/ST/ARM/DSP/Include/arm_math_memory.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/none.h \
+ Middlewares/ST/ARM/DSP/Include/arm_math_types.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/utils.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/basic_math_functions.h \
+ Middlewares/ST/ARM/DSP/Include/arm_math_memory.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/none.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/utils.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/interpolation_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/bayes_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/statistics_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/basic_math_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/fast_math_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/matrix_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/complex_math_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/statistics_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/controller_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/support_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/distance_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/matrix_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/svm_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/svm_defines.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/fast_math_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/transform_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/complex_math_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/filtering_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/support_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/quaternion_math_functions.h \
+ Middlewares/ST/ARM/DSP/Include/dsp/window_functions.h \
+ modules/master_machine/master_process.h bsp/usart/bsp_usart.h \
+ modules/master_machine/seasky_protocol.h
 Inc/usart.h:
 Inc/main.h:
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
@@ -87,3 +125,45 @@ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h:
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h:
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h:
+application/robot_def.h:
+modules/imu/ins_task.h:
+modules/imu/BMI088driver.h:
+Inc/main.h:
+modules/algorithm/QuaternionEKF.h:
+modules/algorithm/kalman_filter.h:
+Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h:
+Middlewares/ST/ARM/DSP/Include/arm_math.h:
+Middlewares/ST/ARM/DSP/Include/arm_math_types.h:
+Drivers/CMSIS/Include/cmsis_compiler.h:
+Middlewares/ST/ARM/DSP/Include/arm_math_memory.h:
+Middlewares/ST/ARM/DSP/Include/dsp/none.h:
+Middlewares/ST/ARM/DSP/Include/arm_math_types.h:
+Middlewares/ST/ARM/DSP/Include/dsp/utils.h:
+Middlewares/ST/ARM/DSP/Include/dsp/basic_math_functions.h:
+Middlewares/ST/ARM/DSP/Include/arm_math_memory.h:
+Middlewares/ST/ARM/DSP/Include/dsp/none.h:
+Middlewares/ST/ARM/DSP/Include/dsp/utils.h:
+Middlewares/ST/ARM/DSP/Include/dsp/interpolation_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/bayes_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/statistics_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/basic_math_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/fast_math_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/matrix_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/complex_math_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/statistics_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/controller_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/support_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/distance_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/matrix_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/svm_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/svm_defines.h:
+Middlewares/ST/ARM/DSP/Include/dsp/fast_math_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/transform_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/complex_math_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/filtering_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/support_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/quaternion_math_functions.h:
+Middlewares/ST/ARM/DSP/Include/dsp/window_functions.h:
+modules/master_machine/master_process.h:
+bsp/usart/bsp_usart.h:
+modules/master_machine/seasky_protocol.h:

@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s 			page 1
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s 			page 1
   43 0004 1020     		movs	r0, #16
   44              	.LVL1:
   45              		.loc 1 13 50 view .LVU4
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s 			page 2
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s 			page 2
 
 
   46 0006 FFF7FEFF 		bl	malloc
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s 			page 1
   91 0030 034A     		ldr	r2, .L5
   92 0032 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
   93 0034 591C     		adds	r1, r3, #1
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s 			page 3
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s 			page 3
 
 
   94 0036 1170     		strb	r1, [r2]
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s 			page 1
  144              	.LVL5:
  145              	.LFB240:
   31:modules/daemon/daemon.c **** 
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s 			page 4
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s 			page 4
 
 
   32:modules/daemon/daemon.c **** uint8_t DaemonIsOnline(DaemonInstance *instance)
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s 			page 1
   42:modules/daemon/daemon.c **** 
   43:modules/daemon/daemon.c ****         dins = daemon_instances[i];
   44:modules/daemon/daemon.c ****         if (dins->temp_count > 0) // 如果计数器还有值,说明上一次喂狗后还没有超�
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s 			page 5
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s 			page 5
 
 
   45:modules/daemon/daemon.c ****             dins->temp_count--;
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s 			page 1
   50:modules/daemon/daemon.c ****         }
   51:modules/daemon/daemon.c ****     }
   52:modules/daemon/daemon.c **** }
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s 			page 6
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s 			page 6
 
 
  231              		.loc 1 52 1 view .LVU60
@@ -331,25 +331,25 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s 			page 1
  259              		.file 5 "modules/daemon/daemon.h"
  260              		.file 6 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/string.h"
  261              		.file 7 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/stdlib.h"
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s 			page 7
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s 			page 7
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 daemon.c
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s:21     .text.DaemonRegister:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s:27     .text.DaemonRegister:00000000 DaemonRegister
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s:106    .text.DaemonRegister:00000040 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s:246    .bss.idx:00000000 idx
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s:252    .bss.daemon_instances:00000000 daemon_instances
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s:112    .text.DaemonReload:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s:118    .text.DaemonReload:00000000 DaemonReload
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s:137    .text.DaemonIsOnline:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s:143    .text.DaemonIsOnline:00000000 DaemonIsOnline
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s:164    .text.DaemonTask:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s:170    .text.DaemonTask:00000000 DaemonTask
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s:238    .text.DaemonTask:0000002c $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s:247    .bss.idx:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccswvYgS.s:249    .bss.daemon_instances:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s:21     .text.DaemonRegister:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s:27     .text.DaemonRegister:00000000 DaemonRegister
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s:106    .text.DaemonRegister:00000040 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s:246    .bss.idx:00000000 idx
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s:252    .bss.daemon_instances:00000000 daemon_instances
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s:112    .text.DaemonReload:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s:118    .text.DaemonReload:00000000 DaemonReload
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s:137    .text.DaemonIsOnline:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s:143    .text.DaemonIsOnline:00000000 DaemonIsOnline
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s:164    .text.DaemonTask:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s:170    .text.DaemonTask:00000000 DaemonTask
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s:238    .text.DaemonTask:0000002c $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s:247    .bss.idx:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccMdNEUx.s:249    .bss.daemon_instances:00000000 $d
 
 UNDEFINED SYMBOLS
 malloc

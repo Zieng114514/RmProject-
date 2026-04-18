@@ -112,12 +112,13 @@ build/robot.o: application/robot.c bsp/bsp_init.h bsp/bsp_init.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
  modules/motor/motor_task.h modules/referee/referee_task.h \
  modules/referee/rm_referee.h Inc/usart.h \
- modules/referee/referee_protocol.h modules/daemon/daemon.h \
- modules/motor/HTmotor/HT04.h bsp/can/bsp_can.h Inc/can.h \
- modules/algorithm/controller.h modules/motor/motor_def.h \
- modules/alarm/buzzer.h bsp/pwm/bsp_pwm.h Inc/tim.h \
- application/chassis/chassis.h application/gimbal/gimbal.h \
- application/shoot/shoot.h application/cmd/robot_cmd.h
+ modules/referee/referee_protocol.h modules/sp_vision/sp_vision.h \
+ modules/daemon/daemon.h modules/motor/HTmotor/HT04.h bsp/can/bsp_can.h \
+ Inc/can.h modules/algorithm/controller.h modules/motor/motor_def.h \
+ modules/algorithm/smc_controller.h modules/alarm/buzzer.h \
+ bsp/pwm/bsp_pwm.h Inc/tim.h application/gimbal/gimbal.h \
+ application/shoot/shoot.h application/cmd/robot_cmd.h \
+ modules/elrs/elrs.h
 bsp/bsp_init.h:
 bsp/bsp_init.h:
 bsp/log/bsp_log.h:
@@ -248,16 +249,18 @@ modules/referee/referee_task.h:
 modules/referee/rm_referee.h:
 Inc/usart.h:
 modules/referee/referee_protocol.h:
+modules/sp_vision/sp_vision.h:
 modules/daemon/daemon.h:
 modules/motor/HTmotor/HT04.h:
 bsp/can/bsp_can.h:
 Inc/can.h:
 modules/algorithm/controller.h:
 modules/motor/motor_def.h:
+modules/algorithm/smc_controller.h:
 modules/alarm/buzzer.h:
 bsp/pwm/bsp_pwm.h:
 Inc/tim.h:
-application/chassis/chassis.h:
 application/gimbal/gimbal.h:
 application/shoot/shoot.h:
 application/cmd/robot_cmd.h:
+modules/elrs/elrs.h:

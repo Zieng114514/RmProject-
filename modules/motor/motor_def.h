@@ -13,6 +13,7 @@
 #define MOTOR_DEF_H
 
 #include "controller.h"
+#include "smc_controller.h"
 #include "stdint.h"
 
 #define LIMIT_MIN_MAX(x, min, max) (x) = (((x) <= (min)) ? (min) : (((x) >= (max)) ? (max) : (x)))
@@ -56,6 +57,7 @@ typedef enum
     MOTOR_DIRECTION_REVERSE = 1
 } Motor_Reverse_Flag_e;
 
+
 /* 反馈量正反标志 */
 typedef enum
 {
@@ -75,10 +77,11 @@ typedef struct
     Closeloop_Type_e close_loop_type;              // 使用几个闭环(串级)
     Motor_Reverse_Flag_e motor_reverse_flag;       // 是否反转
     Feedback_Reverse_Flag_e feedback_reverse_flag; // 反馈是否反向
-    Motor_Reverse_Flag_e imu_reverse_flag;         // IMU反馈是否反向（用于IMU闭环）
     Feedback_Source_e angle_feedback_source;       // 角度反馈类型
     Feedback_Source_e speed_feedback_source;       // 速度反馈类型
     Feedfoward_Type_e feedforward_flag;            // 前馈标志
+    uint8_t use_smc_controller;                    // 是否使用滑模控制器（仅GM6020_NEW）
+    Motor_Reverse_Flag_e imu_reverse_flag;         // IMU数据是否反转
 
 } Motor_Control_Setting_s;
 
@@ -94,22 +97,23 @@ typedef struct
     PIDInstance current_PID;
     PIDInstance speed_PID;
     PIDInstance angle_PID;
-    // IMU外环PID控制器（用于四环串级控制：IMU角度-IMU角速度-电机位置-电机速度）
-    PIDInstance imu_angle_PID;    // IMU角度环PID
-    PIDInstance imu_speed_PID;    // IMU角速度环PID
+    SMCInstance smc_controller; // 滑模控制器（仅GM6020_NEW）
 
     float pid_ref; // 将会作为每个环的输入和输出顺次通过串级闭环
 } Motor_Controller_s;
 
 /* 电机类型枚举 */
-typedef enum
-{
-    MOTOR_TYPE_NONE = 0,
-    GM6020,
-    M3508,
-    M2006,
-    LK9025,
-    HT04,
+typedef enum {
+  MOTOR_TYPE_NONE = 0,
+  GM6020,
+  M3508,
+  M2006,
+  LK9025,
+  HT04,
+  DM_8009,
+  DM_4310,
+  BM_1505,
+  GM6020_NEW // 新版固件6020（配套0x1fe/0x2fe控制帧，可选SMC）
 } Motor_Type_e;
 
 /**
@@ -128,9 +132,7 @@ typedef struct
     PID_Init_Config_s current_PID;
     PID_Init_Config_s speed_PID;
     PID_Init_Config_s angle_PID;
-    // IMU外环PID配置（用于四环串级控制）
-    PID_Init_Config_s imu_angle_PID;  // IMU角度环PID配置
-    PID_Init_Config_s imu_speed_PID;  // IMU角速度环PID配置
+    SMC_Init_Config_s smc_controller; // 滑模控制器（仅GM6020_NEW）
 } Motor_Controller_Init_s;
 
 /* 用于初始化CAN电机的结构体,各类电机通用 */

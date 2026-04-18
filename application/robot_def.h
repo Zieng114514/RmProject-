@@ -30,8 +30,8 @@
 /*决定 C板的UART2 也就是UART1用ELRS接收机还是其他外设*/
 //////////////////////////////////////////////
 //#define UART1_NORMAL
-#define USE_CRSF
-//#define USE_SBUS
+//#define USE_CRSF
+#define USE_SBUS
 
 
 #define pitch_limit_up -24.0f //pitch限制
@@ -45,7 +45,7 @@
 #define PITCH_MAX_ANGLE 0           // 云台竖直方向最大角度 (注意反馈如果是陀螺仪，则填写陀螺仪的角度)
 #define PITCH_MIN_ANGLE 0           // 云台竖直方向最小角度 (注意反馈如果是陀螺仪，则填写陀螺仪的角度)
 // 发射参数
-#define ONE_BULLET_DELTA_ANGLE 36    // 发射一发弹丸拨盘转动的距离,由机械设计图纸给出
+#define ONE_BULLET_DELTA_ANGLE 45    // 发射一发弹丸拨盘转动的距离,由机械设计图纸给出
 #define REDUCTION_RATIO_LOADER 36.0f // 2006拨盘电机的减速比,英雄需要修改为3508的19.0f
 #define NUM_PER_CIRCLE 10            // 拨盘一圈的装载量
 // 机器人底盘修改的参数,单位为mm(毫米)
@@ -56,7 +56,7 @@
 #define RADIUS_WHEEL 60             // 轮子半径
 #define REDUCTION_RATIO_WHEEL 19.0f // 电机减速比,因为编码器量测的是转子的速度而不是输出轴的速度故需进行转换
 
-#define GYRO2GIMBAL_DIR_YAW 1   // 陀螺仪数据相较于云台的yaw的方向,1为相同,-1为相反
+#define GYRO2GIMBAL_DIR_YAW -1   // 陀螺仪数据相较于云台的yaw的方向,1为相同,-1为相反
 #define GYRO2GIMBAL_DIR_PITCH 1 // 陀螺仪数据相较于云台的pitch的方向,1为相同,-1为相反
 #define GYRO2GIMBAL_DIR_ROLL 1  // 陀螺仪数据相较于云台的roll的方向,1为相同,-1为相反
 
@@ -100,6 +100,18 @@ typedef enum
     CHASSIS_NO_FOLLOW,         // 不跟随，允许全向平移
     CHASSIS_FOLLOW_GIMBAL_YAW, // 跟随模式，底盘叠加角度环控制
 } chassis_mode_e;
+
+
+typedef struct
+{
+    float friction_l_speed_aps;
+    float friction_r_speed_aps;
+    float friction_l_real_current;
+    float friction_r_real_current;
+    float loader_speed_aps;
+    float loader_real_current;
+    uint8_t jam_state;
+} Shoot_Upload_Data_s;
 
 // 云台模式设置
 typedef enum
@@ -228,12 +240,6 @@ typedef struct
     attitude_t gimbal_imu_data;
     uint16_t yaw_motor_single_round_angle;
 } Gimbal_Upload_Data_s;
-
-typedef struct
-{
-    // code to go here
-    // ...
-} Shoot_Upload_Data_s;
 
 #pragma pack() // 开启字节对齐,结束前面的#pragma pack(1)
 

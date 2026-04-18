@@ -84,8 +84,9 @@ build/shoot.o: application/shoot/shoot.c application/shoot/shoot.h \
  bsp/log/bsp_log.h Middlewares/Third_Party/SEGGER/RTT/SEGGER_RTT.h \
  Middlewares/Third_Party/SEGGER/RTT/../Config/SEGGER_RTT_Conf.h \
  Middlewares/Third_Party/SEGGER/Config/SEGGER_RTT_Conf.h \
- modules/motor/motor_def.h modules/daemon/daemon.h \
- modules/message_center/message_center.h modules/general_def.h
+ modules/motor/motor_def.h modules/algorithm/smc_controller.h \
+ modules/daemon/daemon.h modules/message_center/message_center.h \
+ modules/general_def.h modules/can_vision/can_vision.h
 application/shoot/shoot.h:
 application/robot_def.h:
 modules/imu/ins_task.h:
@@ -184,6 +185,8 @@ Middlewares/Third_Party/SEGGER/RTT/SEGGER_RTT.h:
 Middlewares/Third_Party/SEGGER/RTT/../Config/SEGGER_RTT_Conf.h:
 Middlewares/Third_Party/SEGGER/Config/SEGGER_RTT_Conf.h:
 modules/motor/motor_def.h:
+modules/algorithm/smc_controller.h:
 modules/daemon/daemon.h:
 modules/message_center/message_center.h:
 modules/general_def.h:
+modules/can_vision/can_vision.h:

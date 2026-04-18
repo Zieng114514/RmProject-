@@ -84,10 +84,11 @@ build/chassis.o: application/chassis/chassis.c \
  Middlewares/Third_Party/SEGGER/RTT/SEGGER_RTT.h \
  Middlewares/Third_Party/SEGGER/RTT/../Config/SEGGER_RTT_Conf.h \
  Middlewares/Third_Party/SEGGER/Config/SEGGER_RTT_Conf.h \
- modules/motor/motor_def.h modules/daemon/daemon.h \
- modules/motor/DJImotor/dji_motor.h modules/motor/motor_def.h \
- modules/super_cap/super_cap.h modules/message_center/message_center.h \
- modules/referee/referee_task.h modules/referee/rm_referee.h Inc/usart.h \
+ modules/motor/motor_def.h modules/algorithm/smc_controller.h \
+ modules/daemon/daemon.h modules/motor/DJImotor/dji_motor.h \
+ modules/motor/motor_def.h modules/super_cap/super_cap.h \
+ modules/message_center/message_center.h modules/referee/referee_task.h \
+ modules/referee/rm_referee.h Inc/usart.h \
  modules/referee/referee_protocol.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  Inc/FreeRTOSConfig.h \
@@ -195,6 +196,7 @@ Middlewares/Third_Party/SEGGER/RTT/SEGGER_RTT.h:
 Middlewares/Third_Party/SEGGER/RTT/../Config/SEGGER_RTT_Conf.h:
 Middlewares/Third_Party/SEGGER/Config/SEGGER_RTT_Conf.h:
 modules/motor/motor_def.h:
+modules/algorithm/smc_controller.h:
 modules/daemon/daemon.h:
 modules/motor/DJImotor/dji_motor.h:
 modules/motor/motor_def.h:

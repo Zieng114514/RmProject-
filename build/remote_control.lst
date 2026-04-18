@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 1
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 1
   32              		@ link register save eliminated.
   25:modules/remote/remote_control.c ****     for (uint8_t i = 0; i < 5; ++i)
   33              		.loc 1 25 5 view .LVU1
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 2
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s 			page 2
 
 
   34              	.LBB2:
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 1
   86              		.thumb_func
   88              	sbus_to_rc:
   89              	.LVL4:
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 3
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s 			page 3
 
 
   90              	.LFB239:
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 1
  133 002a EB80     		strh	r3, [r5, #6]	@ movhi
   40:modules/remote/remote_control.c ****     rc_ctrl[TEMP].rc.rocker_l_ = (((sbus_buf[2] >> 6) | (sbus_buf[3] << 2) | (sbus_buf[4] << 10)) &
  134              		.loc 1 40 5 is_stmt 1 view .LVU32
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 4
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s 			page 4
 
 
  135              		.loc 1 40 45 is_stmt 0 view .LVU33
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 1
  184 0070 C3F30113 		ubfx	r3, r3, #4, #2
  185              		.loc 1 45 35 view .LVU58
  186 0074 EB72     		strb	r3, [r5, #11]
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 5
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s 			page 5
 
 
   46:modules/remote/remote_control.c ****     rc_ctrl[TEMP].rc.switch_left = ((sbus_buf[5] >> 4) & 0x000C) >> 2; //!< Switch left
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 1
   56:modules/remote/remote_control.c ****     if (rc_ctrl[TEMP].key[KEY_PRESS].ctrl) // ctrl键按下
  231              		.loc 1 56 5 is_stmt 1 view .LVU84
  232 00a2 C2B2     		uxtb	r2, r0
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 6
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s 			page 6
 
 
  233              		.loc 1 56 8 is_stmt 0 view .LVU85
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 1
  271              		.loc 1 72 10 view .LVU99
  272              		.loc 1 72 26 is_stmt 0 view .LVU100
  273 00ce 0123     		movs	r3, #1
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 7
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s 			page 7
 
 
  274              		.loc 1 72 19 view .LVU101
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 1
  315 00fe 09D0     		beq	.L14
  316              		.loc 1 83 34 discriminator 1 view .LVU114
  317 0100 13EA0E0F 		tst	r3, lr
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 8
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s 			page 8
 
 
  318 0104 06D1     		bne	.L14
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 1
   77:modules/remote/remote_control.c ****             rc_ctrl[TEMP].key_count[KEY_PRESS][i]++;
  359              		.loc 1 77 46 discriminator 2 view .LVU130
  360 0130 2342     		tst	r3, r4
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 9
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s 			page 9
 
 
  361 0132 D7D1     		bne	.L15
@@ -538,7 +538,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 1
   90:modules/remote/remote_control.c **** /**
   91:modules/remote/remote_control.c ****  * @brief 对sbus_to_rc的简单封装,用于注册到bsp_usart的回调函数中
   92:modules/remote/remote_control.c ****  *
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 10
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s 			page 10
 
 
   93:modules/remote/remote_control.c ****  */
@@ -598,7 +598,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 1
  446              		.thumb_func
  448              	RemoteControlRxCallback:
  449              	.LFB240:
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 11
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s 			page 11
 
 
   95:modules/remote/remote_control.c ****     DaemonReload(rc_daemon_instance);         // 先喂狗
@@ -658,7 +658,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 1
  499              	.LCFI4:
  500              		.cfi_def_cfa_offset 32
  113:modules/remote/remote_control.c ****     USART_Init_Config_s conf;
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 12
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s 			page 12
 
 
  501              		.loc 1 113 5 is_stmt 1 view .LVU153
@@ -718,7 +718,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 1
  541              		.loc 1 127 5 is_stmt 1 view .LVU169
  542              		.loc 1 127 18 is_stmt 0 view .LVU170
  543 0036 074B     		ldr	r3, .L32+16
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 13
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s 			page 13
 
 
  544 0038 0122     		movs	r2, #1
@@ -778,7 +778,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 1
  591              		.loc 1 136 1 view .LVU177
  592 0008 08BD     		pop	{r3, pc}
  593              	.L37:
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 14
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s 			page 14
 
 
  134:modules/remote/remote_control.c ****         return DaemonIsOnline(rc_daemon_instance);
@@ -830,37 +830,37 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 1
  643              		.file 11 "modules/daemon/daemon.h"
  644              		.file 12 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/string.h"
  645              		.file 13 "<built-in>"
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s 			page 15
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s 			page 15
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 remote_control.c
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:21     .text.RectifyRCjoystick:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:26     .text.RectifyRCjoystick:00000000 RectifyRCjoystick
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:78     .text.RectifyRCjoystick:0000002c $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:630    .bss.rc_ctrl:00000000 rc_ctrl
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:83     .text.sbus_to_rc:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:88     .text.sbus_to_rc:00000000 sbus_to_rc
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:393    .text.sbus_to_rc:00000154 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:400    .text.RCLostCallback:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:405    .text.RCLostCallback:00000000 RCLostCallback
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:437    .text.RCLostCallback:00000018 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:619    .bss.rc_usart_instance:00000000 rc_usart_instance
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:443    .text.RemoteControlRxCallback:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:448    .text.RemoteControlRxCallback:00000000 RemoteControlRxCallback
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:474    .text.RemoteControlRxCallback:00000014 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:613    .bss.rc_daemon_instance:00000000 rc_daemon_instance
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:480    .text.RemoteControlInit:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:486    .text.RemoteControlInit:00000000 RemoteControlInit
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:557    .text.RemoteControlInit:00000044 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:624    .bss.rc_init_flag:00000000 rc_init_flag
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:567    .text.RemoteControlIsOnline:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:573    .text.RemoteControlIsOnline:00000000 RemoteControlIsOnline
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:604    .text.RemoteControlIsOnline:00000014 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:610    .bss.rc_daemon_instance:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:616    .bss.rc_usart_instance:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:625    .bss.rc_init_flag:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cco2ocEX.s:627    .bss.rc_ctrl:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:21     .text.RectifyRCjoystick:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:26     .text.RectifyRCjoystick:00000000 RectifyRCjoystick
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:78     .text.RectifyRCjoystick:0000002c $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:630    .bss.rc_ctrl:00000000 rc_ctrl
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:83     .text.sbus_to_rc:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:88     .text.sbus_to_rc:00000000 sbus_to_rc
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:393    .text.sbus_to_rc:00000154 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:400    .text.RCLostCallback:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:405    .text.RCLostCallback:00000000 RCLostCallback
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:437    .text.RCLostCallback:00000018 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:619    .bss.rc_usart_instance:00000000 rc_usart_instance
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:443    .text.RemoteControlRxCallback:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:448    .text.RemoteControlRxCallback:00000000 RemoteControlRxCallback
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:474    .text.RemoteControlRxCallback:00000014 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:613    .bss.rc_daemon_instance:00000000 rc_daemon_instance
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:480    .text.RemoteControlInit:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:486    .text.RemoteControlInit:00000000 RemoteControlInit
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:557    .text.RemoteControlInit:00000044 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:624    .bss.rc_init_flag:00000000 rc_init_flag
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:567    .text.RemoteControlIsOnline:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:573    .text.RemoteControlIsOnline:00000000 RemoteControlIsOnline
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:604    .text.RemoteControlIsOnline:00000014 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:610    .bss.rc_daemon_instance:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:616    .bss.rc_usart_instance:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:625    .bss.rc_init_flag:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cchRy5e3.s:627    .bss.rc_ctrl:00000000 $d
 
 UNDEFINED SYMBOLS
 memcpy

@@ -1,0 +1,1454 @@
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"sp_vision.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "modules/sp_vision/sp_vision.c"
+  20              		.section	.text.get_crc16,"ax",%progbits
+  21              		.align	1
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	get_crc16:
+  27              	.LVL0:
+  28              	.LFB271:
+   1:modules/sp_vision/sp_vision.c **** 
+   2:modules/sp_vision/sp_vision.c **** #include "sp_vision.h"
+   3:modules/sp_vision/sp_vision.c **** #include "daemon.h"
+   4:modules/sp_vision/sp_vision.c **** #include "bsp_log.h"
+   5:modules/sp_vision/sp_vision.c **** #include "robot_def.h"
+   6:modules/sp_vision/sp_vision.c **** 
+   7:modules/sp_vision/sp_vision.c **** 
+   8:modules/sp_vision/sp_vision.c **** static SP_Vision_Recv_s recv_data;
+   9:modules/sp_vision/sp_vision.c **** static SP_Vision_Send_s send_data;
+  10:modules/sp_vision/sp_vision.c **** static DaemonInstance *vision_daemon_instance;
+  11:modules/sp_vision/sp_vision.c **** uint8_t sp_vision_online = 0;
+  12:modules/sp_vision/sp_vision.c **** 
+  13:modules/sp_vision/sp_vision.c **** const uint16_t CRC16_INIT = 0xffff;
+  14:modules/sp_vision/sp_vision.c **** const uint16_t CRC16_TABLE[256] = {
+  15:modules/sp_vision/sp_vision.c ****   0x0000, 0x1189, 0x2312, 0x329b, 0x4624, 0x57ad, 0x6536, 0x74bf, 0x8c48, 0x9dc1, 0xaf5a, 0xbed3,
+  16:modules/sp_vision/sp_vision.c ****   0xca6c, 0xdbe5, 0xe97e, 0xf8f7, 0x1081, 0x0108, 0x3393, 0x221a, 0x56a5, 0x472c, 0x75b7, 0x643e,
+  17:modules/sp_vision/sp_vision.c ****   0x9cc9, 0x8d40, 0xbfdb, 0xae52, 0xdaed, 0xcb64, 0xf9ff, 0xe876, 0x2102, 0x308b, 0x0210, 0x1399,
+  18:modules/sp_vision/sp_vision.c ****   0x6726, 0x76af, 0x4434, 0x55bd, 0xad4a, 0xbcc3, 0x8e58, 0x9fd1, 0xeb6e, 0xfae7, 0xc87c, 0xd9f5,
+  19:modules/sp_vision/sp_vision.c ****   0x3183, 0x200a, 0x1291, 0x0318, 0x77a7, 0x662e, 0x54b5, 0x453c, 0xbdcb, 0xac42, 0x9ed9, 0x8f50,
+  20:modules/sp_vision/sp_vision.c ****   0xfbef, 0xea66, 0xd8fd, 0xc974, 0x4204, 0x538d, 0x6116, 0x709f, 0x0420, 0x15a9, 0x2732, 0x36bb,
+  21:modules/sp_vision/sp_vision.c ****   0xce4c, 0xdfc5, 0xed5e, 0xfcd7, 0x8868, 0x99e1, 0xab7a, 0xbaf3, 0x5285, 0x430c, 0x7197, 0x601e,
+  22:modules/sp_vision/sp_vision.c ****   0x14a1, 0x0528, 0x37b3, 0x263a, 0xdecd, 0xcf44, 0xfddf, 0xec56, 0x98e9, 0x8960, 0xbbfb, 0xaa72,
+  23:modules/sp_vision/sp_vision.c ****   0x6306, 0x728f, 0x4014, 0x519d, 0x2522, 0x34ab, 0x0630, 0x17b9, 0xef4e, 0xfec7, 0xcc5c, 0xddd5,
+  24:modules/sp_vision/sp_vision.c ****   0xa96a, 0xb8e3, 0x8a78, 0x9bf1, 0x7387, 0x620e, 0x5095, 0x411c, 0x35a3, 0x242a, 0x16b1, 0x0738,
+  25:modules/sp_vision/sp_vision.c ****   0xffcf, 0xee46, 0xdcdd, 0xcd54, 0xb9eb, 0xa862, 0x9af9, 0x8b70, 0x8408, 0x9581, 0xa71a, 0xb693,
+  26:modules/sp_vision/sp_vision.c ****   0xc22c, 0xd3a5, 0xe13e, 0xf0b7, 0x0840, 0x19c9, 0x2b52, 0x3adb, 0x4e64, 0x5fed, 0x6d76, 0x7cff,
+  27:modules/sp_vision/sp_vision.c ****   0x9489, 0x8500, 0xb79b, 0xa612, 0xd2ad, 0xc324, 0xf1bf, 0xe036, 0x18c1, 0x0948, 0x3bd3, 0x2a5a,
+  28:modules/sp_vision/sp_vision.c ****   0x5ee5, 0x4f6c, 0x7df7, 0x6c7e, 0xa50a, 0xb483, 0x8618, 0x9791, 0xe32e, 0xf2a7, 0xc03c, 0xd1b5,
+  29:modules/sp_vision/sp_vision.c ****   0x2942, 0x38cb, 0x0a50, 0x1bd9, 0x6f66, 0x7eef, 0x4c74, 0x5dfd, 0xb58b, 0xa402, 0x9699, 0x8710,
+  30:modules/sp_vision/sp_vision.c ****   0xf3af, 0xe226, 0xd0bd, 0xc134, 0x39c3, 0x284a, 0x1ad1, 0x0b58, 0x7fe7, 0x6e6e, 0x5cf5, 0x4d7c,
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 2
+
+
+  31:modules/sp_vision/sp_vision.c ****   0xc60c, 0xd785, 0xe51e, 0xf497, 0x8028, 0x91a1, 0xa33a, 0xb2b3, 0x4a44, 0x5bcd, 0x6956, 0x78df,
+  32:modules/sp_vision/sp_vision.c ****   0x0c60, 0x1de9, 0x2f72, 0x3efb, 0xd68d, 0xc704, 0xf59f, 0xe416, 0x90a9, 0x8120, 0xb3bb, 0xa232,
+  33:modules/sp_vision/sp_vision.c ****   0x5ac5, 0x4b4c, 0x79d7, 0x685e, 0x1ce1, 0x0d68, 0x3ff3, 0x2e7a, 0xe70e, 0xf687, 0xc41c, 0xd595,
+  34:modules/sp_vision/sp_vision.c ****   0xa12a, 0xb0a3, 0x8238, 0x93b1, 0x6b46, 0x7acf, 0x4854, 0x59dd, 0x2d62, 0x3ceb, 0x0e70, 0x1ff9,
+  35:modules/sp_vision/sp_vision.c ****   0xf78f, 0xe606, 0xd49d, 0xc514, 0xb1ab, 0xa022, 0x92b9, 0x8330, 0x7bc7, 0x6a4e, 0x58d5, 0x495c,
+  36:modules/sp_vision/sp_vision.c ****   0x3de3, 0x2c6a, 0x1ef1, 0x0f78};
+  37:modules/sp_vision/sp_vision.c **** 
+  38:modules/sp_vision/sp_vision.c **** 
+  39:modules/sp_vision/sp_vision.c **** static uint16_t get_crc16(const uint8_t * data, uint32_t len)
+  40:modules/sp_vision/sp_vision.c **** {
+  29              		.loc 1 40 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34              		.loc 1 40 1 is_stmt 0 view .LVU1
+  35 0000 0346     		mov	r3, r0
+  41:modules/sp_vision/sp_vision.c ****   uint16_t crc16 = CRC16_INIT;
+  36              		.loc 1 41 3 is_stmt 1 view .LVU2
+  37              	.LVL1:
+  42:modules/sp_vision/sp_vision.c ****   uint8_t byte;
+  38              		.loc 1 42 3 view .LVU3
+  43:modules/sp_vision/sp_vision.c ****   uint8_t i;
+  39              		.loc 1 43 3 view .LVU4
+  44:modules/sp_vision/sp_vision.c **** 
+  45:modules/sp_vision/sp_vision.c ****   while (len--) {
+  40              		.loc 1 45 3 view .LVU5
+  41:modules/sp_vision/sp_vision.c ****   uint8_t byte;
+  41              		.loc 1 41 12 is_stmt 0 view .LVU6
+  42 0002 4FF6FF70 		movw	r0, #65535
+  43              	.LVL2:
+  44              		.loc 1 45 9 view .LVU7
+  45 0006 09E0     		b	.L2
+  46              	.LVL3:
+  47              	.L3:
+  46:modules/sp_vision/sp_vision.c ****     byte = *data++;
+  48              		.loc 1 46 5 is_stmt 1 view .LVU8
+  49              		.loc 1 46 10 is_stmt 0 view .LVU9
+  50 0008 13F8011B 		ldrb	r1, [r3], #1	@ zero_extendqisi2
+  51              	.LVL4:
+  47:modules/sp_vision/sp_vision.c ****     i = (crc16 ^ byte) & 0x00ff;
+  52              		.loc 1 47 5 is_stmt 1 view .LVU10
+  53              		.loc 1 47 16 is_stmt 0 view .LVU11
+  54 000c C2B2     		uxtb	r2, r0
+  55              		.loc 1 47 7 view .LVU12
+  56 000e 4A40     		eors	r2, r2, r1
+  57              	.LVL5:
+  48:modules/sp_vision/sp_vision.c ****     crc16 = (crc16 >> 8) ^ CRC16_TABLE[i];
+  58              		.loc 1 48 5 is_stmt 1 view .LVU13
+  59              		.loc 1 48 39 is_stmt 0 view .LVU14
+  60 0010 0549     		ldr	r1, .L4
+  61 0012 31F81220 		ldrh	r2, [r1, r2, lsl #1]
+  62              	.LVL6:
+  63              		.loc 1 48 11 view .LVU15
+  64 0016 82EA1020 		eor	r0, r2, r0, lsr #8
+  65              	.LVL7:
+  45:modules/sp_vision/sp_vision.c ****     byte = *data++;
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 3
+
+
+  66              		.loc 1 45 13 view .LVU16
+  67 001a 6146     		mov	r1, ip
+  68              	.LVL8:
+  69              	.L2:
+  45:modules/sp_vision/sp_vision.c ****     byte = *data++;
+  70              		.loc 1 45 10 is_stmt 1 view .LVU17
+  45:modules/sp_vision/sp_vision.c ****     byte = *data++;
+  71              		.loc 1 45 13 is_stmt 0 view .LVU18
+  72 001c 01F1FF3C 		add	ip, r1, #-1
+  73              	.LVL9:
+  45:modules/sp_vision/sp_vision.c ****     byte = *data++;
+  74              		.loc 1 45 10 view .LVU19
+  75 0020 0029     		cmp	r1, #0
+  76 0022 F1D1     		bne	.L3
+  49:modules/sp_vision/sp_vision.c ****   }
+  50:modules/sp_vision/sp_vision.c **** 
+  51:modules/sp_vision/sp_vision.c ****   return crc16;
+  77              		.loc 1 51 3 is_stmt 1 view .LVU20
+  52:modules/sp_vision/sp_vision.c **** }
+  78              		.loc 1 52 1 is_stmt 0 view .LVU21
+  79 0024 7047     		bx	lr
+  80              	.L5:
+  81 0026 00BF     		.align	2
+  82              	.L4:
+  83 0028 00000000 		.word	CRC16_TABLE
+  84              		.cfi_endproc
+  85              	.LFE271:
+  87              		.section	.text.check_crc16,"ax",%progbits
+  88              		.align	1
+  89              		.syntax unified
+  90              		.thumb
+  91              		.thumb_func
+  93              	check_crc16:
+  94              	.LVL10:
+  95              	.LFB272:
+  53:modules/sp_vision/sp_vision.c **** 
+  54:modules/sp_vision/sp_vision.c **** static uint8_t check_crc16(const uint8_t * data, uint32_t len)
+  55:modules/sp_vision/sp_vision.c **** {
+  96              		.loc 1 55 1 is_stmt 1 view -0
+  97              		.cfi_startproc
+  98              		@ args = 0, pretend = 0, frame = 0
+  99              		@ frame_needed = 0, uses_anonymous_args = 0
+ 100              		.loc 1 55 1 is_stmt 0 view .LVU23
+ 101 0000 10B5     		push	{r4, lr}
+ 102              	.LCFI0:
+ 103              		.cfi_def_cfa_offset 8
+ 104              		.cfi_offset 4, -8
+ 105              		.cfi_offset 14, -4
+  56:modules/sp_vision/sp_vision.c ****   uint16_t crc16 = (data[len - 1] << 8) | data[len - 2];
+ 106              		.loc 1 56 3 is_stmt 1 view .LVU24
+ 107              		.loc 1 56 25 is_stmt 0 view .LVU25
+ 108 0002 4218     		adds	r2, r0, r1
+ 109 0004 12F8012C 		ldrb	r2, [r2, #-1]	@ zero_extendqisi2
+ 110              		.loc 1 56 47 view .LVU26
+ 111 0008 0239     		subs	r1, r1, #2
+ 112              	.LVL11:
+ 113              		.loc 1 56 47 view .LVU27
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 4
+
+
+ 114 000a 445C     		ldrb	r4, [r0, r1]	@ zero_extendqisi2
+ 115              		.loc 1 56 12 view .LVU28
+ 116 000c 44EA0224 		orr	r4, r4, r2, lsl #8
+ 117              	.LVL12:
+  57:modules/sp_vision/sp_vision.c ****   return get_crc16(data, len - 2) == crc16;
+ 118              		.loc 1 57 3 is_stmt 1 view .LVU29
+ 119              		.loc 1 57 10 is_stmt 0 view .LVU30
+ 120 0010 FFF7FEFF 		bl	get_crc16
+ 121              	.LVL13:
+  58:modules/sp_vision/sp_vision.c **** }
+ 122              		.loc 1 58 1 view .LVU31
+ 123 0014 A042     		cmp	r0, r4
+ 124 0016 14BF     		ite	ne
+ 125 0018 0020     		movne	r0, #0
+ 126 001a 0120     		moveq	r0, #1
+ 127 001c 10BD     		pop	{r4, pc}
+ 128              		.loc 1 58 1 view .LVU32
+ 129              		.cfi_endproc
+ 130              	.LFE272:
+ 132              		.section	.text.VisionOfflineCallback,"ax",%progbits
+ 133              		.align	1
+ 134              		.syntax unified
+ 135              		.thumb
+ 136              		.thumb_func
+ 138              	VisionOfflineCallback:
+ 139              	.LVL14:
+ 140              	.LFB279:
+  59:modules/sp_vision/sp_vision.c **** 
+  60:modules/sp_vision/sp_vision.c **** 
+  61:modules/sp_vision/sp_vision.c **** void SP_Vision_Set_GimbalAttitude(float yaw, float yaw_vel, float pitch, float pitch_vel, float q[4
+  62:modules/sp_vision/sp_vision.c **** {
+  63:modules/sp_vision/sp_vision.c ****     send_data.yaw = yaw;
+  64:modules/sp_vision/sp_vision.c ****     send_data.yaw_vel = yaw_vel;
+  65:modules/sp_vision/sp_vision.c ****     send_data.pitch = pitch;
+  66:modules/sp_vision/sp_vision.c ****     send_data.pitch_vel = pitch_vel;
+  67:modules/sp_vision/sp_vision.c ****     send_data.q[0] = q[0];
+  68:modules/sp_vision/sp_vision.c ****     send_data.q[1] = q[1];
+  69:modules/sp_vision/sp_vision.c ****     send_data.q[2] = q[2];
+  70:modules/sp_vision/sp_vision.c ****     send_data.q[3] = q[3];
+  71:modules/sp_vision/sp_vision.c **** 
+  72:modules/sp_vision/sp_vision.c **** }
+  73:modules/sp_vision/sp_vision.c **** 
+  74:modules/sp_vision/sp_vision.c **** void SP_Vision_Set_BulletSpeed(float speed)
+  75:modules/sp_vision/sp_vision.c **** {
+  76:modules/sp_vision/sp_vision.c ****     send_data.bullet_speed = speed;
+  77:modules/sp_vision/sp_vision.c **** }
+  78:modules/sp_vision/sp_vision.c **** 
+  79:modules/sp_vision/sp_vision.c **** void SP_Vision_Set_BulletCount(uint16_t count)
+  80:modules/sp_vision/sp_vision.c **** {
+  81:modules/sp_vision/sp_vision.c ****     send_data.bullet_count = count;
+  82:modules/sp_vision/sp_vision.c **** }
+  83:modules/sp_vision/sp_vision.c **** 
+  84:modules/sp_vision/sp_vision.c **** void SP_Vision_Set_Mode(SP_Vision_mode_e mode)
+  85:modules/sp_vision/sp_vision.c **** {
+  86:modules/sp_vision/sp_vision.c ****     send_data.mode = (uint8_t)mode;
+  87:modules/sp_vision/sp_vision.c **** }
+  88:modules/sp_vision/sp_vision.c **** 
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 5
+
+
+  89:modules/sp_vision/sp_vision.c **** void SP_Vision_Set_EnemyColor(uint8_t color)
+  90:modules/sp_vision/sp_vision.c **** {
+  91:modules/sp_vision/sp_vision.c ****     (void)color;
+  92:modules/sp_vision/sp_vision.c **** }
+  93:modules/sp_vision/sp_vision.c **** 
+  94:modules/sp_vision/sp_vision.c **** SP_Vision_Recv_s *SP_VisionGetRecvData(void)
+  95:modules/sp_vision/sp_vision.c **** {
+  96:modules/sp_vision/sp_vision.c ****     return &recv_data;
+  97:modules/sp_vision/sp_vision.c **** }
+  98:modules/sp_vision/sp_vision.c **** 
+  99:modules/sp_vision/sp_vision.c **** /**
+ 100:modules/sp_vision/sp_vision.c ****  * @brief 离线回调函数,将在daemon.c中被daemon task调用
+ 101:modules/sp_vision/sp_vision.c ****  * @attention 由于HAL库的设计问题,串口开启DMA接收之后同时发送有概率出现__H
+ 102:modules/sp_vision/sp_vision.c ****  *            进入接收中断.通过daemon判断数据更新,重新调用服务启动函数以�
+ 103:modules/sp_vision/sp_vision.c ****  *
+ 104:modules/sp_vision/sp_vision.c ****  * @param id vision_usart_instance的地址,此处没用.
+ 105:modules/sp_vision/sp_vision.c ****  */
+ 106:modules/sp_vision/sp_vision.c **** static void VisionOfflineCallback(void *id)
+ 107:modules/sp_vision/sp_vision.c **** {
+ 141              		.loc 1 107 1 is_stmt 1 view -0
+ 142              		.cfi_startproc
+ 143              		@ args = 0, pretend = 0, frame = 0
+ 144              		@ frame_needed = 0, uses_anonymous_args = 0
+ 145              		@ link register save eliminated.
+ 108:modules/sp_vision/sp_vision.c ****     sp_vision_online = 0;
+ 146              		.loc 1 108 5 view .LVU34
+ 147              		.loc 1 108 22 is_stmt 0 view .LVU35
+ 148 0000 014B     		ldr	r3, .L9
+ 149 0002 0022     		movs	r2, #0
+ 150 0004 1A70     		strb	r2, [r3]
+ 109:modules/sp_vision/sp_vision.c ****     LOGWARNING("[vision] vision offline!");
+ 151              		.loc 1 109 43 is_stmt 1 view .LVU36
+ 110:modules/sp_vision/sp_vision.c **** 
+ 111:modules/sp_vision/sp_vision.c **** }
+ 152              		.loc 1 111 1 is_stmt 0 view .LVU37
+ 153 0006 7047     		bx	lr
+ 154              	.L10:
+ 155              		.align	2
+ 156              	.L9:
+ 157 0008 00000000 		.word	sp_vision_online
+ 158              		.cfi_endproc
+ 159              	.LFE279:
+ 161              		.section	.text.DecodeVision,"ax",%progbits
+ 162              		.align	1
+ 163              		.syntax unified
+ 164              		.thumb
+ 165              		.thumb_func
+ 167              	DecodeVision:
+ 168              	.LVL15:
+ 169              	.LFB281:
+ 112:modules/sp_vision/sp_vision.c **** 
+ 113:modules/sp_vision/sp_vision.c **** #ifdef VISION_USE_VCP
+ 114:modules/sp_vision/sp_vision.c **** 
+ 115:modules/sp_vision/sp_vision.c **** #include "bsp_usb.h"
+ 116:modules/sp_vision/sp_vision.c **** static uint8_t *vis_recv_buff;
+ 117:modules/sp_vision/sp_vision.c **** 
+ 118:modules/sp_vision/sp_vision.c **** static void DecodeVision(uint16_t recv_len)
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 6
+
+
+ 119:modules/sp_vision/sp_vision.c **** {
+ 170              		.loc 1 119 1 is_stmt 1 view -0
+ 171              		.cfi_startproc
+ 172              		@ args = 0, pretend = 0, frame = 0
+ 173              		@ frame_needed = 0, uses_anonymous_args = 0
+ 174              		.loc 1 119 1 is_stmt 0 view .LVU39
+ 175 0000 38B5     		push	{r3, r4, r5, lr}
+ 176              	.LCFI1:
+ 177              		.cfi_def_cfa_offset 16
+ 178              		.cfi_offset 3, -16
+ 179              		.cfi_offset 4, -12
+ 180              		.cfi_offset 5, -8
+ 181              		.cfi_offset 14, -4
+ 182 0002 0446     		mov	r4, r0
+ 120:modules/sp_vision/sp_vision.c ****     sp_vision_online = 1;
+ 183              		.loc 1 120 5 is_stmt 1 view .LVU40
+ 184              		.loc 1 120 22 is_stmt 0 view .LVU41
+ 185 0004 114B     		ldr	r3, .L14
+ 186 0006 0122     		movs	r2, #1
+ 187 0008 1A70     		strb	r2, [r3]
+ 121:modules/sp_vision/sp_vision.c ****     DaemonReload(vision_daemon_instance); // 刷新daemon计数器
+ 188              		.loc 1 121 5 is_stmt 1 view .LVU42
+ 189 000a 114B     		ldr	r3, .L14+4
+ 190 000c 1868     		ldr	r0, [r3]
+ 191              	.LVL16:
+ 192              		.loc 1 121 5 is_stmt 0 view .LVU43
+ 193 000e FFF7FEFF 		bl	DaemonReload
+ 194              	.LVL17:
+ 122:modules/sp_vision/sp_vision.c ****     if(recv_len != sizeof(SP_Vision_Recv_s))
+ 195              		.loc 1 122 5 is_stmt 1 view .LVU44
+ 196              		.loc 1 122 7 is_stmt 0 view .LVU45
+ 197 0012 1D2C     		cmp	r4, #29
+ 198 0014 18D1     		bne	.L11
+ 123:modules/sp_vision/sp_vision.c ****     {
+ 124:modules/sp_vision/sp_vision.c ****         LOGERROR("[vision] recv len err %d", recv_len);
+ 125:modules/sp_vision/sp_vision.c ****         return;
+ 126:modules/sp_vision/sp_vision.c ****     }
+ 127:modules/sp_vision/sp_vision.c ****     if(vis_recv_buff[0] != 'S' || vis_recv_buff[1] != 'P')
+ 199              		.loc 1 127 5 is_stmt 1 view .LVU46
+ 200              		.loc 1 127 21 is_stmt 0 view .LVU47
+ 201 0016 0F4B     		ldr	r3, .L14+8
+ 202 0018 1C68     		ldr	r4, [r3]
+ 203              	.LVL18:
+ 204              		.loc 1 127 21 view .LVU48
+ 205 001a 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 206              		.loc 1 127 7 view .LVU49
+ 207 001c 532B     		cmp	r3, #83
+ 208 001e 13D1     		bne	.L11
+ 209              		.loc 1 127 48 discriminator 1 view .LVU50
+ 210 0020 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ 211              		.loc 1 127 32 discriminator 1 view .LVU51
+ 212 0022 502B     		cmp	r3, #80
+ 213 0024 10D1     		bne	.L11
+ 128:modules/sp_vision/sp_vision.c ****     {
+ 129:modules/sp_vision/sp_vision.c ****         LOGERROR("[vision] recv head error %02X %02X", vis_recv_buff[0], vis_recv_buff[1]);
+ 130:modules/sp_vision/sp_vision.c ****         return;
+ 131:modules/sp_vision/sp_vision.c ****     }
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 7
+
+
+ 132:modules/sp_vision/sp_vision.c ****     if(!check_crc16(vis_recv_buff, sizeof(SP_Vision_Recv_s)))
+ 214              		.loc 1 132 5 is_stmt 1 view .LVU52
+ 215              		.loc 1 132 9 is_stmt 0 view .LVU53
+ 216 0026 1D21     		movs	r1, #29
+ 217 0028 2046     		mov	r0, r4
+ 218 002a FFF7FEFF 		bl	check_crc16
+ 219              	.LVL19:
+ 220              		.loc 1 132 7 discriminator 1 view .LVU54
+ 221 002e 58B1     		cbz	r0, .L11
+ 133:modules/sp_vision/sp_vision.c ****     {
+ 134:modules/sp_vision/sp_vision.c ****         LOGERROR("[vision] recv crc err");
+ 135:modules/sp_vision/sp_vision.c ****         return;
+ 136:modules/sp_vision/sp_vision.c ****     }
+ 137:modules/sp_vision/sp_vision.c ****     memcpy(&recv_data, vis_recv_buff, sizeof(SP_Vision_Recv_s));
+ 222              		.loc 1 137 5 is_stmt 1 view .LVU55
+ 223 0030 094D     		ldr	r5, .L14+12
+ 224 0032 2068     		ldr	r0, [r4]	@ unaligned
+ 225 0034 6168     		ldr	r1, [r4, #4]	@ unaligned
+ 226 0036 A268     		ldr	r2, [r4, #8]	@ unaligned
+ 227 0038 E368     		ldr	r3, [r4, #12]	@ unaligned
+ 228 003a 0FC5     		stmia	r5!, {r0, r1, r2, r3}
+ 229 003c 2069     		ldr	r0, [r4, #16]	@ unaligned
+ 230 003e 6169     		ldr	r1, [r4, #20]	@ unaligned
+ 231 0040 A269     		ldr	r2, [r4, #24]	@ unaligned
+ 232 0042 07C5     		stmia	r5!, {r0, r1, r2}
+ 233 0044 237F     		ldrb	r3, [r4, #28]	@ zero_extendqisi2
+ 234 0046 2B70     		strb	r3, [r5]
+ 235              	.L11:
+ 138:modules/sp_vision/sp_vision.c ****     // LOGDEBUG("[vision] recv ok");
+ 139:modules/sp_vision/sp_vision.c **** }
+ 236              		.loc 1 139 1 is_stmt 0 view .LVU56
+ 237 0048 38BD     		pop	{r3, r4, r5, pc}
+ 238              	.L15:
+ 239 004a 00BF     		.align	2
+ 240              	.L14:
+ 241 004c 00000000 		.word	sp_vision_online
+ 242 0050 00000000 		.word	vision_daemon_instance
+ 243 0054 00000000 		.word	vis_recv_buff
+ 244 0058 00000000 		.word	recv_data
+ 245              		.cfi_endproc
+ 246              	.LFE281:
+ 248              		.section	.text.SP_Vision_Set_GimbalAttitude,"ax",%progbits
+ 249              		.align	1
+ 250              		.global	SP_Vision_Set_GimbalAttitude
+ 251              		.syntax unified
+ 252              		.thumb
+ 253              		.thumb_func
+ 255              	SP_Vision_Set_GimbalAttitude:
+ 256              	.LVL20:
+ 257              	.LFB273:
+  62:modules/sp_vision/sp_vision.c ****     send_data.yaw = yaw;
+ 258              		.loc 1 62 1 is_stmt 1 view -0
+ 259              		.cfi_startproc
+ 260              		@ args = 0, pretend = 0, frame = 0
+ 261              		@ frame_needed = 0, uses_anonymous_args = 0
+ 262              		@ link register save eliminated.
+  63:modules/sp_vision/sp_vision.c ****     send_data.yaw_vel = yaw_vel;
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 8
+
+
+ 263              		.loc 1 63 5 view .LVU58
+  63:modules/sp_vision/sp_vision.c ****     send_data.yaw_vel = yaw_vel;
+ 264              		.loc 1 63 19 is_stmt 0 view .LVU59
+ 265 0000 0E4B     		ldr	r3, .L17
+ 266 0002 10EE102A 		vmov	r2, s0
+ 267 0006 C3F81320 		str	r2, [r3, #19]	@ unaligned
+  64:modules/sp_vision/sp_vision.c ****     send_data.pitch = pitch;
+ 268              		.loc 1 64 5 is_stmt 1 view .LVU60
+  64:modules/sp_vision/sp_vision.c ****     send_data.pitch = pitch;
+ 269              		.loc 1 64 23 is_stmt 0 view .LVU61
+ 270 000a 10EE902A 		vmov	r2, s1
+ 271 000e C3F81720 		str	r2, [r3, #23]	@ unaligned
+  65:modules/sp_vision/sp_vision.c ****     send_data.pitch_vel = pitch_vel;
+ 272              		.loc 1 65 5 is_stmt 1 view .LVU62
+  65:modules/sp_vision/sp_vision.c ****     send_data.pitch_vel = pitch_vel;
+ 273              		.loc 1 65 21 is_stmt 0 view .LVU63
+ 274 0012 11EE102A 		vmov	r2, s2
+ 275 0016 C3F81B20 		str	r2, [r3, #27]	@ unaligned
+  66:modules/sp_vision/sp_vision.c ****     send_data.q[0] = q[0];
+ 276              		.loc 1 66 5 is_stmt 1 view .LVU64
+  66:modules/sp_vision/sp_vision.c ****     send_data.q[0] = q[0];
+ 277              		.loc 1 66 25 is_stmt 0 view .LVU65
+ 278 001a 11EE902A 		vmov	r2, s3
+ 279 001e C3F81F20 		str	r2, [r3, #31]	@ unaligned
+  67:modules/sp_vision/sp_vision.c ****     send_data.q[1] = q[1];
+ 280              		.loc 1 67 5 is_stmt 1 view .LVU66
+  67:modules/sp_vision/sp_vision.c ****     send_data.q[1] = q[1];
+ 281              		.loc 1 67 20 is_stmt 0 view .LVU67
+ 282 0022 0268     		ldr	r2, [r0]	@ float
+ 283 0024 C3F80320 		str	r2, [r3, #3]	@ unaligned
+  68:modules/sp_vision/sp_vision.c ****     send_data.q[2] = q[2];
+ 284              		.loc 1 68 5 is_stmt 1 view .LVU68
+  68:modules/sp_vision/sp_vision.c ****     send_data.q[2] = q[2];
+ 285              		.loc 1 68 20 is_stmt 0 view .LVU69
+ 286 0028 4268     		ldr	r2, [r0, #4]	@ float
+ 287 002a C3F80720 		str	r2, [r3, #7]	@ unaligned
+  69:modules/sp_vision/sp_vision.c ****     send_data.q[3] = q[3];
+ 288              		.loc 1 69 5 is_stmt 1 view .LVU70
+  69:modules/sp_vision/sp_vision.c ****     send_data.q[3] = q[3];
+ 289              		.loc 1 69 20 is_stmt 0 view .LVU71
+ 290 002e 8268     		ldr	r2, [r0, #8]	@ float
+ 291 0030 C3F80B20 		str	r2, [r3, #11]	@ unaligned
+  70:modules/sp_vision/sp_vision.c **** 
+ 292              		.loc 1 70 5 is_stmt 1 view .LVU72
+  70:modules/sp_vision/sp_vision.c **** 
+ 293              		.loc 1 70 20 is_stmt 0 view .LVU73
+ 294 0034 C268     		ldr	r2, [r0, #12]	@ float
+ 295 0036 C3F80F20 		str	r2, [r3, #15]	@ unaligned
+  72:modules/sp_vision/sp_vision.c **** 
+ 296              		.loc 1 72 1 view .LVU74
+ 297 003a 7047     		bx	lr
+ 298              	.L18:
+ 299              		.align	2
+ 300              	.L17:
+ 301 003c 00000000 		.word	send_data
+ 302              		.cfi_endproc
+ 303              	.LFE273:
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 9
+
+
+ 305              		.section	.text.SP_Vision_Set_BulletSpeed,"ax",%progbits
+ 306              		.align	1
+ 307              		.global	SP_Vision_Set_BulletSpeed
+ 308              		.syntax unified
+ 309              		.thumb
+ 310              		.thumb_func
+ 312              	SP_Vision_Set_BulletSpeed:
+ 313              	.LVL21:
+ 314              	.LFB274:
+  75:modules/sp_vision/sp_vision.c ****     send_data.bullet_speed = speed;
+ 315              		.loc 1 75 1 is_stmt 1 view -0
+ 316              		.cfi_startproc
+ 317              		@ args = 0, pretend = 0, frame = 0
+ 318              		@ frame_needed = 0, uses_anonymous_args = 0
+ 319              		@ link register save eliminated.
+  76:modules/sp_vision/sp_vision.c **** }
+ 320              		.loc 1 76 5 view .LVU76
+  76:modules/sp_vision/sp_vision.c **** }
+ 321              		.loc 1 76 28 is_stmt 0 view .LVU77
+ 322 0000 10EE103A 		vmov	r3, s0
+ 323 0004 014A     		ldr	r2, .L20
+ 324 0006 C2F82330 		str	r3, [r2, #35]	@ unaligned
+  77:modules/sp_vision/sp_vision.c **** 
+ 325              		.loc 1 77 1 view .LVU78
+ 326 000a 7047     		bx	lr
+ 327              	.L21:
+ 328              		.align	2
+ 329              	.L20:
+ 330 000c 00000000 		.word	send_data
+ 331              		.cfi_endproc
+ 332              	.LFE274:
+ 334              		.section	.text.SP_Vision_Set_BulletCount,"ax",%progbits
+ 335              		.align	1
+ 336              		.global	SP_Vision_Set_BulletCount
+ 337              		.syntax unified
+ 338              		.thumb
+ 339              		.thumb_func
+ 341              	SP_Vision_Set_BulletCount:
+ 342              	.LVL22:
+ 343              	.LFB275:
+  80:modules/sp_vision/sp_vision.c ****     send_data.bullet_count = count;
+ 344              		.loc 1 80 1 is_stmt 1 view -0
+ 345              		.cfi_startproc
+ 346              		@ args = 0, pretend = 0, frame = 0
+ 347              		@ frame_needed = 0, uses_anonymous_args = 0
+ 348              		@ link register save eliminated.
+  81:modules/sp_vision/sp_vision.c **** }
+ 349              		.loc 1 81 5 view .LVU80
+  81:modules/sp_vision/sp_vision.c **** }
+ 350              		.loc 1 81 28 is_stmt 0 view .LVU81
+ 351 0000 014B     		ldr	r3, .L23
+ 352 0002 A3F82700 		strh	r0, [r3, #39]	@ unaligned
+  82:modules/sp_vision/sp_vision.c **** 
+ 353              		.loc 1 82 1 view .LVU82
+ 354 0006 7047     		bx	lr
+ 355              	.L24:
+ 356              		.align	2
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 10
+
+
+ 357              	.L23:
+ 358 0008 00000000 		.word	send_data
+ 359              		.cfi_endproc
+ 360              	.LFE275:
+ 362              		.section	.text.SP_Vision_Set_Mode,"ax",%progbits
+ 363              		.align	1
+ 364              		.global	SP_Vision_Set_Mode
+ 365              		.syntax unified
+ 366              		.thumb
+ 367              		.thumb_func
+ 369              	SP_Vision_Set_Mode:
+ 370              	.LVL23:
+ 371              	.LFB276:
+  85:modules/sp_vision/sp_vision.c ****     send_data.mode = (uint8_t)mode;
+ 372              		.loc 1 85 1 is_stmt 1 view -0
+ 373              		.cfi_startproc
+ 374              		@ args = 0, pretend = 0, frame = 0
+ 375              		@ frame_needed = 0, uses_anonymous_args = 0
+ 376              		@ link register save eliminated.
+  86:modules/sp_vision/sp_vision.c **** }
+ 377              		.loc 1 86 5 view .LVU84
+  86:modules/sp_vision/sp_vision.c **** }
+ 378              		.loc 1 86 20 is_stmt 0 view .LVU85
+ 379 0000 014B     		ldr	r3, .L26
+ 380 0002 9870     		strb	r0, [r3, #2]
+  87:modules/sp_vision/sp_vision.c **** 
+ 381              		.loc 1 87 1 view .LVU86
+ 382 0004 7047     		bx	lr
+ 383              	.L27:
+ 384 0006 00BF     		.align	2
+ 385              	.L26:
+ 386 0008 00000000 		.word	send_data
+ 387              		.cfi_endproc
+ 388              	.LFE276:
+ 390              		.section	.text.SP_Vision_Set_EnemyColor,"ax",%progbits
+ 391              		.align	1
+ 392              		.global	SP_Vision_Set_EnemyColor
+ 393              		.syntax unified
+ 394              		.thumb
+ 395              		.thumb_func
+ 397              	SP_Vision_Set_EnemyColor:
+ 398              	.LVL24:
+ 399              	.LFB277:
+  90:modules/sp_vision/sp_vision.c ****     (void)color;
+ 400              		.loc 1 90 1 is_stmt 1 view -0
+ 401              		.cfi_startproc
+ 402              		@ args = 0, pretend = 0, frame = 0
+ 403              		@ frame_needed = 0, uses_anonymous_args = 0
+ 404              		@ link register save eliminated.
+  91:modules/sp_vision/sp_vision.c **** }
+ 405              		.loc 1 91 5 view .LVU88
+  92:modules/sp_vision/sp_vision.c **** 
+ 406              		.loc 1 92 1 is_stmt 0 view .LVU89
+ 407 0000 7047     		bx	lr
+ 408              		.cfi_endproc
+ 409              	.LFE277:
+ 411              		.section	.text.SP_VisionGetRecvData,"ax",%progbits
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 11
+
+
+ 412              		.align	1
+ 413              		.global	SP_VisionGetRecvData
+ 414              		.syntax unified
+ 415              		.thumb
+ 416              		.thumb_func
+ 418              	SP_VisionGetRecvData:
+ 419              	.LFB278:
+  95:modules/sp_vision/sp_vision.c ****     return &recv_data;
+ 420              		.loc 1 95 1 is_stmt 1 view -0
+ 421              		.cfi_startproc
+ 422              		@ args = 0, pretend = 0, frame = 0
+ 423              		@ frame_needed = 0, uses_anonymous_args = 0
+ 424              		@ link register save eliminated.
+  96:modules/sp_vision/sp_vision.c **** }
+ 425              		.loc 1 96 5 view .LVU91
+  97:modules/sp_vision/sp_vision.c **** 
+ 426              		.loc 1 97 1 is_stmt 0 view .LVU92
+ 427 0000 0048     		ldr	r0, .L30
+ 428 0002 7047     		bx	lr
+ 429              	.L31:
+ 430              		.align	2
+ 431              	.L30:
+ 432 0004 00000000 		.word	recv_data
+ 433              		.cfi_endproc
+ 434              	.LFE278:
+ 436              		.section	.text.SP_VisionInit,"ax",%progbits
+ 437              		.align	1
+ 438              		.global	SP_VisionInit
+ 439              		.syntax unified
+ 440              		.thumb
+ 441              		.thumb_func
+ 443              	SP_VisionInit:
+ 444              	.LFB282:
+ 140:modules/sp_vision/sp_vision.c **** 
+ 141:modules/sp_vision/sp_vision.c **** /* 视觉通信初始化 */
+ 142:modules/sp_vision/sp_vision.c **** SP_Vision_Recv_s *SP_VisionInit()
+ 143:modules/sp_vision/sp_vision.c **** {
+ 445              		.loc 1 143 1 is_stmt 1 view -0
+ 446              		.cfi_startproc
+ 447              		@ args = 0, pretend = 0, frame = 24
+ 448              		@ frame_needed = 0, uses_anonymous_args = 0
+ 449 0000 10B5     		push	{r4, lr}
+ 450              	.LCFI2:
+ 451              		.cfi_def_cfa_offset 8
+ 452              		.cfi_offset 4, -8
+ 453              		.cfi_offset 14, -4
+ 454 0002 86B0     		sub	sp, sp, #24
+ 455              	.LCFI3:
+ 456              		.cfi_def_cfa_offset 32
+ 144:modules/sp_vision/sp_vision.c ****     USB_Init_Config_s conf = {.rx_cbk = DecodeVision};
+ 457              		.loc 1 144 5 view .LVU94
+ 458              		.loc 1 144 23 is_stmt 0 view .LVU95
+ 459 0004 04AB     		add	r3, sp, #16
+ 460 0006 0024     		movs	r4, #0
+ 461 0008 0494     		str	r4, [sp, #16]
+ 462 000a 0594     		str	r4, [sp, #20]
+ 463 000c 0F4A     		ldr	r2, .L34
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 12
+
+
+ 464 000e 0592     		str	r2, [sp, #20]
+ 145:modules/sp_vision/sp_vision.c ****     vis_recv_buff = USBInit(conf);
+ 465              		.loc 1 145 5 is_stmt 1 view .LVU96
+ 466              		.loc 1 145 21 is_stmt 0 view .LVU97
+ 467 0010 93E80300 		ldm	r3, {r0, r1}
+ 468 0014 FFF7FEFF 		bl	USBInit
+ 469              	.LVL25:
+ 470              		.loc 1 145 19 discriminator 1 view .LVU98
+ 471 0018 0D4B     		ldr	r3, .L34+4
+ 472 001a 1860     		str	r0, [r3]
+ 146:modules/sp_vision/sp_vision.c **** 
+ 147:modules/sp_vision/sp_vision.c ****     // 为master process注册daemon,用于判断视觉通信是否离线
+ 148:modules/sp_vision/sp_vision.c ****     Daemon_Init_Config_s daemon_conf = {
+ 473              		.loc 1 148 5 is_stmt 1 view .LVU99
+ 474              		.loc 1 148 26 is_stmt 0 view .LVU100
+ 475 001c 0194     		str	r4, [sp, #4]
+ 476 001e 0294     		str	r4, [sp, #8]
+ 477 0020 0394     		str	r4, [sp, #12]
+ 478 0022 0523     		movs	r3, #5
+ 479 0024 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 480 0028 0A4B     		ldr	r3, .L34+8
+ 481 002a 0293     		str	r3, [sp, #8]
+ 149:modules/sp_vision/sp_vision.c ****         .callback = VisionOfflineCallback, // 离线时调用的回调函数,会重启串口接收
+ 150:modules/sp_vision/sp_vision.c ****         .owner_id = NULL,
+ 151:modules/sp_vision/sp_vision.c ****         .reload_count = 5, // 50ms
+ 152:modules/sp_vision/sp_vision.c ****     };
+ 153:modules/sp_vision/sp_vision.c ****     vision_daemon_instance = DaemonRegister(&daemon_conf);
+ 482              		.loc 1 153 5 is_stmt 1 view .LVU101
+ 483              		.loc 1 153 30 is_stmt 0 view .LVU102
+ 484 002c 01A8     		add	r0, sp, #4
+ 485 002e FFF7FEFF 		bl	DaemonRegister
+ 486              	.LVL26:
+ 487              		.loc 1 153 28 discriminator 1 view .LVU103
+ 488 0032 094B     		ldr	r3, .L34+12
+ 489 0034 1860     		str	r0, [r3]
+ 154:modules/sp_vision/sp_vision.c ****     send_data.head[0] = 'S';
+ 490              		.loc 1 154 5 is_stmt 1 view .LVU104
+ 491              		.loc 1 154 23 is_stmt 0 view .LVU105
+ 492 0036 094B     		ldr	r3, .L34+16
+ 493 0038 5322     		movs	r2, #83
+ 494 003a 1A70     		strb	r2, [r3]
+ 155:modules/sp_vision/sp_vision.c ****     send_data.head[1] = 'P';
+ 495              		.loc 1 155 5 is_stmt 1 view .LVU106
+ 496              		.loc 1 155 23 is_stmt 0 view .LVU107
+ 497 003c 5022     		movs	r2, #80
+ 498 003e 5A70     		strb	r2, [r3, #1]
+ 156:modules/sp_vision/sp_vision.c ****     send_data.mode = 1;
+ 499              		.loc 1 156 5 is_stmt 1 view .LVU108
+ 500              		.loc 1 156 20 is_stmt 0 view .LVU109
+ 501 0040 0122     		movs	r2, #1
+ 502 0042 9A70     		strb	r2, [r3, #2]
+ 157:modules/sp_vision/sp_vision.c **** 
+ 158:modules/sp_vision/sp_vision.c ****     return &recv_data;
+ 503              		.loc 1 158 5 is_stmt 1 view .LVU110
+ 159:modules/sp_vision/sp_vision.c **** }
+ 504              		.loc 1 159 1 is_stmt 0 view .LVU111
+ 505 0044 0648     		ldr	r0, .L34+20
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 13
+
+
+ 506 0046 06B0     		add	sp, sp, #24
+ 507              	.LCFI4:
+ 508              		.cfi_def_cfa_offset 8
+ 509              		@ sp needed
+ 510 0048 10BD     		pop	{r4, pc}
+ 511              	.L35:
+ 512 004a 00BF     		.align	2
+ 513              	.L34:
+ 514 004c 00000000 		.word	DecodeVision
+ 515 0050 00000000 		.word	vis_recv_buff
+ 516 0054 00000000 		.word	VisionOfflineCallback
+ 517 0058 00000000 		.word	vision_daemon_instance
+ 518 005c 00000000 		.word	send_data
+ 519 0060 00000000 		.word	recv_data
+ 520              		.cfi_endproc
+ 521              	.LFE282:
+ 523              		.section	.text.SP_VisionSend,"ax",%progbits
+ 524              		.align	1
+ 525              		.global	SP_VisionSend
+ 526              		.syntax unified
+ 527              		.thumb
+ 528              		.thumb_func
+ 530              	SP_VisionSend:
+ 531              	.LFB283:
+ 160:modules/sp_vision/sp_vision.c **** 
+ 161:modules/sp_vision/sp_vision.c **** void SP_VisionSend()
+ 162:modules/sp_vision/sp_vision.c **** {
+ 532              		.loc 1 162 1 is_stmt 1 view -0
+ 533              		.cfi_startproc
+ 534              		@ args = 0, pretend = 0, frame = 48
+ 535              		@ frame_needed = 0, uses_anonymous_args = 0
+ 536 0000 70B5     		push	{r4, r5, r6, lr}
+ 537              	.LCFI5:
+ 538              		.cfi_def_cfa_offset 16
+ 539              		.cfi_offset 4, -16
+ 540              		.cfi_offset 5, -12
+ 541              		.cfi_offset 6, -8
+ 542              		.cfi_offset 14, -4
+ 543 0002 8CB0     		sub	sp, sp, #48
+ 544              	.LCFI6:
+ 545              		.cfi_def_cfa_offset 64
+ 163:modules/sp_vision/sp_vision.c ****     static uint8_t send_buffs[2][sizeof(SP_Vision_Send_s)];
+ 546              		.loc 1 163 5 view .LVU113
+ 164:modules/sp_vision/sp_vision.c ****     static uint16_t tx_len = sizeof(SP_Vision_Send_s);
+ 547              		.loc 1 164 5 view .LVU114
+ 165:modules/sp_vision/sp_vision.c ****     static uint8_t active_buf_idx = 0;
+ 548              		.loc 1 165 5 view .LVU115
+ 166:modules/sp_vision/sp_vision.c ****     uint8_t next_buf_idx = active_buf_idx ^ 1u;
+ 549              		.loc 1 166 5 view .LVU116
+ 550              		.loc 1 166 13 is_stmt 0 view .LVU117
+ 551 0004 214B     		ldr	r3, .L40
+ 552 0006 1D78     		ldrb	r5, [r3]	@ zero_extendqisi2
+ 553 0008 85F00105 		eor	r5, r5, #1
+ 554              	.LVL27:
+ 167:modules/sp_vision/sp_vision.c ****     SP_Vision_Send_s frame;
+ 555              		.loc 1 167 5 is_stmt 1 view .LVU118
+ 168:modules/sp_vision/sp_vision.c **** 
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 14
+
+
+ 169:modules/sp_vision/sp_vision.c ****     __disable_irq();
+ 556              		.loc 1 169 5 view .LVU119
+ 557              	.LBB6:
+ 558              	.LBI6:
+ 559              		.file 2 "Drivers/CMSIS/Include/cmsis_gcc.h"
+   1:Drivers/CMSIS/Include/cmsis_gcc.h **** /**************************************************************************//**
+   2:Drivers/CMSIS/Include/cmsis_gcc.h ****  * @file     cmsis_gcc.h
+   3:Drivers/CMSIS/Include/cmsis_gcc.h ****  * @brief    CMSIS compiler GCC header file
+   4:Drivers/CMSIS/Include/cmsis_gcc.h ****  * @version  V5.0.4
+   5:Drivers/CMSIS/Include/cmsis_gcc.h ****  * @date     09. April 2018
+   6:Drivers/CMSIS/Include/cmsis_gcc.h ****  ******************************************************************************/
+   7:Drivers/CMSIS/Include/cmsis_gcc.h **** /*
+   8:Drivers/CMSIS/Include/cmsis_gcc.h ****  * Copyright (c) 2009-2018 Arm Limited. All rights reserved.
+   9:Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  10:Drivers/CMSIS/Include/cmsis_gcc.h ****  * SPDX-License-Identifier: Apache-2.0
+  11:Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  12:Drivers/CMSIS/Include/cmsis_gcc.h ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  13:Drivers/CMSIS/Include/cmsis_gcc.h ****  * not use this file except in compliance with the License.
+  14:Drivers/CMSIS/Include/cmsis_gcc.h ****  * You may obtain a copy of the License at
+  15:Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  16:Drivers/CMSIS/Include/cmsis_gcc.h ****  * www.apache.org/licenses/LICENSE-2.0
+  17:Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  18:Drivers/CMSIS/Include/cmsis_gcc.h ****  * Unless required by applicable law or agreed to in writing, software
+  19:Drivers/CMSIS/Include/cmsis_gcc.h ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  20:Drivers/CMSIS/Include/cmsis_gcc.h ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  21:Drivers/CMSIS/Include/cmsis_gcc.h ****  * See the License for the specific language governing permissions and
+  22:Drivers/CMSIS/Include/cmsis_gcc.h ****  * limitations under the License.
+  23:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+  24:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  25:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __CMSIS_GCC_H
+  26:Drivers/CMSIS/Include/cmsis_gcc.h **** #define __CMSIS_GCC_H
+  27:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  28:Drivers/CMSIS/Include/cmsis_gcc.h **** /* ignore some GCC warnings */
+  29:Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic push
+  30:Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wsign-conversion"
+  31:Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wconversion"
+  32:Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wunused-parameter"
+  33:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  34:Drivers/CMSIS/Include/cmsis_gcc.h **** /* Fallback for __has_builtin */
+  35:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __has_builtin
+  36:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __has_builtin(x) (0)
+  37:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  38:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  39:Drivers/CMSIS/Include/cmsis_gcc.h **** /* CMSIS compiler specific defines */
+  40:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __ASM
+  41:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __ASM                                  __asm
+  42:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  43:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __INLINE
+  44:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __INLINE                               inline
+  45:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  46:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __STATIC_INLINE
+  47:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __STATIC_INLINE                        static inline
+  48:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  49:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __STATIC_FORCEINLINE                 
+  50:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __STATIC_FORCEINLINE                   __attribute__((always_inline)) static inline
+  51:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif                                           
+  52:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __NO_RETURN
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 15
+
+
+  53:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __NO_RETURN                            __attribute__((__noreturn__))
+  54:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  55:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __USED
+  56:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __USED                                 __attribute__((used))
+  57:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  58:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __WEAK
+  59:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __WEAK                                 __attribute__((weak))
+  60:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  61:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __PACKED
+  62:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __PACKED                               __attribute__((packed, aligned(1)))
+  63:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  64:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __PACKED_STRUCT
+  65:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __PACKED_STRUCT                        struct __attribute__((packed, aligned(1)))
+  66:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  67:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __PACKED_UNION
+  68:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __PACKED_UNION                         union __attribute__((packed, aligned(1)))
+  69:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  70:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32        /* deprecated */
+  71:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  72:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  73:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  74:Drivers/CMSIS/Include/cmsis_gcc.h ****   struct __attribute__((packed)) T_UINT32 { uint32_t v; };
+  75:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  76:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT32(x)                  (((struct T_UINT32 *)(x))->v)
+  77:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  78:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT16_WRITE
+  79:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  80:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  81:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  82:Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT16_WRITE { uint16_t v; };
+  83:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  84:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT16_WRITE(addr, val)    (void)((((struct T_UINT16_WRITE *)(void *)(addr))-
+  85:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  86:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT16_READ
+  87:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  88:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  89:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  90:Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT16_READ { uint16_t v; };
+  91:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  92:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT16_READ(addr)          (((const struct T_UINT16_READ *)(const void *)(add
+  93:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  94:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32_WRITE
+  95:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  96:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  97:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  98:Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT32_WRITE { uint32_t v; };
+  99:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+ 100:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT32_WRITE(addr, val)    (void)((((struct T_UINT32_WRITE *)(void *)(addr))-
+ 101:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 102:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32_READ
+ 103:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+ 104:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+ 105:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+ 106:Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT32_READ { uint32_t v; };
+ 107:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+ 108:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT32_READ(addr)          (((const struct T_UINT32_READ *)(const void *)(add
+ 109:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 16
+
+
+ 110:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __ALIGNED
+ 111:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __ALIGNED(x)                           __attribute__((aligned(x)))
+ 112:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 113:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __RESTRICT
+ 114:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __RESTRICT                             __restrict
+ 115:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 116:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 117:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 118:Drivers/CMSIS/Include/cmsis_gcc.h **** /* ###########################  Core Function Access  ########################### */
+ 119:Drivers/CMSIS/Include/cmsis_gcc.h **** /** \ingroup  CMSIS_Core_FunctionInterface
+ 120:Drivers/CMSIS/Include/cmsis_gcc.h ****     \defgroup CMSIS_Core_RegAccFunctions CMSIS Core Register Access Functions
+ 121:Drivers/CMSIS/Include/cmsis_gcc.h ****   @{
+ 122:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 123:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 124:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 125:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Enable IRQ Interrupts
+ 126:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Enables IRQ interrupts by clearing the I-bit in the CPSR.
+ 127:Drivers/CMSIS/Include/cmsis_gcc.h ****            Can only be executed in Privileged modes.
+ 128:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 129:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __enable_irq(void)
+ 130:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 131:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("cpsie i" : : : "memory");
+ 132:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 133:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 134:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 135:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 136:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Disable IRQ Interrupts
+ 137:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Disables IRQ interrupts by setting the I-bit in the CPSR.
+ 138:Drivers/CMSIS/Include/cmsis_gcc.h ****            Can only be executed in Privileged modes.
+ 139:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 140:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __disable_irq(void)
+ 560              		.loc 2 140 27 view .LVU120
+ 561              	.LBB7:
+ 141:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 142:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("cpsid i" : : : "memory");
+ 562              		.loc 2 142 3 view .LVU121
+ 563              		.syntax unified
+ 564              	@ 142 "Drivers/CMSIS/Include/cmsis_gcc.h" 1
+ 565 000c 72B6     		cpsid i
+ 566              	@ 0 "" 2
+ 567              		.thumb
+ 568              		.syntax unified
+ 569              	.LBE7:
+ 570              	.LBE6:
+ 170:modules/sp_vision/sp_vision.c ****     frame = send_data;
+ 571              		.loc 1 170 5 view .LVU122
+ 572              		.loc 1 170 11 is_stmt 0 view .LVU123
+ 573 000e 0DF1040C 		add	ip, sp, #4
+ 574 0012 1F4C     		ldr	r4, .L40+4
+ 575 0014 0FCC     		ldmia	r4!, {r0, r1, r2, r3}
+ 576 0016 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
+ 577 001a 0FCC     		ldmia	r4!, {r0, r1, r2, r3}
+ 578 001c ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
+ 579 0020 94E80700 		ldm	r4, {r0, r1, r2}
+ 580 0024 ACE80300 		stmia	ip!, {r0, r1}
+ 581 0028 2CF8022B 		strh	r2, [ip], #2	@ movhi
+ 582 002c 120C     		lsrs	r2, r2, #16
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 17
+
+
+ 583 002e 8CF80020 		strb	r2, [ip]
+ 171:modules/sp_vision/sp_vision.c ****     __enable_irq();
+ 584              		.loc 1 171 5 is_stmt 1 view .LVU124
+ 585              	.LBB8:
+ 586              	.LBI8:
+ 129:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 587              		.loc 2 129 27 view .LVU125
+ 588              	.LBB9:
+ 131:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 589              		.loc 2 131 3 view .LVU126
+ 590              		.syntax unified
+ 591              	@ 131 "Drivers/CMSIS/Include/cmsis_gcc.h" 1
+ 592 0032 62B6     		cpsie i
+ 593              	@ 0 "" 2
+ 594              		.thumb
+ 595              		.syntax unified
+ 596              	.LBE9:
+ 597              	.LBE8:
+ 172:modules/sp_vision/sp_vision.c **** 
+ 173:modules/sp_vision/sp_vision.c ****     frame.crc16 = get_crc16((uint8_t *)&frame, sizeof(SP_Vision_Send_s) - 2);
+ 598              		.loc 1 173 5 view .LVU127
+ 599              		.loc 1 173 19 is_stmt 0 view .LVU128
+ 600 0034 2921     		movs	r1, #41
+ 601 0036 01A8     		add	r0, sp, #4
+ 602 0038 FFF7FEFF 		bl	get_crc16
+ 603              	.LVL28:
+ 604              		.loc 1 173 17 discriminator 1 view .LVU129
+ 605 003c ADF82D00 		strh	r0, [sp, #45]	@ unaligned
+ 174:modules/sp_vision/sp_vision.c ****     memcpy(send_buffs[next_buf_idx], &frame, sizeof(SP_Vision_Send_s));
+ 606              		.loc 1 174 5 is_stmt 1 view .LVU130
+ 607 0040 0DF1040C 		add	ip, sp, #4
+ 608 0044 134C     		ldr	r4, .L40+8
+ 609 0046 2B23     		movs	r3, #43
+ 610 0048 03FB0544 		mla	r4, r3, r5, r4
+ 611 004c 09AE     		add	r6, sp, #36
+ 612              	.L37:
+ 613 004e E646     		mov	lr, ip
+ 614 0050 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
+ 615 0054 2060     		str	r0, [r4]	@ unaligned
+ 616 0056 6160     		str	r1, [r4, #4]	@ unaligned
+ 617 0058 A260     		str	r2, [r4, #8]	@ unaligned
+ 618 005a E360     		str	r3, [r4, #12]	@ unaligned
+ 619 005c F446     		mov	ip, lr
+ 620 005e 1034     		adds	r4, r4, #16
+ 621 0060 B645     		cmp	lr, r6
+ 622 0062 F4D1     		bne	.L37
+ 623 0064 7346     		mov	r3, lr
+ 624 0066 03CB     		ldmia	r3!, {r0, r1}
+ 625 0068 2060     		str	r0, [r4]	@ unaligned
+ 626 006a 6160     		str	r1, [r4, #4]	@ unaligned
+ 627 006c 1A88     		ldrh	r2, [r3]	@ unaligned
+ 628 006e 9B78     		ldrb	r3, [r3, #2]	@ zero_extendqisi2
+ 629 0070 2281     		strh	r2, [r4, #8]	@ unaligned
+ 630 0072 A372     		strb	r3, [r4, #10]
+ 175:modules/sp_vision/sp_vision.c **** 
+ 176:modules/sp_vision/sp_vision.c ****     if (USBTransmit(send_buffs[next_buf_idx], tx_len) == USBD_OK)
+ 631              		.loc 1 176 5 view .LVU131
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 18
+
+
+ 632              		.loc 1 176 31 is_stmt 0 view .LVU132
+ 633 0074 2B21     		movs	r1, #43
+ 634              		.loc 1 176 9 view .LVU133
+ 635 0076 0748     		ldr	r0, .L40+8
+ 636 0078 01FB0500 		mla	r0, r1, r5, r0
+ 637 007c FFF7FEFF 		bl	USBTransmit
+ 638              	.LVL29:
+ 639              		.loc 1 176 8 discriminator 1 view .LVU134
+ 640 0080 08B9     		cbnz	r0, .L36
+ 177:modules/sp_vision/sp_vision.c ****     {
+ 178:modules/sp_vision/sp_vision.c ****         active_buf_idx = next_buf_idx;
+ 641              		.loc 1 178 9 is_stmt 1 view .LVU135
+ 642              		.loc 1 178 24 is_stmt 0 view .LVU136
+ 643 0082 024B     		ldr	r3, .L40
+ 644 0084 1D70     		strb	r5, [r3]
+ 645              	.L36:
+ 179:modules/sp_vision/sp_vision.c ****     }
+ 180:modules/sp_vision/sp_vision.c **** }
+ 646              		.loc 1 180 1 view .LVU137
+ 647 0086 0CB0     		add	sp, sp, #48
+ 648              	.LCFI7:
+ 649              		.cfi_def_cfa_offset 16
+ 650              		@ sp needed
+ 651 0088 70BD     		pop	{r4, r5, r6, pc}
+ 652              	.LVL30:
+ 653              	.L41:
+ 654              		.loc 1 180 1 view .LVU138
+ 655 008a 00BF     		.align	2
+ 656              	.L40:
+ 657 008c 00000000 		.word	active_buf_idx.2
+ 658 0090 00000000 		.word	send_data
+ 659 0094 00000000 		.word	send_buffs.1
+ 660              		.cfi_endproc
+ 661              	.LFE283:
+ 663              		.section	.bss.send_buffs.1,"aw",%nobits
+ 664              		.align	2
+ 667              	send_buffs.1:
+ 668 0000 00000000 		.space	86
+ 668      00000000 
+ 668      00000000 
+ 668      00000000 
+ 668      00000000 
+ 669              		.section	.bss.active_buf_idx.2,"aw",%nobits
+ 672              	active_buf_idx.2:
+ 673 0000 00       		.space	1
+ 674              		.section	.bss.vis_recv_buff,"aw",%nobits
+ 675              		.align	2
+ 678              	vis_recv_buff:
+ 679 0000 00000000 		.space	4
+ 680              		.global	CRC16_TABLE
+ 681              		.section	.rodata.CRC16_TABLE,"a"
+ 682              		.align	2
+ 685              	CRC16_TABLE:
+ 686 0000 0000     		.short	0
+ 687 0002 8911     		.short	4489
+ 688 0004 1223     		.short	8978
+ 689 0006 9B32     		.short	12955
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 19
+
+
+ 690 0008 2446     		.short	17956
+ 691 000a AD57     		.short	22445
+ 692 000c 3665     		.short	25910
+ 693 000e BF74     		.short	29887
+ 694 0010 488C     		.short	-29624
+ 695 0012 C19D     		.short	-25151
+ 696 0014 5AAF     		.short	-20646
+ 697 0016 D3BE     		.short	-16685
+ 698 0018 6CCA     		.short	-13716
+ 699 001a E5DB     		.short	-9243
+ 700 001c 7EE9     		.short	-5762
+ 701 001e F7F8     		.short	-1801
+ 702 0020 8110     		.short	4225
+ 703 0022 0801     		.short	264
+ 704 0024 9333     		.short	13203
+ 705 0026 1A22     		.short	8730
+ 706 0028 A556     		.short	22181
+ 707 002a 2C47     		.short	18220
+ 708 002c B775     		.short	30135
+ 709 002e 3E64     		.short	25662
+ 710 0030 C99C     		.short	-25399
+ 711 0032 408D     		.short	-29376
+ 712 0034 DBBF     		.short	-16421
+ 713 0036 52AE     		.short	-20910
+ 714 0038 EDDA     		.short	-9491
+ 715 003a 64CB     		.short	-13468
+ 716 003c FFF9     		.short	-1537
+ 717 003e 76E8     		.short	-6026
+ 718 0040 0221     		.short	8450
+ 719 0042 8B30     		.short	12427
+ 720 0044 1002     		.short	528
+ 721 0046 9913     		.short	5017
+ 722 0048 2667     		.short	26406
+ 723 004a AF76     		.short	30383
+ 724 004c 3444     		.short	17460
+ 725 004e BD55     		.short	21949
+ 726 0050 4AAD     		.short	-21174
+ 727 0052 C3BC     		.short	-17213
+ 728 0054 588E     		.short	-29096
+ 729 0056 D19F     		.short	-24623
+ 730 0058 6EEB     		.short	-5266
+ 731 005a E7FA     		.short	-1305
+ 732 005c 7CC8     		.short	-14212
+ 733 005e F5D9     		.short	-9739
+ 734 0060 8331     		.short	12675
+ 735 0062 0A20     		.short	8202
+ 736 0064 9112     		.short	4753
+ 737 0066 1803     		.short	792
+ 738 0068 A777     		.short	30631
+ 739 006a 2E66     		.short	26158
+ 740 006c B554     		.short	21685
+ 741 006e 3C45     		.short	17724
+ 742 0070 CBBD     		.short	-16949
+ 743 0072 42AC     		.short	-21438
+ 744 0074 D99E     		.short	-24871
+ 745 0076 508F     		.short	-28848
+ 746 0078 EFFB     		.short	-1041
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 20
+
+
+ 747 007a 66EA     		.short	-5530
+ 748 007c FDD8     		.short	-9987
+ 749 007e 74C9     		.short	-13964
+ 750 0080 0442     		.short	16900
+ 751 0082 8D53     		.short	21389
+ 752 0084 1661     		.short	24854
+ 753 0086 9F70     		.short	28831
+ 754 0088 2004     		.short	1056
+ 755 008a A915     		.short	5545
+ 756 008c 3227     		.short	10034
+ 757 008e BB36     		.short	14011
+ 758 0090 4CCE     		.short	-12724
+ 759 0092 C5DF     		.short	-8251
+ 760 0094 5EED     		.short	-4770
+ 761 0096 D7FC     		.short	-809
+ 762 0098 6888     		.short	-30616
+ 763 009a E199     		.short	-26143
+ 764 009c 7AAB     		.short	-21638
+ 765 009e F3BA     		.short	-17677
+ 766 00a0 8552     		.short	21125
+ 767 00a2 0C43     		.short	17164
+ 768 00a4 9771     		.short	29079
+ 769 00a6 1E60     		.short	24606
+ 770 00a8 A114     		.short	5281
+ 771 00aa 2805     		.short	1320
+ 772 00ac B337     		.short	14259
+ 773 00ae 3A26     		.short	9786
+ 774 00b0 CDDE     		.short	-8499
+ 775 00b2 44CF     		.short	-12476
+ 776 00b4 DFFD     		.short	-545
+ 777 00b6 56EC     		.short	-5034
+ 778 00b8 E998     		.short	-26391
+ 779 00ba 6089     		.short	-30368
+ 780 00bc FBBB     		.short	-17413
+ 781 00be 72AA     		.short	-21902
+ 782 00c0 0663     		.short	25350
+ 783 00c2 8F72     		.short	29327
+ 784 00c4 1440     		.short	16404
+ 785 00c6 9D51     		.short	20893
+ 786 00c8 2225     		.short	9506
+ 787 00ca AB34     		.short	13483
+ 788 00cc 3006     		.short	1584
+ 789 00ce B917     		.short	6073
+ 790 00d0 4EEF     		.short	-4274
+ 791 00d2 C7FE     		.short	-313
+ 792 00d4 5CCC     		.short	-13220
+ 793 00d6 D5DD     		.short	-8747
+ 794 00d8 6AA9     		.short	-22166
+ 795 00da E3B8     		.short	-18205
+ 796 00dc 788A     		.short	-30088
+ 797 00de F19B     		.short	-25615
+ 798 00e0 8773     		.short	29575
+ 799 00e2 0E62     		.short	25102
+ 800 00e4 9550     		.short	20629
+ 801 00e6 1C41     		.short	16668
+ 802 00e8 A335     		.short	13731
+ 803 00ea 2A24     		.short	9258
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 21
+
+
+ 804 00ec B116     		.short	5809
+ 805 00ee 3807     		.short	1848
+ 806 00f0 CFFF     		.short	-49
+ 807 00f2 46EE     		.short	-4538
+ 808 00f4 DDDC     		.short	-8995
+ 809 00f6 54CD     		.short	-12972
+ 810 00f8 EBB9     		.short	-17941
+ 811 00fa 62A8     		.short	-22430
+ 812 00fc F99A     		.short	-25863
+ 813 00fe 708B     		.short	-29840
+ 814 0100 0884     		.short	-31736
+ 815 0102 8195     		.short	-27263
+ 816 0104 1AA7     		.short	-22758
+ 817 0106 93B6     		.short	-18797
+ 818 0108 2CC2     		.short	-15828
+ 819 010a A5D3     		.short	-11355
+ 820 010c 3EE1     		.short	-7874
+ 821 010e B7F0     		.short	-3913
+ 822 0110 4008     		.short	2112
+ 823 0112 C919     		.short	6601
+ 824 0114 522B     		.short	11090
+ 825 0116 DB3A     		.short	15067
+ 826 0118 644E     		.short	20068
+ 827 011a ED5F     		.short	24557
+ 828 011c 766D     		.short	28022
+ 829 011e FF7C     		.short	31999
+ 830 0120 8994     		.short	-27511
+ 831 0122 0085     		.short	-31488
+ 832 0124 9BB7     		.short	-18533
+ 833 0126 12A6     		.short	-23022
+ 834 0128 ADD2     		.short	-11603
+ 835 012a 24C3     		.short	-15580
+ 836 012c BFF1     		.short	-3649
+ 837 012e 36E0     		.short	-8138
+ 838 0130 C118     		.short	6337
+ 839 0132 4809     		.short	2376
+ 840 0134 D33B     		.short	15315
+ 841 0136 5A2A     		.short	10842
+ 842 0138 E55E     		.short	24293
+ 843 013a 6C4F     		.short	20332
+ 844 013c F77D     		.short	32247
+ 845 013e 7E6C     		.short	27774
+ 846 0140 0AA5     		.short	-23286
+ 847 0142 83B4     		.short	-19325
+ 848 0144 1886     		.short	-31208
+ 849 0146 9197     		.short	-26735
+ 850 0148 2EE3     		.short	-7378
+ 851 014a A7F2     		.short	-3417
+ 852 014c 3CC0     		.short	-16324
+ 853 014e B5D1     		.short	-11851
+ 854 0150 4229     		.short	10562
+ 855 0152 CB38     		.short	14539
+ 856 0154 500A     		.short	2640
+ 857 0156 D91B     		.short	7129
+ 858 0158 666F     		.short	28518
+ 859 015a EF7E     		.short	32495
+ 860 015c 744C     		.short	19572
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 22
+
+
+ 861 015e FD5D     		.short	24061
+ 862 0160 8BB5     		.short	-19061
+ 863 0162 02A4     		.short	-23550
+ 864 0164 9996     		.short	-26983
+ 865 0166 1087     		.short	-30960
+ 866 0168 AFF3     		.short	-3153
+ 867 016a 26E2     		.short	-7642
+ 868 016c BDD0     		.short	-12099
+ 869 016e 34C1     		.short	-16076
+ 870 0170 C339     		.short	14787
+ 871 0172 4A28     		.short	10314
+ 872 0174 D11A     		.short	6865
+ 873 0176 580B     		.short	2904
+ 874 0178 E77F     		.short	32743
+ 875 017a 6E6E     		.short	28270
+ 876 017c F55C     		.short	23797
+ 877 017e 7C4D     		.short	19836
+ 878 0180 0CC6     		.short	-14836
+ 879 0182 85D7     		.short	-10363
+ 880 0184 1EE5     		.short	-6882
+ 881 0186 97F4     		.short	-2921
+ 882 0188 2880     		.short	-32728
+ 883 018a A191     		.short	-28255
+ 884 018c 3AA3     		.short	-23750
+ 885 018e B3B2     		.short	-19789
+ 886 0190 444A     		.short	19012
+ 887 0192 CD5B     		.short	23501
+ 888 0194 5669     		.short	26966
+ 889 0196 DF78     		.short	30943
+ 890 0198 600C     		.short	3168
+ 891 019a E91D     		.short	7657
+ 892 019c 722F     		.short	12146
+ 893 019e FB3E     		.short	16123
+ 894 01a0 8DD6     		.short	-10611
+ 895 01a2 04C7     		.short	-14588
+ 896 01a4 9FF5     		.short	-2657
+ 897 01a6 16E4     		.short	-7146
+ 898 01a8 A990     		.short	-28503
+ 899 01aa 2081     		.short	-32480
+ 900 01ac BBB3     		.short	-19525
+ 901 01ae 32A2     		.short	-24014
+ 902 01b0 C55A     		.short	23237
+ 903 01b2 4C4B     		.short	19276
+ 904 01b4 D779     		.short	31191
+ 905 01b6 5E68     		.short	26718
+ 906 01b8 E11C     		.short	7393
+ 907 01ba 680D     		.short	3432
+ 908 01bc F33F     		.short	16371
+ 909 01be 7A2E     		.short	11898
+ 910 01c0 0EE7     		.short	-6386
+ 911 01c2 87F6     		.short	-2425
+ 912 01c4 1CC4     		.short	-15332
+ 913 01c6 95D5     		.short	-10859
+ 914 01c8 2AA1     		.short	-24278
+ 915 01ca A3B0     		.short	-20317
+ 916 01cc 3882     		.short	-32200
+ 917 01ce B193     		.short	-27727
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 23
+
+
+ 918 01d0 466B     		.short	27462
+ 919 01d2 CF7A     		.short	31439
+ 920 01d4 5448     		.short	18516
+ 921 01d6 DD59     		.short	23005
+ 922 01d8 622D     		.short	11618
+ 923 01da EB3C     		.short	15595
+ 924 01dc 700E     		.short	3696
+ 925 01de F91F     		.short	8185
+ 926 01e0 8FF7     		.short	-2161
+ 927 01e2 06E6     		.short	-6650
+ 928 01e4 9DD4     		.short	-11107
+ 929 01e6 14C5     		.short	-15084
+ 930 01e8 ABB1     		.short	-20053
+ 931 01ea 22A0     		.short	-24542
+ 932 01ec B992     		.short	-27975
+ 933 01ee 3083     		.short	-31952
+ 934 01f0 C77B     		.short	31687
+ 935 01f2 4E6A     		.short	27214
+ 936 01f4 D558     		.short	22741
+ 937 01f6 5C49     		.short	18780
+ 938 01f8 E33D     		.short	15843
+ 939 01fa 6A2C     		.short	11370
+ 940 01fc F11E     		.short	7921
+ 941 01fe 780F     		.short	3960
+ 942              		.global	CRC16_INIT
+ 943              		.section	.rodata.CRC16_INIT,"a"
+ 944              		.align	1
+ 947              	CRC16_INIT:
+ 948 0000 FFFF     		.short	-1
+ 949              		.global	sp_vision_online
+ 950              		.section	.bss.sp_vision_online,"aw",%nobits
+ 953              	sp_vision_online:
+ 954 0000 00       		.space	1
+ 955              		.section	.bss.vision_daemon_instance,"aw",%nobits
+ 956              		.align	2
+ 959              	vision_daemon_instance:
+ 960 0000 00000000 		.space	4
+ 961              		.section	.bss.send_data,"aw",%nobits
+ 962              		.align	2
+ 965              	send_data:
+ 966 0000 00000000 		.space	43
+ 966      00000000 
+ 966      00000000 
+ 966      00000000 
+ 966      00000000 
+ 967              		.section	.bss.recv_data,"aw",%nobits
+ 968              		.align	2
+ 971              	recv_data:
+ 972 0000 00000000 		.space	29
+ 972      00000000 
+ 972      00000000 
+ 972      00000000 
+ 972      00000000 
+ 973              		.text
+ 974              	.Letext0:
+ 975              		.file 3 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_ty
+ 976              		.file 4 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_stdint.h"
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 24
+
+
+ 977              		.file 5 "modules/sp_vision/sp_vision.h"
+ 978              		.file 6 "modules/daemon/daemon.h"
+ 979              		.file 7 "Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h"
+ 980              		.file 8 "Inc/usbd_cdc_if.h"
+ 981              		.file 9 "bsp/usb/bsp_usb.h"
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 25
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 sp_vision.c
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:21     .text.get_crc16:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:26     .text.get_crc16:00000000 get_crc16
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:83     .text.get_crc16:00000028 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:685    .rodata.CRC16_TABLE:00000000 CRC16_TABLE
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:88     .text.check_crc16:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:93     .text.check_crc16:00000000 check_crc16
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:133    .text.VisionOfflineCallback:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:138    .text.VisionOfflineCallback:00000000 VisionOfflineCallback
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:157    .text.VisionOfflineCallback:00000008 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:953    .bss.sp_vision_online:00000000 sp_vision_online
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:162    .text.DecodeVision:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:167    .text.DecodeVision:00000000 DecodeVision
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:241    .text.DecodeVision:0000004c $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:959    .bss.vision_daemon_instance:00000000 vision_daemon_instance
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:678    .bss.vis_recv_buff:00000000 vis_recv_buff
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:971    .bss.recv_data:00000000 recv_data
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:249    .text.SP_Vision_Set_GimbalAttitude:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:255    .text.SP_Vision_Set_GimbalAttitude:00000000 SP_Vision_Set_GimbalAttitude
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:301    .text.SP_Vision_Set_GimbalAttitude:0000003c $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:965    .bss.send_data:00000000 send_data
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:306    .text.SP_Vision_Set_BulletSpeed:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:312    .text.SP_Vision_Set_BulletSpeed:00000000 SP_Vision_Set_BulletSpeed
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:330    .text.SP_Vision_Set_BulletSpeed:0000000c $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:335    .text.SP_Vision_Set_BulletCount:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:341    .text.SP_Vision_Set_BulletCount:00000000 SP_Vision_Set_BulletCount
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:358    .text.SP_Vision_Set_BulletCount:00000008 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:363    .text.SP_Vision_Set_Mode:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:369    .text.SP_Vision_Set_Mode:00000000 SP_Vision_Set_Mode
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:386    .text.SP_Vision_Set_Mode:00000008 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:391    .text.SP_Vision_Set_EnemyColor:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:397    .text.SP_Vision_Set_EnemyColor:00000000 SP_Vision_Set_EnemyColor
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:412    .text.SP_VisionGetRecvData:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:418    .text.SP_VisionGetRecvData:00000000 SP_VisionGetRecvData
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:432    .text.SP_VisionGetRecvData:00000004 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:437    .text.SP_VisionInit:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:443    .text.SP_VisionInit:00000000 SP_VisionInit
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:514    .text.SP_VisionInit:0000004c $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:524    .text.SP_VisionSend:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:530    .text.SP_VisionSend:00000000 SP_VisionSend
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:657    .text.SP_VisionSend:0000008c $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:672    .bss.active_buf_idx.2:00000000 active_buf_idx.2
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:667    .bss.send_buffs.1:00000000 send_buffs.1
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:664    .bss.send_buffs.1:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:673    .bss.active_buf_idx.2:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:675    .bss.vis_recv_buff:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:682    .rodata.CRC16_TABLE:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:947    .rodata.CRC16_INIT:00000000 CRC16_INIT
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:944    .rodata.CRC16_INIT:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:954    .bss.sp_vision_online:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:956    .bss.vision_daemon_instance:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:962    .bss.send_data:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s:968    .bss.recv_data:00000000 $d
+
+UNDEFINED SYMBOLS
+DaemonReload
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccdnbqyU.s 			page 26
+
+
+USBInit
+DaemonRegister
+USBTransmit

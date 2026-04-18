@@ -124,6 +124,7 @@ modules/algorithm/QuaternionEKF.c \
 modules/algorithm/crc8.c \
 modules/algorithm/crc16.c \
 modules/algorithm/user_lib.c \
+modules/algorithm/smc_controller.c \
 modules/bluetooth/HC05.c \
 modules/BMI088/bmi088.c \
 modules/imu/BMI088driver.c \
@@ -148,9 +149,11 @@ modules/referee/referee_task.c \
 modules/remote/remote_control.c \
 modules/super_cap/super_cap.c \
 modules/can_comm/can_comm.c \
+modules/can_vision/can_vision.c \
 modules/message_center/message_center.c \
 modules/daemon/daemon.c \
 modules/alarm/buzzer.c \
+modules/sp_vision/sp_vision.c \
 application/gimbal/gimbal.c \
 application/chassis/chassis.c \
 application/shoot/shoot.c \

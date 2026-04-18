@@ -1,0 +1,1179 @@
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"can_vision.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "modules/can_vision/can_vision.c"
+  20              		.section	.text.CanVisionRxCallback,"ax",%progbits
+  21              		.align	1
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	CanVisionRxCallback:
+  27              	.LVL0:
+  28              	.LFB273:
+   1:modules/can_vision/can_vision.c **** /**
+   2:modules/can_vision/can_vision.c ****  ******************************************************************************
+   3:modules/can_vision/can_vision.c ****  * @file    can_vision.c
+   4:modules/can_vision/can_vision.c ****  * @brief   CAN视觉通信模块实现
+   5:modules/can_vision/can_vision.c ****  *          发送IMU四元数数据，接收上位机控制命令
+   6:modules/can_vision/can_vision.c ****  ******************************************************************************
+   7:modules/can_vision/can_vision.c ****  */
+   8:modules/can_vision/can_vision.c **** #include "can_vision.h"
+   9:modules/can_vision/can_vision.c **** #include "QuaternionEKF.h"
+  10:modules/can_vision/can_vision.c **** #include "can.h"
+  11:modules/can_vision/can_vision.c **** #include "bsp_log.h"
+  12:modules/can_vision/can_vision.c **** #include "stddef.h"
+  13:modules/can_vision/can_vision.c **** #include "message_center.h"
+  14:modules/can_vision/can_vision.c **** #include "math.h"
+  15:modules/can_vision/can_vision.c **** 
+  16:modules/can_vision/can_vision.c **** /* CAN实例指针 */
+  17:modules/can_vision/can_vision.c **** static CANInstance *can_vision_instance = NULL;
+  18:modules/can_vision/can_vision.c **** 
+  19:modules/can_vision/can_vision.c **** /* 接收到的命令数据 */
+  20:modules/can_vision/can_vision.c **** static CanVisionCommand_t vision_command;
+  21:modules/can_vision/can_vision.c **** static uint8_t command_received = 0; // 标志位，表示是否收到新命令
+  22:modules/can_vision/can_vision.c **** 
+  23:modules/can_vision/can_vision.c **** /* 消息发布者，用于发布上位机命令 */
+  24:modules/can_vision/can_vision.c **** static Publisher_t *vision_cmd_pub = NULL;
+  25:modules/can_vision/can_vision.c **** 
+  26:modules/can_vision/can_vision.c **** static float can_vision_bullet_speed_mps = 25.0f;
+  27:modules/can_vision/can_vision.c **** static uint8_t can_vision_mode = 1;
+  28:modules/can_vision/can_vision.c **** static uint8_t can_vision_shoot_mode = 0;
+  29:modules/can_vision/can_vision.c **** static float can_vision_ft_angle_rad = 0.0f;
+  30:modules/can_vision/can_vision.c **** 
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 2
+
+
+  31:modules/can_vision/can_vision.c **** static void normalize_quat(float *w, float *x, float *y, float *z)
+  32:modules/can_vision/can_vision.c **** {
+  33:modules/can_vision/can_vision.c ****     float n = sqrtf((*w) * (*w) + (*x) * (*x) + (*y) * (*y) + (*z) * (*z));
+  34:modules/can_vision/can_vision.c ****     if (n > 0.0f)
+  35:modules/can_vision/can_vision.c ****     {
+  36:modules/can_vision/can_vision.c ****         *w /= n;
+  37:modules/can_vision/can_vision.c ****         *x /= n;
+  38:modules/can_vision/can_vision.c ****         *y /= n;
+  39:modules/can_vision/can_vision.c ****         *z /= n;
+  40:modules/can_vision/can_vision.c ****     }
+  41:modules/can_vision/can_vision.c **** }
+  42:modules/can_vision/can_vision.c **** 
+  43:modules/can_vision/can_vision.c **** void CanVisionSetBulletSpeed(float speed_mps)
+  44:modules/can_vision/can_vision.c **** {
+  45:modules/can_vision/can_vision.c ****     can_vision_bullet_speed_mps = speed_mps;
+  46:modules/can_vision/can_vision.c **** }
+  47:modules/can_vision/can_vision.c **** 
+  48:modules/can_vision/can_vision.c **** /**
+  49:modules/can_vision/can_vision.c ****  * @brief CAN接收回调函数
+  50:modules/can_vision/can_vision.c ****  * @param instance CAN实例指针
+  51:modules/can_vision/can_vision.c ****  */
+  52:modules/can_vision/can_vision.c **** static void CanVisionRxCallback(CANInstance *instance)
+  53:modules/can_vision/can_vision.c **** {
+  29              		.loc 1 53 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		.loc 1 53 1 is_stmt 0 view .LVU1
+  34 0000 08B5     		push	{r3, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 3, -8
+  38              		.cfi_offset 14, -4
+  54:modules/can_vision/can_vision.c ****     if (instance->rx_id == CAN_VISION_COMMAND_ID && instance->rx_len == 8)
+  39              		.loc 1 54 5 is_stmt 1 view .LVU2
+  40              		.loc 1 54 17 is_stmt 0 view .LVU3
+  41 0002 436B     		ldr	r3, [r0, #52]	@ unaligned
+  42              		.loc 1 54 8 view .LVU4
+  43 0004 FF2B     		cmp	r3, #255
+  44 0006 00D0     		beq	.L4
+  45              	.LVL1:
+  46              	.L1:
+  55:modules/can_vision/can_vision.c ****     {
+  56:modules/can_vision/can_vision.c ****         // 解析控制标志位
+  57:modules/can_vision/can_vision.c ****         vision_command.control = instance->rx_buff[0];
+  58:modules/can_vision/can_vision.c ****         vision_command.shoot = instance->rx_buff[1];
+  59:modules/can_vision/can_vision.c **** 
+  60:modules/can_vision/can_vision.c ****         // 解析偏航角度（int16_t，高字节在前，除以1e4得到浮点数）
+  61:modules/can_vision/can_vision.c ****         int16_t yaw_int = (int16_t)((instance->rx_buff[2] << 8) | instance->rx_buff[3]);
+  62:modules/can_vision/can_vision.c ****         vision_command.yaw = (float)yaw_int / 1e4f;
+  63:modules/can_vision/can_vision.c **** 
+  64:modules/can_vision/can_vision.c ****         // 解析俯仰角度
+  65:modules/can_vision/can_vision.c ****         int16_t pitch_int = (int16_t)((instance->rx_buff[4] << 8) | instance->rx_buff[5]);
+  66:modules/can_vision/can_vision.c ****         vision_command.pitch = (float)pitch_int / 1e4f;
+  67:modules/can_vision/can_vision.c **** 
+  68:modules/can_vision/can_vision.c ****         // 解析水平距离
+  69:modules/can_vision/can_vision.c ****         int16_t distance_int = (int16_t)((instance->rx_buff[6] << 8) | instance->rx_buff[7]);
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 3
+
+
+  70:modules/can_vision/can_vision.c ****         vision_command.horizon_distance = (float)distance_int / 1e4f;
+  71:modules/can_vision/can_vision.c **** 
+  72:modules/can_vision/can_vision.c ****         command_received = 1; // 标记收到新命令
+  73:modules/can_vision/can_vision.c ****         
+  74:modules/can_vision/can_vision.c ****         // 发布命令到消息中心
+  75:modules/can_vision/can_vision.c ****         if (vision_cmd_pub != NULL)
+  76:modules/can_vision/can_vision.c ****         {
+  77:modules/can_vision/can_vision.c ****             PubPushMessage(vision_cmd_pub, (void*)&vision_command);
+  78:modules/can_vision/can_vision.c ****         }
+  79:modules/can_vision/can_vision.c ****     }
+  80:modules/can_vision/can_vision.c **** }
+  47              		.loc 1 80 1 view .LVU5
+  48 0008 08BD     		pop	{r3, pc}
+  49              	.LVL2:
+  50              	.L4:
+  54:modules/can_vision/can_vision.c ****     if (instance->rx_id == CAN_VISION_COMMAND_ID && instance->rx_len == 8)
+  51              		.loc 1 54 61 discriminator 1 view .LVU6
+  52 000a 90F83830 		ldrb	r3, [r0, #56]	@ zero_extendqisi2
+  54:modules/can_vision/can_vision.c ****     if (instance->rx_id == CAN_VISION_COMMAND_ID && instance->rx_len == 8)
+  53              		.loc 1 54 50 discriminator 1 view .LVU7
+  54 000e 082B     		cmp	r3, #8
+  55 0010 FAD1     		bne	.L1
+  56              	.LBB2:
+  57:modules/can_vision/can_vision.c ****         vision_command.shoot = instance->rx_buff[1];
+  57              		.loc 1 57 9 is_stmt 1 view .LVU8
+  57:modules/can_vision/can_vision.c ****         vision_command.shoot = instance->rx_buff[1];
+  58              		.loc 1 57 51 is_stmt 0 view .LVU9
+  59 0012 90F82C30 		ldrb	r3, [r0, #44]	@ zero_extendqisi2
+  57:modules/can_vision/can_vision.c ****         vision_command.shoot = instance->rx_buff[1];
+  60              		.loc 1 57 32 view .LVU10
+  61 0016 1F4A     		ldr	r2, .L5
+  62 0018 1370     		strb	r3, [r2]
+  58:modules/can_vision/can_vision.c **** 
+  63              		.loc 1 58 9 is_stmt 1 view .LVU11
+  58:modules/can_vision/can_vision.c **** 
+  64              		.loc 1 58 49 is_stmt 0 view .LVU12
+  65 001a 90F82D30 		ldrb	r3, [r0, #45]	@ zero_extendqisi2
+  58:modules/can_vision/can_vision.c **** 
+  66              		.loc 1 58 30 view .LVU13
+  67 001e 5370     		strb	r3, [r2, #1]
+  61:modules/can_vision/can_vision.c ****         vision_command.yaw = (float)yaw_int / 1e4f;
+  68              		.loc 1 61 9 is_stmt 1 view .LVU14
+  61:modules/can_vision/can_vision.c ****         vision_command.yaw = (float)yaw_int / 1e4f;
+  69              		.loc 1 61 55 is_stmt 0 view .LVU15
+  70 0020 90F82E30 		ldrb	r3, [r0, #46]	@ zero_extendqisi2
+  61:modules/can_vision/can_vision.c ****         vision_command.yaw = (float)yaw_int / 1e4f;
+  71              		.loc 1 61 27 view .LVU16
+  72 0024 1B02     		lsls	r3, r3, #8
+  73 0026 1BB2     		sxth	r3, r3
+  61:modules/can_vision/can_vision.c ****         vision_command.yaw = (float)yaw_int / 1e4f;
+  74              		.loc 1 61 84 view .LVU17
+  75 0028 90F82F10 		ldrb	r1, [r0, #47]	@ zero_extendqisi2
+  61:modules/can_vision/can_vision.c ****         vision_command.yaw = (float)yaw_int / 1e4f;
+  76              		.loc 1 61 17 view .LVU18
+  77 002c 0B43     		orrs	r3, r3, r1
+  78              	.LVL3:
+  62:modules/can_vision/can_vision.c **** 
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 4
+
+
+  79              		.loc 1 62 9 is_stmt 1 view .LVU19
+  62:modules/can_vision/can_vision.c **** 
+  80              		.loc 1 62 30 is_stmt 0 view .LVU20
+  81 002e 07EE903A 		vmov	s15, r3	@ int
+  82 0032 F8EEE77A 		vcvt.f32.s32	s15, s15
+  62:modules/can_vision/can_vision.c **** 
+  83              		.loc 1 62 45 view .LVU21
+  84 0036 9FED187A 		vldr.32	s14, .L5+4
+  85 003a C7EE876A 		vdiv.f32	s13, s15, s14
+  62:modules/can_vision/can_vision.c **** 
+  86              		.loc 1 62 28 view .LVU22
+  87 003e C2ED016A 		vstr.32	s13, [r2, #4]
+  65:modules/can_vision/can_vision.c ****         vision_command.pitch = (float)pitch_int / 1e4f;
+  88              		.loc 1 65 9 is_stmt 1 view .LVU23
+  65:modules/can_vision/can_vision.c ****         vision_command.pitch = (float)pitch_int / 1e4f;
+  89              		.loc 1 65 57 is_stmt 0 view .LVU24
+  90 0042 90F83030 		ldrb	r3, [r0, #48]	@ zero_extendqisi2
+  91              	.LVL4:
+  65:modules/can_vision/can_vision.c ****         vision_command.pitch = (float)pitch_int / 1e4f;
+  92              		.loc 1 65 29 view .LVU25
+  93 0046 1B02     		lsls	r3, r3, #8
+  94 0048 1BB2     		sxth	r3, r3
+  65:modules/can_vision/can_vision.c ****         vision_command.pitch = (float)pitch_int / 1e4f;
+  95              		.loc 1 65 86 view .LVU26
+  96 004a 90F83110 		ldrb	r1, [r0, #49]	@ zero_extendqisi2
+  97              	.LVL5:
+  65:modules/can_vision/can_vision.c ****         vision_command.pitch = (float)pitch_int / 1e4f;
+  98              		.loc 1 65 17 view .LVU27
+  99 004e 0B43     		orrs	r3, r3, r1
+ 100              	.LVL6:
+  66:modules/can_vision/can_vision.c **** 
+ 101              		.loc 1 66 9 is_stmt 1 view .LVU28
+  66:modules/can_vision/can_vision.c **** 
+ 102              		.loc 1 66 32 is_stmt 0 view .LVU29
+ 103 0050 07EE903A 		vmov	s15, r3	@ int
+ 104 0054 F8EEE77A 		vcvt.f32.s32	s15, s15
+  66:modules/can_vision/can_vision.c **** 
+ 105              		.loc 1 66 49 view .LVU30
+ 106 0058 C7EE876A 		vdiv.f32	s13, s15, s14
+  66:modules/can_vision/can_vision.c **** 
+ 107              		.loc 1 66 30 view .LVU31
+ 108 005c C2ED026A 		vstr.32	s13, [r2, #8]
+  69:modules/can_vision/can_vision.c ****         vision_command.horizon_distance = (float)distance_int / 1e4f;
+ 109              		.loc 1 69 9 is_stmt 1 view .LVU32
+  69:modules/can_vision/can_vision.c ****         vision_command.horizon_distance = (float)distance_int / 1e4f;
+ 110              		.loc 1 69 60 is_stmt 0 view .LVU33
+ 111 0060 90F83230 		ldrb	r3, [r0, #50]	@ zero_extendqisi2
+ 112              	.LVL7:
+  69:modules/can_vision/can_vision.c ****         vision_command.horizon_distance = (float)distance_int / 1e4f;
+ 113              		.loc 1 69 32 view .LVU34
+ 114 0064 1B02     		lsls	r3, r3, #8
+ 115 0066 1BB2     		sxth	r3, r3
+  69:modules/can_vision/can_vision.c ****         vision_command.horizon_distance = (float)distance_int / 1e4f;
+ 116              		.loc 1 69 89 view .LVU35
+ 117 0068 90F83310 		ldrb	r1, [r0, #51]	@ zero_extendqisi2
+ 118              	.LVL8:
+  69:modules/can_vision/can_vision.c ****         vision_command.horizon_distance = (float)distance_int / 1e4f;
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 5
+
+
+ 119              		.loc 1 69 17 view .LVU36
+ 120 006c 0B43     		orrs	r3, r3, r1
+ 121              	.LVL9:
+  70:modules/can_vision/can_vision.c **** 
+ 122              		.loc 1 70 9 is_stmt 1 view .LVU37
+  70:modules/can_vision/can_vision.c **** 
+ 123              		.loc 1 70 43 is_stmt 0 view .LVU38
+ 124 006e 07EE903A 		vmov	s15, r3	@ int
+ 125 0072 F8EEE77A 		vcvt.f32.s32	s15, s15
+  70:modules/can_vision/can_vision.c **** 
+ 126              		.loc 1 70 63 view .LVU39
+ 127 0076 C7EE876A 		vdiv.f32	s13, s15, s14
+  70:modules/can_vision/can_vision.c **** 
+ 128              		.loc 1 70 41 view .LVU40
+ 129 007a C2ED036A 		vstr.32	s13, [r2, #12]
+  72:modules/can_vision/can_vision.c ****         
+ 130              		.loc 1 72 9 is_stmt 1 view .LVU41
+  72:modules/can_vision/can_vision.c ****         
+ 131              		.loc 1 72 26 is_stmt 0 view .LVU42
+ 132 007e 074B     		ldr	r3, .L5+8
+ 133              	.LVL10:
+  72:modules/can_vision/can_vision.c ****         
+ 134              		.loc 1 72 26 view .LVU43
+ 135 0080 0122     		movs	r2, #1
+ 136 0082 1A70     		strb	r2, [r3]
+  75:modules/can_vision/can_vision.c ****         {
+ 137              		.loc 1 75 9 is_stmt 1 view .LVU44
+  75:modules/can_vision/can_vision.c ****         {
+ 138              		.loc 1 75 28 is_stmt 0 view .LVU45
+ 139 0084 064B     		ldr	r3, .L5+12
+ 140 0086 1868     		ldr	r0, [r3]
+ 141              	.LVL11:
+  75:modules/can_vision/can_vision.c ****         {
+ 142              		.loc 1 75 12 view .LVU46
+ 143 0088 0028     		cmp	r0, #0
+ 144 008a BDD0     		beq	.L1
+  77:modules/can_vision/can_vision.c ****         }
+ 145              		.loc 1 77 13 is_stmt 1 view .LVU47
+ 146 008c 0149     		ldr	r1, .L5
+ 147              	.LVL12:
+  77:modules/can_vision/can_vision.c ****         }
+ 148              		.loc 1 77 13 is_stmt 0 view .LVU48
+ 149 008e FFF7FEFF 		bl	PubPushMessage
+ 150              	.LVL13:
+  77:modules/can_vision/can_vision.c ****         }
+ 151              		.loc 1 77 13 view .LVU49
+ 152              	.LBE2:
+ 153              		.loc 1 80 1 view .LVU50
+ 154 0092 B9E7     		b	.L1
+ 155              	.L6:
+ 156              		.align	2
+ 157              	.L5:
+ 158 0094 00000000 		.word	vision_command
+ 159 0098 00401C46 		.word	1176256512
+ 160 009c 00000000 		.word	command_received
+ 161 00a0 00000000 		.word	vision_cmd_pub
+ 162              		.cfi_endproc
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 6
+
+
+ 163              	.LFE273:
+ 165              		.section	.text.normalize_quat,"ax",%progbits
+ 166              		.align	1
+ 167              		.syntax unified
+ 168              		.thumb
+ 169              		.thumb_func
+ 171              	normalize_quat:
+ 172              	.LVL14:
+ 173              	.LFB271:
+  32:modules/can_vision/can_vision.c ****     float n = sqrtf((*w) * (*w) + (*x) * (*x) + (*y) * (*y) + (*z) * (*z));
+ 174              		.loc 1 32 1 is_stmt 1 view -0
+ 175              		.cfi_startproc
+ 176              		@ args = 0, pretend = 0, frame = 0
+ 177              		@ frame_needed = 0, uses_anonymous_args = 0
+  32:modules/can_vision/can_vision.c ****     float n = sqrtf((*w) * (*w) + (*x) * (*x) + (*y) * (*y) + (*z) * (*z));
+ 178              		.loc 1 32 1 is_stmt 0 view .LVU52
+ 179 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 180              	.LCFI1:
+ 181              		.cfi_def_cfa_offset 24
+ 182              		.cfi_offset 3, -24
+ 183              		.cfi_offset 4, -20
+ 184              		.cfi_offset 5, -16
+ 185              		.cfi_offset 6, -12
+ 186              		.cfi_offset 7, -8
+ 187              		.cfi_offset 14, -4
+ 188 0002 2DED028B 		vpush.64	{d8}
+ 189              	.LCFI2:
+ 190              		.cfi_def_cfa_offset 32
+ 191              		.cfi_offset 80, -32
+ 192              		.cfi_offset 81, -28
+ 193 0006 0746     		mov	r7, r0
+ 194 0008 0E46     		mov	r6, r1
+ 195 000a 1546     		mov	r5, r2
+ 196 000c 1C46     		mov	r4, r3
+  33:modules/can_vision/can_vision.c ****     if (n > 0.0f)
+ 197              		.loc 1 33 5 is_stmt 1 view .LVU53
+  33:modules/can_vision/can_vision.c ****     if (n > 0.0f)
+ 198              		.loc 1 33 22 is_stmt 0 view .LVU54
+ 199 000e 90ED008A 		vldr.32	s16, [r0]
+  33:modules/can_vision/can_vision.c ****     if (n > 0.0f)
+ 200              		.loc 1 33 26 view .LVU55
+ 201 0012 68EE087A 		vmul.f32	s15, s16, s16
+  33:modules/can_vision/can_vision.c ****     if (n > 0.0f)
+ 202              		.loc 1 33 36 view .LVU56
+ 203 0016 91ED007A 		vldr.32	s14, [r1]
+  33:modules/can_vision/can_vision.c ****     if (n > 0.0f)
+ 204              		.loc 1 33 40 view .LVU57
+ 205 001a 27EE077A 		vmul.f32	s14, s14, s14
+  33:modules/can_vision/can_vision.c ****     if (n > 0.0f)
+ 206              		.loc 1 33 33 view .LVU58
+ 207 001e 77EE877A 		vadd.f32	s15, s15, s14
+  33:modules/can_vision/can_vision.c ****     if (n > 0.0f)
+ 208              		.loc 1 33 50 view .LVU59
+ 209 0022 92ED007A 		vldr.32	s14, [r2]
+  33:modules/can_vision/can_vision.c ****     if (n > 0.0f)
+ 210              		.loc 1 33 54 view .LVU60
+ 211 0026 27EE077A 		vmul.f32	s14, s14, s14
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 7
+
+
+  33:modules/can_vision/can_vision.c ****     if (n > 0.0f)
+ 212              		.loc 1 33 47 view .LVU61
+ 213 002a 77EE877A 		vadd.f32	s15, s15, s14
+  33:modules/can_vision/can_vision.c ****     if (n > 0.0f)
+ 214              		.loc 1 33 64 view .LVU62
+ 215 002e 93ED000A 		vldr.32	s0, [r3]
+  33:modules/can_vision/can_vision.c ****     if (n > 0.0f)
+ 216              		.loc 1 33 68 view .LVU63
+ 217 0032 20EE000A 		vmul.f32	s0, s0, s0
+  33:modules/can_vision/can_vision.c ****     if (n > 0.0f)
+ 218              		.loc 1 33 15 view .LVU64
+ 219 0036 37EE800A 		vadd.f32	s0, s15, s0
+ 220 003a FFF7FEFF 		bl	sqrtf
+ 221              	.LVL15:
+  34:modules/can_vision/can_vision.c ****     {
+ 222              		.loc 1 34 5 is_stmt 1 view .LVU65
+  34:modules/can_vision/can_vision.c ****     {
+ 223              		.loc 1 34 8 is_stmt 0 view .LVU66
+ 224 003e B5EEC00A 		vcmpe.f32	s0, #0
+ 225 0042 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 226 0046 15DD     		ble	.L7
+  36:modules/can_vision/can_vision.c ****         *x /= n;
+ 227              		.loc 1 36 9 is_stmt 1 view .LVU67
+  36:modules/can_vision/can_vision.c ****         *x /= n;
+ 228              		.loc 1 36 12 is_stmt 0 view .LVU68
+ 229 0048 C8EE007A 		vdiv.f32	s15, s16, s0
+ 230 004c C7ED007A 		vstr.32	s15, [r7]
+  37:modules/can_vision/can_vision.c ****         *y /= n;
+ 231              		.loc 1 37 9 is_stmt 1 view .LVU69
+ 232 0050 96ED007A 		vldr.32	s14, [r6]
+  37:modules/can_vision/can_vision.c ****         *y /= n;
+ 233              		.loc 1 37 12 is_stmt 0 view .LVU70
+ 234 0054 C7EE007A 		vdiv.f32	s15, s14, s0
+ 235 0058 C6ED007A 		vstr.32	s15, [r6]
+  38:modules/can_vision/can_vision.c ****         *z /= n;
+ 236              		.loc 1 38 9 is_stmt 1 view .LVU71
+ 237 005c 95ED007A 		vldr.32	s14, [r5]
+  38:modules/can_vision/can_vision.c ****         *z /= n;
+ 238              		.loc 1 38 12 is_stmt 0 view .LVU72
+ 239 0060 C7EE007A 		vdiv.f32	s15, s14, s0
+ 240 0064 C5ED007A 		vstr.32	s15, [r5]
+  39:modules/can_vision/can_vision.c ****     }
+ 241              		.loc 1 39 9 is_stmt 1 view .LVU73
+ 242 0068 94ED007A 		vldr.32	s14, [r4]
+  39:modules/can_vision/can_vision.c ****     }
+ 243              		.loc 1 39 12 is_stmt 0 view .LVU74
+ 244 006c C7EE007A 		vdiv.f32	s15, s14, s0
+ 245 0070 C4ED007A 		vstr.32	s15, [r4]
+ 246              	.L7:
+  41:modules/can_vision/can_vision.c **** 
+ 247              		.loc 1 41 1 view .LVU75
+ 248 0074 BDEC028B 		vldm	sp!, {d8}
+ 249              	.LCFI3:
+ 250              		.cfi_restore 80
+ 251              		.cfi_restore 81
+ 252              		.cfi_def_cfa_offset 24
+ 253 0078 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 8
+
+
+  41:modules/can_vision/can_vision.c **** 
+ 254              		.loc 1 41 1 view .LVU76
+ 255              		.cfi_endproc
+ 256              	.LFE271:
+ 258              		.section	.text.CanVisionSetBulletSpeed,"ax",%progbits
+ 259              		.align	1
+ 260              		.global	CanVisionSetBulletSpeed
+ 261              		.syntax unified
+ 262              		.thumb
+ 263              		.thumb_func
+ 265              	CanVisionSetBulletSpeed:
+ 266              	.LVL16:
+ 267              	.LFB272:
+  44:modules/can_vision/can_vision.c ****     can_vision_bullet_speed_mps = speed_mps;
+ 268              		.loc 1 44 1 is_stmt 1 view -0
+ 269              		.cfi_startproc
+ 270              		@ args = 0, pretend = 0, frame = 0
+ 271              		@ frame_needed = 0, uses_anonymous_args = 0
+ 272              		@ link register save eliminated.
+  45:modules/can_vision/can_vision.c **** }
+ 273              		.loc 1 45 5 view .LVU78
+  45:modules/can_vision/can_vision.c **** }
+ 274              		.loc 1 45 33 is_stmt 0 view .LVU79
+ 275 0000 014B     		ldr	r3, .L13
+ 276 0002 83ED000A 		vstr.32	s0, [r3]
+  46:modules/can_vision/can_vision.c **** 
+ 277              		.loc 1 46 1 view .LVU80
+ 278 0006 7047     		bx	lr
+ 279              	.L14:
+ 280              		.align	2
+ 281              	.L13:
+ 282 0008 00000000 		.word	can_vision_bullet_speed_mps
+ 283              		.cfi_endproc
+ 284              	.LFE272:
+ 286              		.section	.rodata.CanVisionInit.str1.4,"aMS",%progbits,1
+ 287              		.align	2
+ 288              	.LC1:
+ 289 0000 76697369 		.ascii	"vision_cmd\000"
+ 289      6F6E5F63 
+ 289      6D6400
+ 290              		.section	.text.CanVisionInit,"ax",%progbits
+ 291              		.align	1
+ 292              		.global	CanVisionInit
+ 293              		.syntax unified
+ 294              		.thumb
+ 295              		.thumb_func
+ 297              	CanVisionInit:
+ 298              	.LFB274:
+  81:modules/can_vision/can_vision.c **** 
+  82:modules/can_vision/can_vision.c **** /**
+  83:modules/can_vision/can_vision.c ****  * @brief 初始化CAN视觉通信模块
+  84:modules/can_vision/can_vision.c ****  */
+  85:modules/can_vision/can_vision.c **** void CanVisionInit(void)
+  86:modules/can_vision/can_vision.c **** {
+ 299              		.loc 1 86 1 is_stmt 1 view -0
+ 300              		.cfi_startproc
+ 301              		@ args = 0, pretend = 0, frame = 24
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 9
+
+
+ 302              		@ frame_needed = 0, uses_anonymous_args = 0
+ 303 0000 10B5     		push	{r4, lr}
+ 304              	.LCFI4:
+ 305              		.cfi_def_cfa_offset 8
+ 306              		.cfi_offset 4, -8
+ 307              		.cfi_offset 14, -4
+ 308 0002 86B0     		sub	sp, sp, #24
+ 309              	.LCFI5:
+ 310              		.cfi_def_cfa_offset 32
+  87:modules/can_vision/can_vision.c ****     // CAN初始化配置
+  88:modules/can_vision/can_vision.c ****     CAN_Init_Config_s can_config = {
+ 311              		.loc 1 88 5 view .LVU82
+ 312              		.loc 1 88 23 is_stmt 0 view .LVU83
+ 313 0004 0DF1040C 		add	ip, sp, #4
+ 314 0008 104C     		ldr	r4, .L17
+ 315 000a 0FCC     		ldmia	r4!, {r0, r1, r2, r3}
+ 316 000c ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
+ 317 0010 2368     		ldr	r3, [r4]
+ 318 0012 CCF80030 		str	r3, [ip]
+  89:modules/can_vision/can_vision.c ****         .can_handle = &hcan2,              // 使用CAN2，避免与双板通信冲突
+  90:modules/can_vision/can_vision.c ****         .tx_id = CAN_VISION_QUATERNION_ID,  // 发送ID：四元数
+  91:modules/can_vision/can_vision.c ****         .rx_id = CAN_VISION_COMMAND_ID,     // 接收ID：命令
+  92:modules/can_vision/can_vision.c ****         .can_module_callback = CanVisionRxCallback,
+  93:modules/can_vision/can_vision.c ****         .id = NULL,                         // 不需要模块ID
+  94:modules/can_vision/can_vision.c ****     };
+  95:modules/can_vision/can_vision.c **** 
+  96:modules/can_vision/can_vision.c ****     // 注册CAN实例
+  97:modules/can_vision/can_vision.c ****     can_vision_instance = CANRegister(&can_config);
+ 319              		.loc 1 97 5 is_stmt 1 view .LVU84
+ 320              		.loc 1 97 27 is_stmt 0 view .LVU85
+ 321 0016 01A8     		add	r0, sp, #4
+ 322 0018 FFF7FEFF 		bl	CANRegister
+ 323              	.LVL17:
+ 324              		.loc 1 97 25 discriminator 1 view .LVU86
+ 325 001c 0C4B     		ldr	r3, .L17+4
+ 326 001e 1860     		str	r0, [r3]
+  98:modules/can_vision/can_vision.c ****     
+  99:modules/can_vision/can_vision.c ****     // 设置发送数据长度为8字节
+ 100:modules/can_vision/can_vision.c ****     CANSetDLC(can_vision_instance, 8);
+ 327              		.loc 1 100 5 is_stmt 1 view .LVU87
+ 328 0020 0821     		movs	r1, #8
+ 329 0022 FFF7FEFF 		bl	CANSetDLC
+ 330              	.LVL18:
+ 101:modules/can_vision/can_vision.c **** 
+ 102:modules/can_vision/can_vision.c ****     // 初始化命令数据
+ 103:modules/can_vision/can_vision.c ****     vision_command.control = 0;
+ 331              		.loc 1 103 5 view .LVU88
+ 332              		.loc 1 103 28 is_stmt 0 view .LVU89
+ 333 0026 0B4B     		ldr	r3, .L17+8
+ 334 0028 0022     		movs	r2, #0
+ 335 002a 1A70     		strb	r2, [r3]
+ 104:modules/can_vision/can_vision.c ****     vision_command.shoot = 0;
+ 336              		.loc 1 104 5 is_stmt 1 view .LVU90
+ 337              		.loc 1 104 26 is_stmt 0 view .LVU91
+ 338 002c 5A70     		strb	r2, [r3, #1]
+ 105:modules/can_vision/can_vision.c ****     vision_command.yaw = 0.0f;
+ 339              		.loc 1 105 5 is_stmt 1 view .LVU92
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 10
+
+
+ 340              		.loc 1 105 24 is_stmt 0 view .LVU93
+ 341 002e 0021     		movs	r1, #0
+ 342 0030 5960     		str	r1, [r3, #4]	@ float
+ 106:modules/can_vision/can_vision.c ****     vision_command.pitch = 0.0f;
+ 343              		.loc 1 106 5 is_stmt 1 view .LVU94
+ 344              		.loc 1 106 26 is_stmt 0 view .LVU95
+ 345 0032 9960     		str	r1, [r3, #8]	@ float
+ 107:modules/can_vision/can_vision.c ****     vision_command.horizon_distance = 0.0f;
+ 346              		.loc 1 107 5 is_stmt 1 view .LVU96
+ 347              		.loc 1 107 37 is_stmt 0 view .LVU97
+ 348 0034 D960     		str	r1, [r3, #12]	@ float
+ 108:modules/can_vision/can_vision.c ****     command_received = 0;
+ 349              		.loc 1 108 5 is_stmt 1 view .LVU98
+ 350              		.loc 1 108 22 is_stmt 0 view .LVU99
+ 351 0036 084B     		ldr	r3, .L17+12
+ 352 0038 1A70     		strb	r2, [r3]
+ 109:modules/can_vision/can_vision.c **** 
+ 110:modules/can_vision/can_vision.c ****     // 注册消息发布者，发布上位机命令
+ 111:modules/can_vision/can_vision.c ****     vision_cmd_pub = PubRegister("vision_cmd", sizeof(CanVisionCommand_t));
+ 353              		.loc 1 111 5 is_stmt 1 view .LVU100
+ 354              		.loc 1 111 22 is_stmt 0 view .LVU101
+ 355 003a 1021     		movs	r1, #16
+ 356 003c 0748     		ldr	r0, .L17+16
+ 357 003e FFF7FEFF 		bl	PubRegister
+ 358              	.LVL19:
+ 359              		.loc 1 111 20 discriminator 1 view .LVU102
+ 360 0042 074B     		ldr	r3, .L17+20
+ 361 0044 1860     		str	r0, [r3]
+ 112:modules/can_vision/can_vision.c **** 
+ 113:modules/can_vision/can_vision.c ****   //  LOGINFO("[can_vision] CAN Vision Module Initialized");
+ 114:modules/can_vision/can_vision.c **** }
+ 362              		.loc 1 114 1 view .LVU103
+ 363 0046 06B0     		add	sp, sp, #24
+ 364              	.LCFI6:
+ 365              		.cfi_def_cfa_offset 8
+ 366              		@ sp needed
+ 367 0048 10BD     		pop	{r4, pc}
+ 368              	.L18:
+ 369 004a 00BF     		.align	2
+ 370              	.L17:
+ 371 004c 00000000 		.word	.LANCHOR0
+ 372 0050 00000000 		.word	can_vision_instance
+ 373 0054 00000000 		.word	vision_command
+ 374 0058 00000000 		.word	command_received
+ 375 005c 00000000 		.word	.LC1
+ 376 0060 00000000 		.word	vision_cmd_pub
+ 377              		.cfi_endproc
+ 378              	.LFE274:
+ 380              		.section	.text.CanVisionTask,"ax",%progbits
+ 381              		.align	1
+ 382              		.global	CanVisionTask
+ 383              		.syntax unified
+ 384              		.thumb
+ 385              		.thumb_func
+ 387              	CanVisionTask:
+ 388              	.LFB275:
+ 115:modules/can_vision/can_vision.c **** 
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 11
+
+
+ 116:modules/can_vision/can_vision.c **** /**
+ 117:modules/can_vision/can_vision.c ****  * @brief CAN视觉通信任务函数
+ 118:modules/can_vision/can_vision.c ****  * @note 用于定期发送四元数数据，建议在100Hz任务中调用
+ 119:modules/can_vision/can_vision.c ****  */
+ 120:modules/can_vision/can_vision.c **** void CanVisionTask(void)
+ 121:modules/can_vision/can_vision.c **** {
+ 389              		.loc 1 121 1 is_stmt 1 view -0
+ 390              		.cfi_startproc
+ 391              		@ args = 0, pretend = 0, frame = 16
+ 392              		@ frame_needed = 0, uses_anonymous_args = 0
+ 122:modules/can_vision/can_vision.c ****     if (can_vision_instance == NULL)
+ 393              		.loc 1 122 5 view .LVU105
+ 394              		.loc 1 122 29 is_stmt 0 view .LVU106
+ 395 0000 4E4B     		ldr	r3, .L26
+ 396 0002 1B68     		ldr	r3, [r3]
+ 397              		.loc 1 122 8 view .LVU107
+ 398 0004 002B     		cmp	r3, #0
+ 399 0006 00F09780 		beq	.L23
+ 121:modules/can_vision/can_vision.c ****     if (can_vision_instance == NULL)
+ 400              		.loc 1 121 1 view .LVU108
+ 401 000a 70B5     		push	{r4, r5, r6, lr}
+ 402              	.LCFI7:
+ 403              		.cfi_def_cfa_offset 16
+ 404              		.cfi_offset 4, -16
+ 405              		.cfi_offset 5, -12
+ 406              		.cfi_offset 6, -8
+ 407              		.cfi_offset 14, -4
+ 408 000c 2DED028B 		vpush.64	{d8}
+ 409              	.LCFI8:
+ 410              		.cfi_def_cfa_offset 24
+ 411              		.cfi_offset 80, -24
+ 412              		.cfi_offset 81, -20
+ 413 0010 84B0     		sub	sp, sp, #16
+ 414              	.LCFI9:
+ 415              		.cfi_def_cfa_offset 40
+ 123:modules/can_vision/can_vision.c ****     {
+ 124:modules/can_vision/can_vision.c ****         return; // 未初始化，直接返回
+ 125:modules/can_vision/can_vision.c ****     }
+ 126:modules/can_vision/can_vision.c **** 
+ 127:modules/can_vision/can_vision.c ****     float q_w = QEKF_INS.q[0];
+ 416              		.loc 1 127 5 is_stmt 1 view .LVU109
+ 417              		.loc 1 127 27 is_stmt 0 view .LVU110
+ 418 0012 4B4B     		ldr	r3, .L26+4
+ 419 0014 D3F85021 		ldr	r2, [r3, #336]	@ float
+ 420              		.loc 1 127 11 view .LVU111
+ 421 0018 0392     		str	r2, [sp, #12]	@ float
+ 128:modules/can_vision/can_vision.c ****     float q_x = QEKF_INS.q[1];
+ 422              		.loc 1 128 5 is_stmt 1 view .LVU112
+ 423              		.loc 1 128 27 is_stmt 0 view .LVU113
+ 424 001a D3F85421 		ldr	r2, [r3, #340]	@ float
+ 425              		.loc 1 128 11 view .LVU114
+ 426 001e 0292     		str	r2, [sp, #8]	@ float
+ 129:modules/can_vision/can_vision.c ****     float q_y = QEKF_INS.q[2];
+ 427              		.loc 1 129 5 is_stmt 1 view .LVU115
+ 428              		.loc 1 129 27 is_stmt 0 view .LVU116
+ 429 0020 D3F85821 		ldr	r2, [r3, #344]	@ float
+ 430              		.loc 1 129 11 view .LVU117
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 12
+
+
+ 431 0024 0192     		str	r2, [sp, #4]	@ float
+ 130:modules/can_vision/can_vision.c ****     float q_z = QEKF_INS.q[3];
+ 432              		.loc 1 130 5 is_stmt 1 view .LVU118
+ 433              		.loc 1 130 27 is_stmt 0 view .LVU119
+ 434 0026 D3F85C31 		ldr	r3, [r3, #348]	@ float
+ 435              		.loc 1 130 11 view .LVU120
+ 436 002a 0093     		str	r3, [sp]	@ float
+ 131:modules/can_vision/can_vision.c ****     normalize_quat(&q_w, &q_x, &q_y, &q_z);
+ 437              		.loc 1 131 5 is_stmt 1 view .LVU121
+ 438 002c 6B46     		mov	r3, sp
+ 439 002e 01AA     		add	r2, sp, #4
+ 440 0030 02A9     		add	r1, sp, #8
+ 441 0032 03A8     		add	r0, sp, #12
+ 442 0034 FFF7FEFF 		bl	normalize_quat
+ 443              	.LVL20:
+ 132:modules/can_vision/can_vision.c **** 
+ 133:modules/can_vision/can_vision.c ****     int16_t x_int = (int16_t)(q_x * 1e4f);
+ 444              		.loc 1 133 5 view .LVU122
+ 445              		.loc 1 133 35 is_stmt 0 view .LVU123
+ 446 0038 9FED428A 		vldr.32	s16, .L26+8
+ 447 003c DDED027A 		vldr.32	s15, [sp, #8]
+ 448 0040 67EE887A 		vmul.f32	s15, s15, s16
+ 449              		.loc 1 133 13 view .LVU124
+ 450 0044 FDEEE77A 		vcvt.s32.f32	s15, s15
+ 451 0048 17EE904A 		vmov	r4, s15	@ int
+ 452              	.LVL21:
+ 134:modules/can_vision/can_vision.c ****     int16_t y_int = (int16_t)(q_y * 1e4f);
+ 453              		.loc 1 134 5 is_stmt 1 view .LVU125
+ 454              		.loc 1 134 35 is_stmt 0 view .LVU126
+ 455 004c DDED017A 		vldr.32	s15, [sp, #4]
+ 456 0050 67EE887A 		vmul.f32	s15, s15, s16
+ 457              		.loc 1 134 13 view .LVU127
+ 458 0054 FDEEE77A 		vcvt.s32.f32	s15, s15
+ 459 0058 17EE901A 		vmov	r1, s15	@ int
+ 460              	.LVL22:
+ 135:modules/can_vision/can_vision.c ****     int16_t z_int = (int16_t)(q_z * 1e4f);
+ 461              		.loc 1 135 5 is_stmt 1 view .LVU128
+ 462              		.loc 1 135 35 is_stmt 0 view .LVU129
+ 463 005c DDED007A 		vldr.32	s15, [sp]
+ 464 0060 67EE887A 		vmul.f32	s15, s15, s16
+ 465              		.loc 1 135 13 view .LVU130
+ 466 0064 FDEEE77A 		vcvt.s32.f32	s15, s15
+ 467 0068 17EE902A 		vmov	r2, s15	@ int
+ 468              	.LVL23:
+ 136:modules/can_vision/can_vision.c ****     int16_t w_int = (int16_t)(q_w * 1e4f);
+ 469              		.loc 1 136 5 is_stmt 1 view .LVU131
+ 470              		.loc 1 136 35 is_stmt 0 view .LVU132
+ 471 006c DDED037A 		vldr.32	s15, [sp, #12]
+ 472 0070 67EE887A 		vmul.f32	s15, s15, s16
+ 473              		.loc 1 136 13 view .LVU133
+ 474 0074 FDEEE77A 		vcvt.s32.f32	s15, s15
+ 475 0078 17EE903A 		vmov	r3, s15	@ int
+ 476              	.LVL24:
+ 137:modules/can_vision/can_vision.c **** 
+ 138:modules/can_vision/can_vision.c ****     // 打包数据到CAN发送缓冲区（大端序，高字节在前）
+ 139:modules/can_vision/can_vision.c ****     can_vision_instance->tx_buff[0] = (uint8_t)(x_int >> 8);
+ 477              		.loc 1 139 5 is_stmt 1 view .LVU134
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 13
+
+
+ 478              		.loc 1 139 24 is_stmt 0 view .LVU135
+ 479 007c 2F4D     		ldr	r5, .L26
+ 480 007e 2868     		ldr	r0, [r5]
+ 481              		.loc 1 139 39 view .LVU136
+ 482 0080 C4F30726 		ubfx	r6, r4, #8, #8
+ 483              		.loc 1 139 37 view .LVU137
+ 484 0084 80F82460 		strb	r6, [r0, #36]
+ 140:modules/can_vision/can_vision.c ****     can_vision_instance->tx_buff[1] = (uint8_t)(x_int & 0xFF);
+ 485              		.loc 1 140 5 is_stmt 1 view .LVU138
+ 486              		.loc 1 140 37 is_stmt 0 view .LVU139
+ 487 0088 80F82540 		strb	r4, [r0, #37]
+ 141:modules/can_vision/can_vision.c ****     can_vision_instance->tx_buff[2] = (uint8_t)(y_int >> 8);
+ 488              		.loc 1 141 5 is_stmt 1 view .LVU140
+ 489              		.loc 1 141 39 is_stmt 0 view .LVU141
+ 490 008c C1F30724 		ubfx	r4, r1, #8, #8
+ 491              	.LVL25:
+ 492              		.loc 1 141 37 view .LVU142
+ 493 0090 80F82640 		strb	r4, [r0, #38]
+ 142:modules/can_vision/can_vision.c ****     can_vision_instance->tx_buff[3] = (uint8_t)(y_int & 0xFF);
+ 494              		.loc 1 142 5 is_stmt 1 view .LVU143
+ 495              		.loc 1 142 37 is_stmt 0 view .LVU144
+ 496 0094 80F82710 		strb	r1, [r0, #39]
+ 143:modules/can_vision/can_vision.c ****     can_vision_instance->tx_buff[4] = (uint8_t)(z_int >> 8);
+ 497              		.loc 1 143 5 is_stmt 1 view .LVU145
+ 498              		.loc 1 143 39 is_stmt 0 view .LVU146
+ 499 0098 C2F30721 		ubfx	r1, r2, #8, #8
+ 500              	.LVL26:
+ 501              		.loc 1 143 37 view .LVU147
+ 502 009c 80F82810 		strb	r1, [r0, #40]
+ 144:modules/can_vision/can_vision.c ****     can_vision_instance->tx_buff[5] = (uint8_t)(z_int & 0xFF);
+ 503              		.loc 1 144 5 is_stmt 1 view .LVU148
+ 504              		.loc 1 144 37 is_stmt 0 view .LVU149
+ 505 00a0 80F82920 		strb	r2, [r0, #41]
+ 145:modules/can_vision/can_vision.c ****     can_vision_instance->tx_buff[6] = (uint8_t)(w_int >> 8);
+ 506              		.loc 1 145 5 is_stmt 1 view .LVU150
+ 507              		.loc 1 145 39 is_stmt 0 view .LVU151
+ 508 00a4 C3F30722 		ubfx	r2, r3, #8, #8
+ 509              	.LVL27:
+ 510              		.loc 1 145 37 view .LVU152
+ 511 00a8 80F82A20 		strb	r2, [r0, #42]
+ 146:modules/can_vision/can_vision.c ****     can_vision_instance->tx_buff[7] = (uint8_t)(w_int & 0xFF);
+ 512              		.loc 1 146 5 is_stmt 1 view .LVU153
+ 513              		.loc 1 146 37 is_stmt 0 view .LVU154
+ 514 00ac 80F82B30 		strb	r3, [r0, #43]
+ 147:modules/can_vision/can_vision.c **** 
+ 148:modules/can_vision/can_vision.c ****     // 发送CAN数据，超时时间1ms
+ 149:modules/can_vision/can_vision.c ****     can_vision_instance->txconf.StdId = CAN_VISION_QUATERNION_ID;
+ 515              		.loc 1 149 5 is_stmt 1 view .LVU155
+ 516              		.loc 1 149 39 is_stmt 0 view .LVU156
+ 517 00b0 0024     		movs	r4, #0
+ 518 00b2 0126     		movs	r6, #1
+ 519 00b4 0671     		strb	r6, [r0, #4]
+ 520 00b6 4471     		strb	r4, [r0, #5]
+ 521 00b8 8471     		strb	r4, [r0, #6]
+ 522 00ba C471     		strb	r4, [r0, #7]
+ 150:modules/can_vision/can_vision.c ****     CANTransmit(can_vision_instance, 1.0f);
+ 523              		.loc 1 150 5 is_stmt 1 view .LVU157
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 14
+
+
+ 524 00bc B7EE000A 		vmov.f32	s0, #1.0e+0
+ 525 00c0 FFF7FEFF 		bl	CANTransmit
+ 526              	.LVL28:
+ 151:modules/can_vision/can_vision.c **** 
+ 152:modules/can_vision/can_vision.c ****     int16_t bullet_speed_int = (int16_t)(can_vision_bullet_speed_mps * 1e2f);
+ 527              		.loc 1 152 5 view .LVU158
+ 528              		.loc 1 152 70 is_stmt 0 view .LVU159
+ 529 00c4 204B     		ldr	r3, .L26+12
+ 530 00c6 D3ED007A 		vldr.32	s15, [r3]
+ 531 00ca 9FED207A 		vldr.32	s14, .L26+16
+ 532 00ce 67EE877A 		vmul.f32	s15, s15, s14
+ 533              		.loc 1 152 13 view .LVU160
+ 534 00d2 FDEEE77A 		vcvt.s32.f32	s15, s15
+ 535 00d6 17EE902A 		vmov	r2, s15	@ int
+ 536              	.LVL29:
+ 153:modules/can_vision/can_vision.c ****     int16_t ft_angle_int = (int16_t)(can_vision_ft_angle_rad * 1e4f);
+ 537              		.loc 1 153 5 is_stmt 1 view .LVU161
+ 538              		.loc 1 153 62 is_stmt 0 view .LVU162
+ 539 00da 1D4B     		ldr	r3, .L26+20
+ 540 00dc D3ED007A 		vldr.32	s15, [r3]
+ 541 00e0 67EE887A 		vmul.f32	s15, s15, s16
+ 542              		.loc 1 153 13 view .LVU163
+ 543 00e4 FDEEE77A 		vcvt.s32.f32	s15, s15
+ 544 00e8 17EE903A 		vmov	r3, s15	@ int
+ 545              	.LVL30:
+ 154:modules/can_vision/can_vision.c ****     can_vision_instance->tx_buff[0] = (uint8_t)(bullet_speed_int >> 8);
+ 546              		.loc 1 154 5 is_stmt 1 view .LVU164
+ 547              		.loc 1 154 24 is_stmt 0 view .LVU165
+ 548 00ec 2868     		ldr	r0, [r5]
+ 549              		.loc 1 154 39 view .LVU166
+ 550 00ee C2F30721 		ubfx	r1, r2, #8, #8
+ 551              		.loc 1 154 37 view .LVU167
+ 552 00f2 80F82410 		strb	r1, [r0, #36]
+ 155:modules/can_vision/can_vision.c ****     can_vision_instance->tx_buff[1] = (uint8_t)(bullet_speed_int & 0xFF);
+ 553              		.loc 1 155 5 is_stmt 1 view .LVU168
+ 554              		.loc 1 155 37 is_stmt 0 view .LVU169
+ 555 00f6 80F82520 		strb	r2, [r0, #37]
+ 156:modules/can_vision/can_vision.c ****     can_vision_instance->tx_buff[2] = can_vision_mode;
+ 556              		.loc 1 156 5 is_stmt 1 view .LVU170
+ 557              		.loc 1 156 37 is_stmt 0 view .LVU171
+ 558 00fa 164A     		ldr	r2, .L26+24
+ 559              	.LVL31:
+ 560              		.loc 1 156 37 view .LVU172
+ 561 00fc 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+ 562 00fe 80F82620 		strb	r2, [r0, #38]
+ 157:modules/can_vision/can_vision.c ****     can_vision_instance->tx_buff[3] = can_vision_shoot_mode;
+ 563              		.loc 1 157 5 is_stmt 1 view .LVU173
+ 564              		.loc 1 157 37 is_stmt 0 view .LVU174
+ 565 0102 154A     		ldr	r2, .L26+28
+ 566 0104 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+ 567 0106 80F82720 		strb	r2, [r0, #39]
+ 158:modules/can_vision/can_vision.c ****     can_vision_instance->tx_buff[4] = (uint8_t)(ft_angle_int >> 8);
+ 568              		.loc 1 158 5 is_stmt 1 view .LVU175
+ 569              		.loc 1 158 39 is_stmt 0 view .LVU176
+ 570 010a C3F30722 		ubfx	r2, r3, #8, #8
+ 571              		.loc 1 158 37 view .LVU177
+ 572 010e 80F82820 		strb	r2, [r0, #40]
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 15
+
+
+ 159:modules/can_vision/can_vision.c ****     can_vision_instance->tx_buff[5] = (uint8_t)(ft_angle_int & 0xFF);
+ 573              		.loc 1 159 5 is_stmt 1 view .LVU178
+ 574              		.loc 1 159 37 is_stmt 0 view .LVU179
+ 575 0112 80F82930 		strb	r3, [r0, #41]
+ 160:modules/can_vision/can_vision.c ****     can_vision_instance->tx_buff[6] = 0;
+ 576              		.loc 1 160 5 is_stmt 1 view .LVU180
+ 577              		.loc 1 160 37 is_stmt 0 view .LVU181
+ 578 0116 80F82A40 		strb	r4, [r0, #42]
+ 161:modules/can_vision/can_vision.c ****     can_vision_instance->tx_buff[7] = 0;
+ 579              		.loc 1 161 5 is_stmt 1 view .LVU182
+ 580              		.loc 1 161 37 is_stmt 0 view .LVU183
+ 581 011a 80F82B40 		strb	r4, [r0, #43]
+ 162:modules/can_vision/can_vision.c ****     can_vision_instance->txconf.StdId = CAN_VISION_BULLET_SPEED_ID;
+ 582              		.loc 1 162 5 is_stmt 1 view .LVU184
+ 583              		.loc 1 162 39 is_stmt 0 view .LVU185
+ 584 011e 1023     		movs	r3, #16
+ 585              	.LVL32:
+ 586              		.loc 1 162 39 view .LVU186
+ 587 0120 0371     		strb	r3, [r0, #4]
+ 588 0122 4671     		strb	r6, [r0, #5]
+ 589 0124 8471     		strb	r4, [r0, #6]
+ 590 0126 C471     		strb	r4, [r0, #7]
+ 163:modules/can_vision/can_vision.c ****     CANTransmit(can_vision_instance, 1.0f);
+ 591              		.loc 1 163 5 is_stmt 1 view .LVU187
+ 592 0128 B7EE000A 		vmov.f32	s0, #1.0e+0
+ 593 012c FFF7FEFF 		bl	CANTransmit
+ 594              	.LVL33:
+ 164:modules/can_vision/can_vision.c **** }
+ 595              		.loc 1 164 1 is_stmt 0 view .LVU188
+ 596 0130 04B0     		add	sp, sp, #16
+ 597              	.LCFI10:
+ 598              		.cfi_def_cfa_offset 24
+ 599              		@ sp needed
+ 600 0132 BDEC028B 		vldm	sp!, {d8}
+ 601              	.LCFI11:
+ 602              		.cfi_restore 80
+ 603              		.cfi_restore 81
+ 604              		.cfi_def_cfa_offset 16
+ 605 0136 70BD     		pop	{r4, r5, r6, pc}
+ 606              	.LVL34:
+ 607              	.L23:
+ 608              	.LCFI12:
+ 609              		.cfi_def_cfa_offset 0
+ 610              		.cfi_restore 4
+ 611              		.cfi_restore 5
+ 612              		.cfi_restore 6
+ 613              		.cfi_restore 14
+ 614              		.loc 1 164 1 view .LVU189
+ 615 0138 7047     		bx	lr
+ 616              	.L27:
+ 617 013a 00BF     		.align	2
+ 618              	.L26:
+ 619 013c 00000000 		.word	can_vision_instance
+ 620 0140 00000000 		.word	QEKF_INS
+ 621 0144 00401C46 		.word	1176256512
+ 622 0148 00000000 		.word	can_vision_bullet_speed_mps
+ 623 014c 0000C842 		.word	1120403456
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 16
+
+
+ 624 0150 00000000 		.word	can_vision_ft_angle_rad
+ 625 0154 00000000 		.word	can_vision_mode
+ 626 0158 00000000 		.word	can_vision_shoot_mode
+ 627              		.cfi_endproc
+ 628              	.LFE275:
+ 630              		.section	.text.CanVisionGetCommand,"ax",%progbits
+ 631              		.align	1
+ 632              		.global	CanVisionGetCommand
+ 633              		.syntax unified
+ 634              		.thumb
+ 635              		.thumb_func
+ 637              	CanVisionGetCommand:
+ 638              	.LFB276:
+ 165:modules/can_vision/can_vision.c **** 
+ 166:modules/can_vision/can_vision.c **** /**
+ 167:modules/can_vision/can_vision.c ****  * @brief 获取最新的上位机命令数据
+ 168:modules/can_vision/can_vision.c ****  * @return 返回命令数据结构体指针，如果未收到数据则返回NULL
+ 169:modules/can_vision/can_vision.c ****  */
+ 170:modules/can_vision/can_vision.c **** CanVisionCommand_t *CanVisionGetCommand(void)
+ 171:modules/can_vision/can_vision.c **** {
+ 639              		.loc 1 171 1 is_stmt 1 view -0
+ 640              		.cfi_startproc
+ 641              		@ args = 0, pretend = 0, frame = 0
+ 642              		@ frame_needed = 0, uses_anonymous_args = 0
+ 643              		@ link register save eliminated.
+ 172:modules/can_vision/can_vision.c ****     if (command_received)
+ 644              		.loc 1 172 5 view .LVU191
+ 645              		.loc 1 172 9 is_stmt 0 view .LVU192
+ 646 0000 044B     		ldr	r3, .L31
+ 647 0002 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 648              		.loc 1 172 8 view .LVU193
+ 649 0004 23B1     		cbz	r3, .L30
+ 173:modules/can_vision/can_vision.c ****     {
+ 174:modules/can_vision/can_vision.c ****         command_received = 0; // 清除标志位
+ 650              		.loc 1 174 9 is_stmt 1 view .LVU194
+ 651              		.loc 1 174 26 is_stmt 0 view .LVU195
+ 652 0006 034B     		ldr	r3, .L31
+ 653 0008 0022     		movs	r2, #0
+ 654 000a 1A70     		strb	r2, [r3]
+ 175:modules/can_vision/can_vision.c ****         return &vision_command;
+ 655              		.loc 1 175 9 is_stmt 1 view .LVU196
+ 656              		.loc 1 175 16 is_stmt 0 view .LVU197
+ 657 000c 0248     		ldr	r0, .L31+4
+ 658 000e 7047     		bx	lr
+ 659              	.L30:
+ 176:modules/can_vision/can_vision.c ****     }
+ 177:modules/can_vision/can_vision.c ****     return NULL;
+ 660              		.loc 1 177 12 view .LVU198
+ 661 0010 0020     		movs	r0, #0
+ 178:modules/can_vision/can_vision.c **** }
+ 662              		.loc 1 178 1 view .LVU199
+ 663 0012 7047     		bx	lr
+ 664              	.L32:
+ 665              		.align	2
+ 666              	.L31:
+ 667 0014 00000000 		.word	command_received
+ 668 0018 00000000 		.word	vision_command
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 17
+
+
+ 669              		.cfi_endproc
+ 670              	.LFE276:
+ 672              		.section	.text.CanVisionSetMode,"ax",%progbits
+ 673              		.align	1
+ 674              		.global	CanVisionSetMode
+ 675              		.syntax unified
+ 676              		.thumb
+ 677              		.thumb_func
+ 679              	CanVisionSetMode:
+ 680              	.LVL35:
+ 681              	.LFB277:
+ 179:modules/can_vision/can_vision.c **** 
+ 180:modules/can_vision/can_vision.c **** void CanVisionSetMode(uint8_t mode)
+ 181:modules/can_vision/can_vision.c **** {
+ 682              		.loc 1 181 1 is_stmt 1 view -0
+ 683              		.cfi_startproc
+ 684              		@ args = 0, pretend = 0, frame = 0
+ 685              		@ frame_needed = 0, uses_anonymous_args = 0
+ 686              		@ link register save eliminated.
+ 182:modules/can_vision/can_vision.c ****     can_vision_mode = mode;
+ 687              		.loc 1 182 5 view .LVU201
+ 688              		.loc 1 182 21 is_stmt 0 view .LVU202
+ 689 0000 014B     		ldr	r3, .L34
+ 690 0002 1870     		strb	r0, [r3]
+ 183:modules/can_vision/can_vision.c **** }
+ 691              		.loc 1 183 1 view .LVU203
+ 692 0004 7047     		bx	lr
+ 693              	.L35:
+ 694 0006 00BF     		.align	2
+ 695              	.L34:
+ 696 0008 00000000 		.word	can_vision_mode
+ 697              		.cfi_endproc
+ 698              	.LFE277:
+ 700              		.section	.text.CanVisionSetShootMode,"ax",%progbits
+ 701              		.align	1
+ 702              		.global	CanVisionSetShootMode
+ 703              		.syntax unified
+ 704              		.thumb
+ 705              		.thumb_func
+ 707              	CanVisionSetShootMode:
+ 708              	.LVL36:
+ 709              	.LFB278:
+ 184:modules/can_vision/can_vision.c **** 
+ 185:modules/can_vision/can_vision.c **** void CanVisionSetShootMode(uint8_t shoot_mode)
+ 186:modules/can_vision/can_vision.c **** {
+ 710              		.loc 1 186 1 is_stmt 1 view -0
+ 711              		.cfi_startproc
+ 712              		@ args = 0, pretend = 0, frame = 0
+ 713              		@ frame_needed = 0, uses_anonymous_args = 0
+ 714              		@ link register save eliminated.
+ 187:modules/can_vision/can_vision.c ****     can_vision_shoot_mode = shoot_mode;
+ 715              		.loc 1 187 5 view .LVU205
+ 716              		.loc 1 187 27 is_stmt 0 view .LVU206
+ 717 0000 014B     		ldr	r3, .L37
+ 718 0002 1870     		strb	r0, [r3]
+ 188:modules/can_vision/can_vision.c **** }
+ 719              		.loc 1 188 1 view .LVU207
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 18
+
+
+ 720 0004 7047     		bx	lr
+ 721              	.L38:
+ 722 0006 00BF     		.align	2
+ 723              	.L37:
+ 724 0008 00000000 		.word	can_vision_shoot_mode
+ 725              		.cfi_endproc
+ 726              	.LFE278:
+ 728              		.section	.text.CanVisionSetFeedforwardAngle,"ax",%progbits
+ 729              		.align	1
+ 730              		.global	CanVisionSetFeedforwardAngle
+ 731              		.syntax unified
+ 732              		.thumb
+ 733              		.thumb_func
+ 735              	CanVisionSetFeedforwardAngle:
+ 736              	.LVL37:
+ 737              	.LFB279:
+ 189:modules/can_vision/can_vision.c **** 
+ 190:modules/can_vision/can_vision.c **** void CanVisionSetFeedforwardAngle(float ft_angle_rad)
+ 191:modules/can_vision/can_vision.c **** {
+ 738              		.loc 1 191 1 is_stmt 1 view -0
+ 739              		.cfi_startproc
+ 740              		@ args = 0, pretend = 0, frame = 0
+ 741              		@ frame_needed = 0, uses_anonymous_args = 0
+ 742              		@ link register save eliminated.
+ 192:modules/can_vision/can_vision.c ****     can_vision_ft_angle_rad = ft_angle_rad;
+ 743              		.loc 1 192 5 view .LVU209
+ 744              		.loc 1 192 29 is_stmt 0 view .LVU210
+ 745 0000 014B     		ldr	r3, .L40
+ 746 0002 83ED000A 		vstr.32	s0, [r3]
+ 193:modules/can_vision/can_vision.c **** }
+ 747              		.loc 1 193 1 view .LVU211
+ 748 0006 7047     		bx	lr
+ 749              	.L41:
+ 750              		.align	2
+ 751              	.L40:
+ 752 0008 00000000 		.word	can_vision_ft_angle_rad
+ 753              		.cfi_endproc
+ 754              	.LFE279:
+ 756              		.section	.bss.can_vision_ft_angle_rad,"aw",%nobits
+ 757              		.align	2
+ 760              	can_vision_ft_angle_rad:
+ 761 0000 00000000 		.space	4
+ 762              		.section	.bss.can_vision_shoot_mode,"aw",%nobits
+ 765              	can_vision_shoot_mode:
+ 766 0000 00       		.space	1
+ 767              		.section	.data.can_vision_mode,"aw"
+ 770              	can_vision_mode:
+ 771 0000 01       		.byte	1
+ 772              		.section	.data.can_vision_bullet_speed_mps,"aw"
+ 773              		.align	2
+ 776              	can_vision_bullet_speed_mps:
+ 777 0000 0000C841 		.word	1103626240
+ 778              		.section	.bss.vision_cmd_pub,"aw",%nobits
+ 779              		.align	2
+ 782              	vision_cmd_pub:
+ 783 0000 00000000 		.space	4
+ 784              		.section	.bss.command_received,"aw",%nobits
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 19
+
+
+ 787              	command_received:
+ 788 0000 00       		.space	1
+ 789              		.section	.bss.vision_command,"aw",%nobits
+ 790              		.align	2
+ 793              	vision_command:
+ 794 0000 00000000 		.space	16
+ 794      00000000 
+ 794      00000000 
+ 794      00000000 
+ 795              		.section	.bss.can_vision_instance,"aw",%nobits
+ 796              		.align	2
+ 799              	can_vision_instance:
+ 800 0000 00000000 		.space	4
+ 801              		.section	.rodata
+ 802              		.align	2
+ 803              		.set	.LANCHOR0,. + 0
+ 804              	.LC0:
+ 805 0000 00000000 		.word	hcan2
+ 806 0004 01000000 		.word	1
+ 807 0008 FF000000 		.word	255
+ 808 000c 00000000 		.word	CanVisionRxCallback
+ 809 0010 00000000 		.word	0
+ 810              		.text
+ 811              	.Letext0:
+ 812              		.file 2 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_ty
+ 813              		.file 3 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_stdint.h"
+ 814              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 815              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+ 816              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_can.h"
+ 817              		.file 7 "bsp/can/bsp_can.h"
+ 818              		.file 8 "modules/can_vision/can_vision.h"
+ 819              		.file 9 "Middlewares/ST/ARM/DSP/Include/arm_math_types.h"
+ 820              		.file 10 "Middlewares/ST/ARM/DSP/Include/dsp/matrix_functions.h"
+ 821              		.file 11 "modules/algorithm/kalman_filter.h"
+ 822              		.file 12 "modules/algorithm/QuaternionEKF.h"
+ 823              		.file 13 "Inc/can.h"
+ 824              		.file 14 "modules/message_center/message_center.h"
+ 825              		.file 15 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/math.h"
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s 			page 20
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 can_vision.c
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:21     .text.CanVisionRxCallback:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:26     .text.CanVisionRxCallback:00000000 CanVisionRxCallback
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:158    .text.CanVisionRxCallback:00000094 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:793    .bss.vision_command:00000000 vision_command
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:787    .bss.command_received:00000000 command_received
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:782    .bss.vision_cmd_pub:00000000 vision_cmd_pub
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:166    .text.normalize_quat:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:171    .text.normalize_quat:00000000 normalize_quat
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:259    .text.CanVisionSetBulletSpeed:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:265    .text.CanVisionSetBulletSpeed:00000000 CanVisionSetBulletSpeed
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:282    .text.CanVisionSetBulletSpeed:00000008 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:776    .data.can_vision_bullet_speed_mps:00000000 can_vision_bullet_speed_mps
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:287    .rodata.CanVisionInit.str1.4:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:291    .text.CanVisionInit:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:297    .text.CanVisionInit:00000000 CanVisionInit
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:371    .text.CanVisionInit:0000004c $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:799    .bss.can_vision_instance:00000000 can_vision_instance
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:381    .text.CanVisionTask:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:387    .text.CanVisionTask:00000000 CanVisionTask
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:619    .text.CanVisionTask:0000013c $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:760    .bss.can_vision_ft_angle_rad:00000000 can_vision_ft_angle_rad
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:770    .data.can_vision_mode:00000000 can_vision_mode
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:765    .bss.can_vision_shoot_mode:00000000 can_vision_shoot_mode
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:631    .text.CanVisionGetCommand:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:637    .text.CanVisionGetCommand:00000000 CanVisionGetCommand
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:667    .text.CanVisionGetCommand:00000014 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:673    .text.CanVisionSetMode:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:679    .text.CanVisionSetMode:00000000 CanVisionSetMode
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:696    .text.CanVisionSetMode:00000008 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:701    .text.CanVisionSetShootMode:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:707    .text.CanVisionSetShootMode:00000000 CanVisionSetShootMode
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:724    .text.CanVisionSetShootMode:00000008 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:729    .text.CanVisionSetFeedforwardAngle:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:735    .text.CanVisionSetFeedforwardAngle:00000000 CanVisionSetFeedforwardAngle
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:752    .text.CanVisionSetFeedforwardAngle:00000008 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:757    .bss.can_vision_ft_angle_rad:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:766    .bss.can_vision_shoot_mode:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:773    .data.can_vision_bullet_speed_mps:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:779    .bss.vision_cmd_pub:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:788    .bss.command_received:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:790    .bss.vision_command:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:796    .bss.can_vision_instance:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cczLaeY0.s:802    .rodata:00000000 $d
+
+UNDEFINED SYMBOLS
+PubPushMessage
+sqrtf
+CANRegister
+CANSetDLC
+PubRegister
+CANTransmit
+QEKF_INS
+hcan2

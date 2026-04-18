@@ -11,6 +11,7 @@
 #include "bsp_log.h"
 #include "stddef.h"
 #include "message_center.h"
+#include "math.h"
 
 /* CAN实例指针 */
 static CANInstance *can_vision_instance = NULL;
@@ -21,6 +22,28 @@ static uint8_t command_received = 0; // 标志位，表示是否收到新命令
 
 /* 消息发布者，用于发布上位机命令 */
 static Publisher_t *vision_cmd_pub = NULL;
+
+static float can_vision_bullet_speed_mps = 25.0f;
+static uint8_t can_vision_mode = 1;
+static uint8_t can_vision_shoot_mode = 0;
+static float can_vision_ft_angle_rad = 0.0f;
+
+static void normalize_quat(float *w, float *x, float *y, float *z)
+{
+    float n = sqrtf((*w) * (*w) + (*x) * (*x) + (*y) * (*y) + (*z) * (*z));
+    if (n > 0.0f)
+    {
+        *w /= n;
+        *x /= n;
+        *y /= n;
+        *z /= n;
+    }
+}
+
+void CanVisionSetBulletSpeed(float speed_mps)
+{
+    can_vision_bullet_speed_mps = speed_mps;
+}
 
 /**
  * @brief CAN接收回调函数
@@ -87,7 +110,7 @@ void CanVisionInit(void)
     // 注册消息发布者，发布上位机命令
     vision_cmd_pub = PubRegister("vision_cmd", sizeof(CanVisionCommand_t));
 
-    LOGINFO("[can_vision] CAN Vision Module Initialized");
+  //  LOGINFO("[can_vision] CAN Vision Module Initialized");
 }
 
 /**
@@ -101,31 +124,42 @@ void CanVisionTask(void)
         return; // 未初始化，直接返回
     }
 
-    // 从QEKF_INS获取四元数数据
-    // 注意：四元数格式为 [w, x, y, z]，但上位机期望的格式为 [x, y, z, w]
     float q_w = QEKF_INS.q[0];
     float q_x = QEKF_INS.q[1];
     float q_y = QEKF_INS.q[2];
     float q_z = QEKF_INS.q[3];
+    normalize_quat(&q_w, &q_x, &q_y, &q_z);
 
-    // 将四元数转换为int16_t（乘以1e4），并打包成CAN数据格式
-    // 数据格式：[x_high, x_low, y_high, y_low, z_high, z_low, w_high, w_low]
     int16_t x_int = (int16_t)(q_x * 1e4f);
     int16_t y_int = (int16_t)(q_y * 1e4f);
     int16_t z_int = (int16_t)(q_z * 1e4f);
     int16_t w_int = (int16_t)(q_w * 1e4f);
 
     // 打包数据到CAN发送缓冲区（大端序，高字节在前）
-    can_vision_instance->tx_buff[0] = (uint8_t)(x_int >> 8);  // x高字节
-    can_vision_instance->tx_buff[1] = (uint8_t)(x_int & 0xFF); // x低字节
-    can_vision_instance->tx_buff[2] = (uint8_t)(y_int >> 8);   // y高字节
-    can_vision_instance->tx_buff[3] = (uint8_t)(y_int & 0xFF); // y低字节
-    can_vision_instance->tx_buff[4] = (uint8_t)(z_int >> 8);   // z高字节
-    can_vision_instance->tx_buff[5] = (uint8_t)(z_int & 0xFF); // z低字节
-    can_vision_instance->tx_buff[6] = (uint8_t)(w_int >> 8);   // w高字节
-    can_vision_instance->tx_buff[7] = (uint8_t)(w_int & 0xFF); // w低字节
+    can_vision_instance->tx_buff[0] = (uint8_t)(x_int >> 8);
+    can_vision_instance->tx_buff[1] = (uint8_t)(x_int & 0xFF);
+    can_vision_instance->tx_buff[2] = (uint8_t)(y_int >> 8);
+    can_vision_instance->tx_buff[3] = (uint8_t)(y_int & 0xFF);
+    can_vision_instance->tx_buff[4] = (uint8_t)(z_int >> 8);
+    can_vision_instance->tx_buff[5] = (uint8_t)(z_int & 0xFF);
+    can_vision_instance->tx_buff[6] = (uint8_t)(w_int >> 8);
+    can_vision_instance->tx_buff[7] = (uint8_t)(w_int & 0xFF);
 
     // 发送CAN数据，超时时间1ms
+    can_vision_instance->txconf.StdId = CAN_VISION_QUATERNION_ID;
+    CANTransmit(can_vision_instance, 1.0f);
+
+    int16_t bullet_speed_int = (int16_t)(can_vision_bullet_speed_mps * 1e2f);
+    int16_t ft_angle_int = (int16_t)(can_vision_ft_angle_rad * 1e4f);
+    can_vision_instance->tx_buff[0] = (uint8_t)(bullet_speed_int >> 8);
+    can_vision_instance->tx_buff[1] = (uint8_t)(bullet_speed_int & 0xFF);
+    can_vision_instance->tx_buff[2] = can_vision_mode;
+    can_vision_instance->tx_buff[3] = can_vision_shoot_mode;
+    can_vision_instance->tx_buff[4] = (uint8_t)(ft_angle_int >> 8);
+    can_vision_instance->tx_buff[5] = (uint8_t)(ft_angle_int & 0xFF);
+    can_vision_instance->tx_buff[6] = 0;
+    can_vision_instance->tx_buff[7] = 0;
+    can_vision_instance->txconf.StdId = CAN_VISION_BULLET_SPEED_ID;
     CANTransmit(can_vision_instance, 1.0f);
 }
 
@@ -141,4 +175,19 @@ CanVisionCommand_t *CanVisionGetCommand(void)
         return &vision_command;
     }
     return NULL;
+}
+
+void CanVisionSetMode(uint8_t mode)
+{
+    can_vision_mode = mode;
+}
+
+void CanVisionSetShootMode(uint8_t shoot_mode)
+{
+    can_vision_shoot_mode = shoot_mode;
+}
+
+void CanVisionSetFeedforwardAngle(float ft_angle_rad)
+{
+    can_vision_ft_angle_rad = ft_angle_rad;
 }

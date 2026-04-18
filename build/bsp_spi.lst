@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
   44 0002 174B     		ldr	r3, .L10
   45 0004 1E78     		ldrb	r6, [r3]	@ zero_extendqisi2
   46              		.loc 1 12 8 view .LVU4
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 2
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 2
 
 
   47 0006 032E     		cmp	r6, #3
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
   91 002e E268     		ldr	r2, [r4, #12]
   92              		.loc 1 22 24 view .LVU25
   93 0030 AA61     		str	r2, [r5, #24]
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 3
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 3
 
 
   23:bsp/spi/bsp_spi.c ****     instance->id = conf->id;
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
   39:bsp/spi/bsp_spi.c **** }
  130              		.loc 1 39 1 is_stmt 0 view .LVU42
  131 0056 2846     		mov	r0, r5
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 4
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 4
 
 
  132 0058 70BD     		pop	{r4, r5, r6, pc}
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
  181 000a 0189     		ldrh	r1, [r0, #8]
  182              	.LVL8:
  183              		.loc 1 44 5 view .LVU49
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 5
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 5
 
 
  184 000c 4068     		ldr	r0, [r0, #4]
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
  216 002c 3246     		mov	r2, r6
  217 002e 2946     		mov	r1, r5
  218 0030 2068     		ldr	r0, [r4]
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 6
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 6
 
 
  219 0032 FFF7FEFF 		bl	HAL_SPI_Transmit_IT
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
   68:bsp/spi/bsp_spi.c ****     spi_ins->rx_size = len;
  267              		.loc 1 68 5 is_stmt 1 view .LVU66
  268              		.loc 1 68 22 is_stmt 0 view .LVU67
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 7
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 7
 
 
  269 0008 C272     		strb	r2, [r0, #11]
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
  304              	.LVL21:
   76:bsp/spi/bsp_spi.c ****     case SPI_IT_MODE:
  305              		.loc 1 76 9 view .LVU80
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 8
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 8
 
 
  306              	.L19:
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
  350              		@ args = 0, pretend = 0, frame = 0
  351              		@ frame_needed = 0, uses_anonymous_args = 0
  352              		.loc 1 93 1 is_stmt 0 view .LVU88
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 9
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 9
 
 
  353 0000 F0B5     		push	{r4, r5, r6, r7, lr}
@@ -538,7 +538,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
  108:bsp/spi/bsp_spi.c ****         {
  109:bsp/spi/bsp_spi.c ****         };
  393              		.loc 1 109 10 is_stmt 1 view .LVU100
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 10
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 10
 
 
  110:bsp/spi/bsp_spi.c ****     }
@@ -598,7 +598,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
  131:bsp/spi/bsp_spi.c ****         break;
  132:bsp/spi/bsp_spi.c ****     default:
  133:bsp/spi/bsp_spi.c ****         while (1)
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 11
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 11
 
 
  424              		.loc 1 133 9 is_stmt 1 view .LVU111
@@ -658,7 +658,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
  464              		.cfi_def_cfa_offset 20
  465              		@ sp needed
  466 0068 F0BD     		pop	{r4, r5, r6, r7, pc}
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 12
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 12
 
 
  467              	.LVL37:
@@ -718,7 +718,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
  511              		.align	2
  512              	.L37:
  513 00a4 00300140 		.word	1073819648
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 13
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 13
 
 
  514 00a8 00380040 		.word	1073756160
@@ -778,7 +778,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
  559              		.align	1
  560              		.global	HAL_SPI_RxCpltCallback
  561              		.syntax unified
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 14
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 14
 
 
  562              		.thumb
@@ -838,7 +838,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
  605 0018 1A68     		ldr	r2, [r3]
  606              		.loc 1 161 12 view .LVU156
  607 001a AA42     		cmp	r2, r5
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 15
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 15
 
 
  608 001c F4D1     		bne	.L45
@@ -898,7 +898,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
  648 0052 8369     		ldr	r3, [r0, #24]
  649              		.loc 1 170 16 view .LVU172
  650 0054 03B1     		cbz	r3, .L43
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 16
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 16
 
 
  171:bsp/spi/bsp_spi.c ****                 spi_instance[i]->callback(spi_instance[i]);
@@ -958,7 +958,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
  185:bsp/spi/bsp_spi.c **** }
  693              		.loc 1 185 1 is_stmt 0 view .LVU181
  694 0006 08BD     		pop	{r3, pc}
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 17
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 17
 
 
  695              		.cfi_endproc
@@ -990,34 +990,34 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 1
  727              		.file 11 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/string.h"
  728              		.file 12 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/stdlib.h"
  729              		.file 13 "<built-in>"
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s 			page 18
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s 			page 18
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 bsp_spi.c
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:21     .text.SPIRegister:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:27     .text.SPIRegister:00000000 SPIRegister
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:143    .text.SPIRegister:00000060 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:708    .bss.idx:00000000 idx
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:703    .data.SPIDeviceOnGoing:00000000 SPIDeviceOnGoing
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:714    .bss.spi_instance:00000000 spi_instance
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:153    .text.SPITransmit:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:159    .text.SPITransmit:00000000 SPITransmit
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:243    .text.SPIRecv:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:249    .text.SPIRecv:00000000 SPIRecv
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:339    .text.SPITransRecv:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:345    .text.SPITransRecv:00000000 SPITransRecv
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:513    .text.SPITransRecv:000000a4 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:520    .text.SPISetMode:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:526    .text.SPISetMode:00000000 SPISetMode
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:559    .text.HAL_SPI_RxCpltCallback:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:565    .text.HAL_SPI_RxCpltCallback:00000000 HAL_SPI_RxCpltCallback
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:665    .text.HAL_SPI_RxCpltCallback:0000005c $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:671    .text.HAL_SPI_TxRxCpltCallback:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:677    .text.HAL_SPI_TxRxCpltCallback:00000000 HAL_SPI_TxRxCpltCallback
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:700    .data.SPIDeviceOnGoing:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:709    .bss.idx:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccvo2udn.s:711    .bss.spi_instance:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:21     .text.SPIRegister:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:27     .text.SPIRegister:00000000 SPIRegister
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:143    .text.SPIRegister:00000060 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:708    .bss.idx:00000000 idx
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:703    .data.SPIDeviceOnGoing:00000000 SPIDeviceOnGoing
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:714    .bss.spi_instance:00000000 spi_instance
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:153    .text.SPITransmit:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:159    .text.SPITransmit:00000000 SPITransmit
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:243    .text.SPIRecv:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:249    .text.SPIRecv:00000000 SPIRecv
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:339    .text.SPITransRecv:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:345    .text.SPITransRecv:00000000 SPITransRecv
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:513    .text.SPITransRecv:000000a4 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:520    .text.SPISetMode:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:526    .text.SPISetMode:00000000 SPISetMode
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:559    .text.HAL_SPI_RxCpltCallback:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:565    .text.HAL_SPI_RxCpltCallback:00000000 HAL_SPI_RxCpltCallback
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:665    .text.HAL_SPI_RxCpltCallback:0000005c $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:671    .text.HAL_SPI_TxRxCpltCallback:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:677    .text.HAL_SPI_TxRxCpltCallback:00000000 HAL_SPI_TxRxCpltCallback
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:700    .data.SPIDeviceOnGoing:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:709    .bss.idx:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccpDWbiz.s:711    .bss.spi_instance:00000000 $d
 
 UNDEFINED SYMBOLS
 malloc

@@ -11,6 +11,7 @@
 #include "motor_task.h"
 #include "referee_task.h"
 #include "master_process.h"
+#include "sp_vision/sp_vision.h"
 #include "daemon.h"
 #include "HT04.h"
 #include "buzzer.h"
@@ -58,6 +59,7 @@ __attribute__((noreturn)) void StartINSTASK(void const *argument)
 {
     static float ins_start;
     static float ins_dt;
+    static uint8_t sp_vision_send_div = 0;
     INS_Init(); // 确保BMI088被正确初始化.
     LOGINFO("[freeRTOS] INS Task Start");
     for (;;)
@@ -68,7 +70,10 @@ __attribute__((noreturn)) void StartINSTASK(void const *argument)
         ins_dt = DWT_GetTimeline_ms() - ins_start;
         if (ins_dt > 1)
             LOGERROR("[freeRTOS] INS Task is being DELAY! dt = [%f]", &ins_dt);
-        VisionSend(); // 解算完成后发送视觉数据,但是当前的实现不太优雅,后续若添加硬件触发需要重新考虑结构的组织
+
+        if ((sp_vision_send_div++ % 5u) == 0u)
+            SP_VisionSend(); // 以200Hz发送sp_vision数据，降低VCP带宽压力并减少串流错位概率
+
         osDelay(1);
     }
 }

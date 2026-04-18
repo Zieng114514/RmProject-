@@ -78,14 +78,14 @@ build/gimbal.o: application/gimbal/gimbal.c application/gimbal/gimbal.h \
  Middlewares/ST/ARM/DSP/Include/dsp/quaternion_math_functions.h \
  Middlewares/ST/ARM/DSP/Include/dsp/window_functions.h \
  modules/master_machine/master_process.h bsp/usart/bsp_usart.h \
- modules/master_machine/seasky_protocol.h \
+ modules/master_machine/seasky_protocol.h application/cmd/robot_cmd.h \
  modules/motor/DJImotor/dji_motor.h bsp/can/bsp_can.h Inc/can.h \
  Inc/main.h modules/algorithm/controller.h bsp/dwt/bsp_dwt.h \
  bsp/log/bsp_log.h Middlewares/Third_Party/SEGGER/RTT/SEGGER_RTT.h \
  Middlewares/Third_Party/SEGGER/RTT/../Config/SEGGER_RTT_Conf.h \
  Middlewares/Third_Party/SEGGER/Config/SEGGER_RTT_Conf.h \
- modules/motor/motor_def.h modules/daemon/daemon.h \
- modules/motor/DMmotor/dmmotor.h \
+ modules/motor/motor_def.h modules/algorithm/smc_controller.h \
+ modules/daemon/daemon.h modules/motor/DMmotor/dmmotor.h \
  Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  Inc/FreeRTOSConfig.h \
@@ -103,9 +103,9 @@ build/gimbal.o: application/gimbal/gimbal.c application/gimbal/gimbal.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- modules/message_center/message_center.h modules/general_def.h \
- modules/BMI088/bmi088.h bsp/spi/bsp_spi.h Inc/spi.h Inc/gpio.h \
- bsp/gpio/bsp_gpio.h bsp/pwm/bsp_pwm.h Inc/tim.h
+ modules/message_center/message_center.h modules/sp_vision/sp_vision.h \
+ modules/general_def.h modules/BMI088/bmi088.h bsp/spi/bsp_spi.h \
+ Inc/spi.h Inc/gpio.h bsp/gpio/bsp_gpio.h bsp/pwm/bsp_pwm.h Inc/tim.h
 application/gimbal/gimbal.h:
 application/robot_def.h:
 modules/imu/ins_task.h:
@@ -193,6 +193,7 @@ Middlewares/ST/ARM/DSP/Include/dsp/window_functions.h:
 modules/master_machine/master_process.h:
 bsp/usart/bsp_usart.h:
 modules/master_machine/seasky_protocol.h:
+application/cmd/robot_cmd.h:
 modules/motor/DJImotor/dji_motor.h:
 bsp/can/bsp_can.h:
 Inc/can.h:
@@ -204,6 +205,7 @@ Middlewares/Third_Party/SEGGER/RTT/SEGGER_RTT.h:
 Middlewares/Third_Party/SEGGER/RTT/../Config/SEGGER_RTT_Conf.h:
 Middlewares/Third_Party/SEGGER/Config/SEGGER_RTT_Conf.h:
 modules/motor/motor_def.h:
+modules/algorithm/smc_controller.h:
 modules/daemon/daemon.h:
 modules/motor/DMmotor/dmmotor.h:
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h:
@@ -224,6 +226,7 @@ Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
 modules/message_center/message_center.h:
+modules/sp_vision/sp_vision.h:
 modules/general_def.h:
 modules/BMI088/bmi088.h:
 bsp/spi/bsp_spi.h:

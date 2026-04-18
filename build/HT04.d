@@ -78,7 +78,8 @@ build/HT04.o: modules/motor/HTmotor/HT04.c modules/motor/HTmotor/HT04.h \
  Middlewares/ST/ARM/DSP/Include/dsp/support_functions.h \
  Middlewares/ST/ARM/DSP/Include/dsp/quaternion_math_functions.h \
  Middlewares/ST/ARM/DSP/Include/dsp/window_functions.h \
- modules/motor/motor_def.h modules/daemon/daemon.h modules/general_def.h \
+ modules/motor/motor_def.h modules/algorithm/smc_controller.h \
+ modules/daemon/daemon.h modules/general_def.h \
  modules/algorithm/user_lib.h \
  Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
@@ -186,6 +187,7 @@ Middlewares/ST/ARM/DSP/Include/dsp/support_functions.h:
 Middlewares/ST/ARM/DSP/Include/dsp/quaternion_math_functions.h:
 Middlewares/ST/ARM/DSP/Include/dsp/window_functions.h:
 modules/motor/motor_def.h:
+modules/algorithm/smc_controller.h:
 modules/daemon/daemon.h:
 modules/general_def.h:
 modules/algorithm/user_lib.h:

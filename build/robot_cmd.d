@@ -85,9 +85,11 @@ build/robot_cmd.o: application/cmd/robot_cmd.c application/robot_def.h \
  Middlewares/Third_Party/SEGGER/RTT/SEGGER_RTT.h \
  Middlewares/Third_Party/SEGGER/RTT/../Config/SEGGER_RTT_Conf.h \
  Middlewares/Third_Party/SEGGER/Config/SEGGER_RTT_Conf.h \
- modules/motor/motor_def.h modules/daemon/daemon.h \
- modules/BMI088/bmi088.h bsp/spi/bsp_spi.h Inc/spi.h Inc/gpio.h \
- bsp/gpio/bsp_gpio.h bsp/pwm/bsp_pwm.h Inc/tim.h
+ modules/motor/motor_def.h modules/algorithm/smc_controller.h \
+ modules/daemon/daemon.h modules/BMI088/bmi088.h bsp/spi/bsp_spi.h \
+ Inc/spi.h Inc/gpio.h bsp/gpio/bsp_gpio.h bsp/pwm/bsp_pwm.h Inc/tim.h \
+ modules/elrs/elrs.h modules/sp_vision/sp_vision.h \
+ modules/can_comm/can_comm.h
 application/robot_def.h:
 modules/imu/ins_task.h:
 modules/imu/BMI088driver.h:
@@ -190,6 +192,7 @@ Middlewares/Third_Party/SEGGER/RTT/SEGGER_RTT.h:
 Middlewares/Third_Party/SEGGER/RTT/../Config/SEGGER_RTT_Conf.h:
 Middlewares/Third_Party/SEGGER/Config/SEGGER_RTT_Conf.h:
 modules/motor/motor_def.h:
+modules/algorithm/smc_controller.h:
 modules/daemon/daemon.h:
 modules/BMI088/bmi088.h:
 bsp/spi/bsp_spi.h:
@@ -198,3 +201,6 @@ Inc/gpio.h:
 bsp/gpio/bsp_gpio.h:
 bsp/pwm/bsp_pwm.h:
 Inc/tim.h:
+modules/elrs/elrs.h:
+modules/sp_vision/sp_vision.h:
+modules/can_comm/can_comm.h:

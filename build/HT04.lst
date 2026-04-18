@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
   28:modules/motor/HTmotor/HT04.c **** }
   29:modules/motor/HTmotor/HT04.c **** /* 两个用于将uint值和float值进行映射的函数,在设定发送值和解析反馈值时�
   30:modules/motor/HTmotor/HT04.c **** static uint16_t float_to_uint(float x, float x_min, float x_max, uint8_t bits)
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 2
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 2
 
 
   31:modules/motor/HTmotor/HT04.c **** {
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
   78              		@ frame_needed = 0, uses_anonymous_args = 0
   79              		@ link register save eliminated.
   80              		.loc 1 37 1 is_stmt 0 view .LVU15
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 3
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 3
 
 
   81 0000 07EE900A 		vmov	s15, r0	@ int
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  130              		.loc 1 24 5 is_stmt 1 view .LVU30
   24:modules/motor/HTmotor/HT04.c ****     motor->motor_can_instace->tx_buff[7] = (uint8_t)cmd; // 最后一位是命令id
  131              		.loc 1 24 17 is_stmt 0 view .LVU31
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 4
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 4
 
 
  132 0004 D1F8B831 		ldr	r3, [r1, #440]
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  177              	.LFB280:
   42:modules/motor/HTmotor/HT04.c **** 
   43:modules/motor/HTmotor/HT04.c **** /**
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 5
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 5
 
 
   44:modules/motor/HTmotor/HT04.c ****  * @brief 解析电机反馈值
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  201 0010 A3FB0203 		umull	r0, r3, r3, r2
  202              	.LVL13:
  203              		.loc 1 74 27 view .LVU52
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 6
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 6
 
 
  204 0014 DB08     		lsrs	r3, r3, #3
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
   52:modules/motor/HTmotor/HT04.c ****     HTMotor_Measure_t *measure = &(motor->measure); // 将can实例中保存的id转换成电机实
  253              		.loc 1 52 5 view .LVU61
   52:modules/motor/HTmotor/HT04.c ****     HTMotor_Measure_t *measure = &(motor->measure); // 将can实例中保存的id转换成电机实
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 7
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 7
 
 
  254              		.loc 1 52 22 is_stmt 0 view .LVU62
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  292              		.loc 1 60 26 discriminator 1 view .LVU78
  293 003a 2646     		mov	r6, r4
  294 003c 0C36     		adds	r6, r6, #12
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 8
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 8
 
 
  295 003e 84ED000A 		vstr.32	s0, [r4]
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  334 0080 0C21     		movs	r1, #12
  335 0082 F3EE020A 		vmov.f32	s1, #1.8e+1
  336 0086 BBEE020A 		vmov.f32	s0, #-1.8e+1
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 9
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 9
 
 
  337 008a 1843     		orrs	r0, r0, r3
@@ -538,7 +538,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
   81:modules/motor/HTmotor/HT04.c ****     uint16_t p, v, kp, kd, t;
   82:modules/motor/HTmotor/HT04.c ****     p = float_to_uint(0, P_MIN, P_MAX, 16);
   83:modules/motor/HTmotor/HT04.c ****     v = float_to_uint(0, V_MIN, V_MAX, 12);
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 10
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 10
 
 
   84:modules/motor/HTmotor/HT04.c ****     kp = float_to_uint(0, KP_MIN, KP_MAX, 12);
@@ -598,7 +598,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  138:modules/motor/HTmotor/HT04.c **** {
  139:modules/motor/HTmotor/HT04.c ****     motor->pid_ref = ref;
  140:modules/motor/HTmotor/HT04.c **** }
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 11
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 11
 
 
  141:modules/motor/HTmotor/HT04.c **** 
@@ -658,10 +658,10 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  163:modules/motor/HTmotor/HT04.c ****             if (setting->angle_feedback_source == OTHER_FEED)
  413              		.loc 1 163 13 is_stmt 1 view .LVU114
  414              		.loc 1 163 24 is_stmt 0 view .LVU115
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 12
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 12
 
 
- 415 0010 94F83130 		ldrb	r3, [r4, #49]	@ zero_extendqisi2
+ 415 0010 94F83030 		ldrb	r3, [r4, #48]	@ zero_extendqisi2
  416              		.loc 1 163 16 view .LVU116
  417 0014 012B     		cmp	r3, #1
  418 0016 0CD0     		beq	.L35
@@ -718,7 +718,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  451              		.loc 1 177 29 view .LVU129
  452 0040 93ED007A 		vldr.32	s14, [r3]
  453              	.LVL45:
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 13
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 13
 
 
  454              		.loc 1 177 29 view .LVU130
@@ -778,7 +778,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  489 0070 0C20     		movs	r0, #12
  490              	.LVL52:
  491              		.loc 1 196 19 view .LVU143
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 14
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 14
 
 
  492 0072 B3EE021A 		vmov.f32	s2, #1.8e+1
@@ -838,7 +838,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  531              		.loc 1 161 9 is_stmt 1 view .LVU159
  161:modules/motor/HTmotor/HT04.c ****         {
  532              		.loc 1 161 21 is_stmt 0 view .LVU160
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 15
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 15
 
 
  533 00a8 94F82D30 		ldrb	r3, [r4, #45]	@ zero_extendqisi2
@@ -874,7 +874,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  554              		.loc 1 173 13 is_stmt 1 view .LVU169
  173:modules/motor/HTmotor/HT04.c ****                 pid_ref += *motor->speed_feedforward_ptr;
  555              		.loc 1 173 24 is_stmt 0 view .LVU170
- 556 00ce 94F83330 		ldrb	r3, [r4, #51]	@ zero_extendqisi2
+ 556 00ce 94F83230 		ldrb	r3, [r4, #50]	@ zero_extendqisi2
  173:modules/motor/HTmotor/HT04.c ****                 pid_ref += *motor->speed_feedforward_ptr;
  557              		.loc 1 173 16 view .LVU171
  558 00d2 13F0020F 		tst	r3, #2
@@ -896,9 +896,9 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  569              		.loc 1 176 13 is_stmt 1 view .LVU176
  176:modules/motor/HTmotor/HT04.c ****                 pid_measure = *motor->other_speed_feedback_ptr;
  570              		.loc 1 176 24 is_stmt 0 view .LVU177
- 571 00e4 94F83130 		ldrb	r3, [r4, #49]	@ zero_extendqisi2
+ 571 00e4 94F83030 		ldrb	r3, [r4, #48]	@ zero_extendqisi2
  176:modules/motor/HTmotor/HT04.c ****                 pid_measure = *motor->other_speed_feedback_ptr;
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 16
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 16
 
 
  572              		.loc 1 176 16 view .LVU178
@@ -929,7 +929,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  591              		.loc 1 184 9 is_stmt 1 view .LVU184
  184:modules/motor/HTmotor/HT04.c ****             pid_ref += *motor->current_feedforward_ptr;
  592              		.loc 1 184 20 is_stmt 0 view .LVU185
- 593 0104 94F83330 		ldrb	r3, [r4, #51]	@ zero_extendqisi2
+ 593 0104 94F83230 		ldrb	r3, [r4, #50]	@ zero_extendqisi2
  184:modules/motor/HTmotor/HT04.c ****             pid_ref += *motor->current_feedforward_ptr;
  594              		.loc 1 184 12 view .LVU186
  595 0108 13F0010F 		tst	r3, #1
@@ -958,7 +958,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  611 0122 90D1     		bne	.L39
  612              	.L27:
  191:modules/motor/HTmotor/HT04.c **** 
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 17
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 17
 
 
  613              		.loc 1 191 9 is_stmt 1 view .LVU194
@@ -1018,7 +1018,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  663              	.LCFI5:
  664              		.cfi_def_cfa_offset 32
  665              		.cfi_offset 80, -32
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 18
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 18
 
 
  666              		.cfi_offset 81, -28
@@ -1078,7 +1078,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  710 005c 0546     		mov	r5, r0
  711              	.LVL74:
   86:modules/motor/HTmotor/HT04.c **** 
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 19
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 19
 
 
  712              		.loc 1 86 5 is_stmt 1 view .LVU211
@@ -1138,7 +1138,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
   95:modules/motor/HTmotor/HT04.c ****     buf[7] = t & 0xff;
  749              		.loc 1 95 32 is_stmt 0 view .LVU229
  750 009a 010A     		lsrs	r1, r0, #8
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 20
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 20
 
 
  751 009c 41EA0511 		orr	r1, r1, r5, lsl #4
@@ -1198,7 +1198,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  794              	.L45:
  103:modules/motor/HTmotor/HT04.c **** 
  795              		.loc 1 103 1 view .LVU241
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 21
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 21
 
 
  796 00e2 00BF     		.align	2
@@ -1258,7 +1258,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  845 0000 30B5     		push	{r4, r5, lr}
  846              	.LCFI7:
  847              		.cfi_def_cfa_offset 12
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 22
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 22
 
 
  848              		.cfi_offset 4, -12
@@ -1318,7 +1318,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  891 0038 0FCC     		ldmia	r4!, {r0, r1, r2, r3}
  892 003a ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
  893 003e 94E80700 		ldm	r4, {r0, r1, r2}
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 23
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 23
 
 
  894 0042 8CE80700 		stm	ip, {r0, r1, r2}
@@ -1378,7 +1378,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  944              	.LFB286:
  222:modules/motor/HTmotor/HT04.c **** 
  223:modules/motor/HTmotor/HT04.c **** void HTMotorStop(HTMotorInstance *motor)
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 24
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 24
 
 
  224:modules/motor/HTmotor/HT04.c **** {
@@ -1438,7 +1438,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  994              		.cfi_startproc
  995              		@ args = 0, pretend = 0, frame = 16
  996              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 25
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 25
 
 
  106:modules/motor/HTmotor/HT04.c ****     HTMotorInstance *motor = (HTMotorInstance *)malloc(sizeof(HTMotorInstance));
@@ -1481,303 +1481,305 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 1
  110:modules/motor/HTmotor/HT04.c ****     PIDInit(&motor->current_PID, &config->controller_param_init_config.current_PID);
  1028              		.loc 1 110 27 is_stmt 0 view .LVU280
  1029 001e 04F12C03 		add	r3, r4, #44
- 1030 0022 05F1EC02 		add	r2, r5, #236
- 1031 0026 92E80300 		ldm	r2, {r0, r1}
- 1032 002a 83E80300 		stm	r3, {r0, r1}
+ 1030 0022 05F1B002 		add	r2, r5, #176
+ 1031 0026 07CA     		ldm	r2, {r0, r1, r2}
+ 1032 0028 03C3     		stmia	r3!, {r0, r1}
+ 1033 002a 1A70     		strb	r2, [r3]
  111:modules/motor/HTmotor/HT04.c ****     PIDInit(&motor->speed_PID, &config->controller_param_init_config.speed_PID);
- 1033              		.loc 1 111 5 is_stmt 1 view .LVU281
- 1034 002e 05F11001 		add	r1, r5, #16
- 1035 0032 04F13800 		add	r0, r4, #56
- 1036 0036 FFF7FEFF 		bl	PIDInit
- 1037              	.LVL98:
+ 1034              		.loc 1 111 5 is_stmt 1 view .LVU281
+ 1035 002c 05F11001 		add	r1, r5, #16
+ 1036 0030 04F13800 		add	r0, r4, #56
+ 1037 0034 FFF7FEFF 		bl	PIDInit
+ 1038              	.LVL98:
  112:modules/motor/HTmotor/HT04.c ****     PIDInit(&motor->angle_PID, &config->controller_param_init_config.angle_PID);
- 1038              		.loc 1 112 5 view .LVU282
- 1039 003a 05F13C01 		add	r1, r5, #60
- 1040 003e 04F1B000 		add	r0, r4, #176
- 1041 0042 FFF7FEFF 		bl	PIDInit
- 1042              	.LVL99:
+ 1039              		.loc 1 112 5 view .LVU282
+ 1040 0038 05F13C01 		add	r1, r5, #60
+ 1041 003c 04F1B000 		add	r0, r4, #176
+ 1042 0040 FFF7FEFF 		bl	PIDInit
+ 1043              	.LVL99:
  113:modules/motor/HTmotor/HT04.c ****     motor->other_angle_feedback_ptr = config->controller_param_init_config.other_angle_feedback_ptr
- 1043              		.loc 1 113 5 view .LVU283
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 26
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 26
 
 
- 1044 0046 05F16801 		add	r1, r5, #104
- 1045 004a 04F59470 		add	r0, r4, #296
- 1046 004e FFF7FEFF 		bl	PIDInit
- 1047              	.LVL100:
+ 1044              		.loc 1 113 5 view .LVU283
+ 1045 0044 05F16801 		add	r1, r5, #104
+ 1046 0048 04F59470 		add	r0, r4, #296
+ 1047 004c FFF7FEFF 		bl	PIDInit
+ 1048              	.LVL100:
  114:modules/motor/HTmotor/HT04.c ****     motor->other_speed_feedback_ptr = config->controller_param_init_config.other_speed_feedback_ptr
- 1048              		.loc 1 114 5 view .LVU284
+ 1049              		.loc 1 114 5 view .LVU284
  114:modules/motor/HTmotor/HT04.c ****     motor->other_speed_feedback_ptr = config->controller_param_init_config.other_speed_feedback_ptr
- 1049              		.loc 1 114 75 is_stmt 0 view .LVU285
- 1050 0052 2B68     		ldr	r3, [r5]
+ 1050              		.loc 1 114 75 is_stmt 0 view .LVU285
+ 1051 0050 2B68     		ldr	r3, [r5]
  114:modules/motor/HTmotor/HT04.c ****     motor->other_speed_feedback_ptr = config->controller_param_init_config.other_speed_feedback_ptr
- 1051              		.loc 1 114 37 view .LVU286
- 1052 0054 C4F8A031 		str	r3, [r4, #416]
+ 1052              		.loc 1 114 37 view .LVU286
+ 1053 0052 C4F8A031 		str	r3, [r4, #416]
  115:modules/motor/HTmotor/HT04.c **** 
- 1053              		.loc 1 115 5 is_stmt 1 view .LVU287
+ 1054              		.loc 1 115 5 is_stmt 1 view .LVU287
  115:modules/motor/HTmotor/HT04.c **** 
- 1054              		.loc 1 115 75 is_stmt 0 view .LVU288
- 1055 0058 6B68     		ldr	r3, [r5, #4]
+ 1055              		.loc 1 115 75 is_stmt 0 view .LVU288
+ 1056 0056 6B68     		ldr	r3, [r5, #4]
  115:modules/motor/HTmotor/HT04.c **** 
- 1056              		.loc 1 115 37 view .LVU289
- 1057 005a C4F8A431 		str	r3, [r4, #420]
+ 1057              		.loc 1 115 37 view .LVU289
+ 1058 0058 C4F8A431 		str	r3, [r4, #420]
  117:modules/motor/HTmotor/HT04.c ****     config->can_init_config.id = motor;
- 1058              		.loc 1 117 5 is_stmt 1 view .LVU290
+ 1059              		.loc 1 117 5 is_stmt 1 view .LVU290
  117:modules/motor/HTmotor/HT04.c ****     config->can_init_config.id = motor;
- 1059              		.loc 1 117 49 is_stmt 0 view .LVU291
- 1060 005e 1D4B     		ldr	r3, .L59
- 1061 0060 C5F80431 		str	r3, [r5, #260]
+ 1060              		.loc 1 117 49 is_stmt 0 view .LVU291
+ 1061 005c 1C4B     		ldr	r3, .L59
+ 1062 005e C5F8C830 		str	r3, [r5, #200]
  118:modules/motor/HTmotor/HT04.c ****     motor->motor_can_instace = CANRegister(&config->can_init_config);
- 1062              		.loc 1 118 5 is_stmt 1 view .LVU292
+ 1063              		.loc 1 118 5 is_stmt 1 view .LVU292
  118:modules/motor/HTmotor/HT04.c ****     motor->motor_can_instace = CANRegister(&config->can_init_config);
- 1063              		.loc 1 118 32 is_stmt 0 view .LVU293
- 1064 0064 C5F80841 		str	r4, [r5, #264]
+ 1064              		.loc 1 118 32 is_stmt 0 view .LVU293
+ 1065 0062 C5F8CC40 		str	r4, [r5, #204]
  119:modules/motor/HTmotor/HT04.c **** 
- 1065              		.loc 1 119 5 is_stmt 1 view .LVU294
+ 1066              		.loc 1 119 5 is_stmt 1 view .LVU294
  119:modules/motor/HTmotor/HT04.c **** 
- 1066              		.loc 1 119 32 is_stmt 0 view .LVU295
- 1067 0068 05F1F800 		add	r0, r5, #248
- 1068 006c FFF7FEFF 		bl	CANRegister
- 1069              	.LVL101:
+ 1067              		.loc 1 119 32 is_stmt 0 view .LVU295
+ 1068 0066 05F1BC00 		add	r0, r5, #188
+ 1069 006a FFF7FEFF 		bl	CANRegister
+ 1070              	.LVL101:
  119:modules/motor/HTmotor/HT04.c **** 
- 1070              		.loc 1 119 30 discriminator 1 view .LVU296
- 1071 0070 C4F8B801 		str	r0, [r4, #440]
+ 1071              		.loc 1 119 30 discriminator 1 view .LVU296
+ 1072 006e C4F8B801 		str	r0, [r4, #440]
  121:modules/motor/HTmotor/HT04.c ****         .callback = HTMotorLostCallback,
- 1072              		.loc 1 121 5 is_stmt 1 view .LVU297
+ 1073              		.loc 1 121 5 is_stmt 1 view .LVU297
  121:modules/motor/HTmotor/HT04.c ****         .callback = HTMotorLostCallback,
- 1073              		.loc 1 121 26 is_stmt 0 view .LVU298
- 1074 0074 0023     		movs	r3, #0
- 1075 0076 0193     		str	r3, [sp, #4]
- 1076 0078 0293     		str	r3, [sp, #8]
- 1077 007a 0393     		str	r3, [sp, #12]
- 1078 007c 0523     		movs	r3, #5
- 1079 007e ADF80430 		strh	r3, [sp, #4]	@ movhi
- 1080 0082 154B     		ldr	r3, .L59+4
- 1081 0084 0293     		str	r3, [sp, #8]
- 1082 0086 0394     		str	r4, [sp, #12]
+ 1074              		.loc 1 121 26 is_stmt 0 view .LVU298
+ 1075 0072 0023     		movs	r3, #0
+ 1076 0074 0193     		str	r3, [sp, #4]
+ 1077 0076 0293     		str	r3, [sp, #8]
+ 1078 0078 0393     		str	r3, [sp, #12]
+ 1079 007a 0523     		movs	r3, #5
+ 1080 007c ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 1081 0080 144B     		ldr	r3, .L59+4
+ 1082 0082 0293     		str	r3, [sp, #8]
+ 1083 0084 0394     		str	r4, [sp, #12]
  126:modules/motor/HTmotor/HT04.c **** 
- 1083              		.loc 1 126 5 is_stmt 1 view .LVU299
- 126:modules/motor/HTmotor/HT04.c **** 
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 27
+ 1084              		.loc 1 126 5 is_stmt 1 view .LVU299
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 27
 
 
- 1084              		.loc 1 126 27 is_stmt 0 view .LVU300
- 1085 0088 01A8     		add	r0, sp, #4
- 1086 008a FFF7FEFF 		bl	DaemonRegister
- 1087              	.LVL102:
  126:modules/motor/HTmotor/HT04.c **** 
- 1088              		.loc 1 126 25 discriminator 1 view .LVU301
- 1089 008e C4F8BC01 		str	r0, [r4, #444]
+ 1085              		.loc 1 126 27 is_stmt 0 view .LVU300
+ 1086 0086 01A8     		add	r0, sp, #4
+ 1087 0088 FFF7FEFF 		bl	DaemonRegister
+ 1088              	.LVL102:
+ 126:modules/motor/HTmotor/HT04.c **** 
+ 1089              		.loc 1 126 25 discriminator 1 view .LVU301
+ 1090 008c C4F8BC01 		str	r0, [r4, #444]
  128:modules/motor/HTmotor/HT04.c ****     HTMotorSetMode(CMD_MOTOR_MODE, motor); // 确保电机已经上电并执行电机模式
- 1090              		.loc 1 128 5 is_stmt 1 view .LVU302
- 1091 0092 2046     		mov	r0, r4
- 1092 0094 FFF7FEFF 		bl	HTMotorEnable
- 1093              	.LVL103:
+ 1091              		.loc 1 128 5 is_stmt 1 view .LVU302
+ 1092 0090 2046     		mov	r0, r4
+ 1093 0092 FFF7FEFF 		bl	HTMotorEnable
+ 1094              	.LVL103:
  129:modules/motor/HTmotor/HT04.c ****     DWT_Delay(0.05f);
- 1094              		.loc 1 129 5 view .LVU303
- 1095 0098 2146     		mov	r1, r4
- 1096 009a FC20     		movs	r0, #252
- 1097 009c FFF7FEFF 		bl	HTMotorSetMode
- 1098              	.LVL104:
+ 1095              		.loc 1 129 5 view .LVU303
+ 1096 0096 2146     		mov	r1, r4
+ 1097 0098 FC20     		movs	r0, #252
+ 1098 009a FFF7FEFF 		bl	HTMotorSetMode
+ 1099              	.LVL104:
  130:modules/motor/HTmotor/HT04.c ****     HTMotorCalibEncoder(motor); // 将当前编码器位置作为零位
- 1099              		.loc 1 130 5 view .LVU304
- 1100 00a0 9FED0E8A 		vldr.32	s16, .L59+8
- 1101 00a4 B0EE480A 		vmov.f32	s0, s16
- 1102 00a8 FFF7FEFF 		bl	DWT_Delay
- 1103              	.LVL105:
+ 1100              		.loc 1 130 5 view .LVU304
+ 1101 009e 9FED0E8A 		vldr.32	s16, .L59+8
+ 1102 00a2 B0EE480A 		vmov.f32	s0, s16
+ 1103 00a6 FFF7FEFF 		bl	DWT_Delay
+ 1104              	.LVL105:
  131:modules/motor/HTmotor/HT04.c ****     DWT_Delay(0.05f);           // 保证下一个电机发送时CAN是空闲的,注意应用在初
- 1104              		.loc 1 131 5 view .LVU305
- 1105 00ac 2046     		mov	r0, r4
- 1106 00ae FFF7FEFF 		bl	HTMotorCalibEncoder
- 1107              	.LVL106:
+ 1105              		.loc 1 131 5 view .LVU305
+ 1106 00aa 2046     		mov	r0, r4
+ 1107 00ac FFF7FEFF 		bl	HTMotorCalibEncoder
+ 1108              	.LVL106:
  132:modules/motor/HTmotor/HT04.c ****     ht_motor_instance[idx++] = motor;
- 1108              		.loc 1 132 5 view .LVU306
- 1109 00b2 B0EE480A 		vmov.f32	s0, s16
- 1110 00b6 FFF7FEFF 		bl	DWT_Delay
- 1111              	.LVL107:
+ 1109              		.loc 1 132 5 view .LVU306
+ 1110 00b0 B0EE480A 		vmov.f32	s0, s16
+ 1111 00b4 FFF7FEFF 		bl	DWT_Delay
+ 1112              	.LVL107:
  133:modules/motor/HTmotor/HT04.c ****     return motor;
- 1112              		.loc 1 133 5 view .LVU307
+ 1113              		.loc 1 133 5 view .LVU307
  133:modules/motor/HTmotor/HT04.c ****     return motor;
- 1113              		.loc 1 133 26 is_stmt 0 view .LVU308
- 1114 00ba 094A     		ldr	r2, .L59+12
- 1115 00bc 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
- 1116 00be 591C     		adds	r1, r3, #1
- 1117 00c0 1170     		strb	r1, [r2]
+ 1114              		.loc 1 133 26 is_stmt 0 view .LVU308
+ 1115 00b8 084A     		ldr	r2, .L59+12
+ 1116 00ba 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 1117 00bc 591C     		adds	r1, r3, #1
+ 1118 00be 1170     		strb	r1, [r2]
  133:modules/motor/HTmotor/HT04.c ****     return motor;
- 1118              		.loc 1 133 30 view .LVU309
- 1119 00c2 084A     		ldr	r2, .L59+16
- 1120 00c4 42F82340 		str	r4, [r2, r3, lsl #2]
+ 1119              		.loc 1 133 30 view .LVU309
+ 1120 00c0 074A     		ldr	r2, .L59+16
+ 1121 00c2 42F82340 		str	r4, [r2, r3, lsl #2]
  134:modules/motor/HTmotor/HT04.c **** }
- 1121              		.loc 1 134 5 is_stmt 1 view .LVU310
+ 1122              		.loc 1 134 5 is_stmt 1 view .LVU310
  135:modules/motor/HTmotor/HT04.c **** 
- 1122              		.loc 1 135 1 is_stmt 0 view .LVU311
- 1123 00c8 2046     		mov	r0, r4
- 1124 00ca 05B0     		add	sp, sp, #20
- 1125              	.LCFI13:
- 1126              		.cfi_def_cfa_offset 20
- 1127              		@ sp needed
- 1128 00cc BDEC028B 		vldm	sp!, {d8}
- 1129              	.LCFI14:
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 28
+ 1123              		.loc 1 135 1 is_stmt 0 view .LVU311
+ 1124 00c6 2046     		mov	r0, r4
+ 1125 00c8 05B0     		add	sp, sp, #20
+ 1126              	.LCFI13:
+ 1127              		.cfi_def_cfa_offset 20
+ 1128              		@ sp needed
+ 1129 00ca BDEC028B 		vldm	sp!, {d8}
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 28
 
 
- 1130              		.cfi_restore 80
- 1131              		.cfi_restore 81
- 1132              		.cfi_def_cfa_offset 12
- 1133 00d0 30BD     		pop	{r4, r5, pc}
- 1134              	.LVL108:
- 1135              	.L60:
+ 1130              	.LCFI14:
+ 1131              		.cfi_restore 80
+ 1132              		.cfi_restore 81
+ 1133              		.cfi_def_cfa_offset 12
+ 1134 00ce 30BD     		pop	{r4, r5, pc}
+ 1135              	.LVL108:
+ 1136              	.L60:
  135:modules/motor/HTmotor/HT04.c **** 
- 1136              		.loc 1 135 1 view .LVU312
- 1137 00d2 00BF     		.align	2
- 1138              	.L59:
- 1139 00d4 00000000 		.word	HTMotorDecode
- 1140 00d8 00000000 		.word	HTMotorLostCallback
- 1141 00dc CDCC4C3D 		.word	1028443341
- 1142 00e0 00000000 		.word	idx
- 1143 00e4 00000000 		.word	ht_motor_instance
- 1144              		.cfi_endproc
- 1145              	.LFE282:
- 1147              		.section	.text.HTMotorOuterLoop,"ax",%progbits
- 1148              		.align	1
- 1149              		.global	HTMotorOuterLoop
- 1150              		.syntax unified
- 1151              		.thumb
- 1152              		.thumb_func
- 1154              	HTMotorOuterLoop:
- 1155              	.LVL109:
- 1156              	.LFB288:
+ 1137              		.loc 1 135 1 view .LVU312
+ 1138              		.align	2
+ 1139              	.L59:
+ 1140 00d0 00000000 		.word	HTMotorDecode
+ 1141 00d4 00000000 		.word	HTMotorLostCallback
+ 1142 00d8 CDCC4C3D 		.word	1028443341
+ 1143 00dc 00000000 		.word	idx
+ 1144 00e0 00000000 		.word	ht_motor_instance
+ 1145              		.cfi_endproc
+ 1146              	.LFE282:
+ 1148              		.section	.text.HTMotorOuterLoop,"ax",%progbits
+ 1149              		.align	1
+ 1150              		.global	HTMotorOuterLoop
+ 1151              		.syntax unified
+ 1152              		.thumb
+ 1153              		.thumb_func
+ 1155              	HTMotorOuterLoop:
+ 1156              	.LVL109:
+ 1157              	.LFB288:
  232:modules/motor/HTmotor/HT04.c **** 
  233:modules/motor/HTmotor/HT04.c **** void HTMotorOuterLoop(HTMotorInstance *motor, Closeloop_Type_e type)
  234:modules/motor/HTmotor/HT04.c **** {
- 1157              		.loc 1 234 1 is_stmt 1 view -0
- 1158              		.cfi_startproc
- 1159              		@ args = 0, pretend = 0, frame = 0
- 1160              		@ frame_needed = 0, uses_anonymous_args = 0
- 1161              		@ link register save eliminated.
+ 1158              		.loc 1 234 1 is_stmt 1 view -0
+ 1159              		.cfi_startproc
+ 1160              		@ args = 0, pretend = 0, frame = 0
+ 1161              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1162              		@ link register save eliminated.
  235:modules/motor/HTmotor/HT04.c ****     motor->motor_settings.outer_loop_type = type;
- 1162              		.loc 1 235 5 view .LVU314
- 1163              		.loc 1 235 43 is_stmt 0 view .LVU315
- 1164 0000 80F82C10 		strb	r1, [r0, #44]
+ 1163              		.loc 1 235 5 view .LVU314
+ 1164              		.loc 1 235 43 is_stmt 0 view .LVU315
+ 1165 0000 80F82C10 		strb	r1, [r0, #44]
  236:modules/motor/HTmotor/HT04.c **** }
- 1165              		.loc 1 236 1 view .LVU316
- 1166 0004 7047     		bx	lr
- 1167              		.cfi_endproc
- 1168              	.LFE288:
- 1170              		.section	.rodata.str1.4,"aMS",%progbits,1
- 1171              		.align	2
- 1172              	.LC0:
- 1173 0000 68745F74 		.ascii	"ht_task_name\000"
- 1173      61736B5F 
- 1173      6E616D65 
- 1173      00
- 1174              		.section	.bss.zero_buff,"aw",%nobits
- 1175              		.align	2
- 1178              	zero_buff:
- 1179 0000 00000000 		.space	6
- 1179      0000
- 1180              		.section	.bss.ht_task_handle,"aw",%nobits
- 1181              		.align	2
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 29
+ 1166              		.loc 1 236 1 view .LVU316
+ 1167 0004 7047     		bx	lr
+ 1168              		.cfi_endproc
+ 1169              	.LFE288:
+ 1171              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 1172              		.align	2
+ 1173              	.LC0:
+ 1174 0000 68745F74 		.ascii	"ht_task_name\000"
+ 1174      61736B5F 
+ 1174      6E616D65 
+ 1174      00
+ 1175              		.section	.bss.zero_buff,"aw",%nobits
+ 1176              		.align	2
+ 1179              	zero_buff:
+ 1180 0000 00000000 		.space	6
+ 1180      0000
+ 1181              		.section	.bss.ht_task_handle,"aw",%nobits
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 29
 
 
- 1184              	ht_task_handle:
- 1185 0000 00000000 		.space	16
- 1185      00000000 
- 1185      00000000 
- 1185      00000000 
- 1186              		.section	.bss.ht_motor_instance,"aw",%nobits
- 1187              		.align	2
- 1190              	ht_motor_instance:
- 1191 0000 00000000 		.space	16
- 1191      00000000 
- 1191      00000000 
- 1191      00000000 
- 1192              		.section	.bss.idx,"aw",%nobits
- 1195              	idx:
- 1196 0000 00       		.space	1
- 1197              		.section	.rodata
- 1198              		.align	2
- 1199              		.set	.LANCHOR0,. + 0
- 1200              	.LC2:
- 1201 0000 00000000 		.word	.LC0
- 1202 0004 00000000 		.word	HTMotorTask
- 1203 0008 0000     		.short	0
- 1204 000a 0000     		.space	2
- 1205 000c 00000000 		.word	0
- 1206 0010 80000000 		.word	128
- 1207 0014 00000000 		.word	0
- 1208 0018 00000000 		.word	0
- 1209              		.text
- 1210              	.Letext0:
- 1211              		.file 2 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_ty
- 1212              		.file 3 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_stdint.h"
- 1213              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
- 1214              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
- 1215              		.file 6 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/lib/gcc/arm-none-eabi/13.3.1/include/stdd
- 1216              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_can.h"
- 1217              		.file 8 "bsp/can/bsp_can.h"
- 1218              		.file 9 "modules/algorithm/controller.h"
- 1219              		.file 10 "modules/motor/motor_def.h"
- 1220              		.file 11 "modules/daemon/daemon.h"
- 1221              		.file 12 "modules/motor/HTmotor/HT04.h"
- 1222              		.file 13 "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
- 1223              		.file 14 "Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h"
- 1224              		.file 15 "Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
- 1225              		.file 16 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
- 1226              		.file 17 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/string.h"
- 1227              		.file 18 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/stdlib.h"
- 1228              		.file 19 "modules/algorithm/user_lib.h"
- 1229              		.file 20 "bsp/dwt/bsp_dwt.h"
- 1230              		.file 21 "<built-in>"
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 30
+ 1182              		.align	2
+ 1185              	ht_task_handle:
+ 1186 0000 00000000 		.space	16
+ 1186      00000000 
+ 1186      00000000 
+ 1186      00000000 
+ 1187              		.section	.bss.ht_motor_instance,"aw",%nobits
+ 1188              		.align	2
+ 1191              	ht_motor_instance:
+ 1192 0000 00000000 		.space	16
+ 1192      00000000 
+ 1192      00000000 
+ 1192      00000000 
+ 1193              		.section	.bss.idx,"aw",%nobits
+ 1196              	idx:
+ 1197 0000 00       		.space	1
+ 1198              		.section	.rodata
+ 1199              		.align	2
+ 1200              		.set	.LANCHOR0,. + 0
+ 1201              	.LC2:
+ 1202 0000 00000000 		.word	.LC0
+ 1203 0004 00000000 		.word	HTMotorTask
+ 1204 0008 0000     		.short	0
+ 1205 000a 0000     		.space	2
+ 1206 000c 00000000 		.word	0
+ 1207 0010 80000000 		.word	128
+ 1208 0014 00000000 		.word	0
+ 1209 0018 00000000 		.word	0
+ 1210              		.text
+ 1211              	.Letext0:
+ 1212              		.file 2 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_ty
+ 1213              		.file 3 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_stdint.h"
+ 1214              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 1215              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+ 1216              		.file 6 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/lib/gcc/arm-none-eabi/13.3.1/include/stdd
+ 1217              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_can.h"
+ 1218              		.file 8 "bsp/can/bsp_can.h"
+ 1219              		.file 9 "modules/algorithm/controller.h"
+ 1220              		.file 10 "modules/algorithm/smc_controller.h"
+ 1221              		.file 11 "modules/motor/motor_def.h"
+ 1222              		.file 12 "modules/daemon/daemon.h"
+ 1223              		.file 13 "modules/motor/HTmotor/HT04.h"
+ 1224              		.file 14 "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
+ 1225              		.file 15 "Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h"
+ 1226              		.file 16 "Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
+ 1227              		.file 17 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
+ 1228              		.file 18 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/string.h"
+ 1229              		.file 19 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/stdlib.h"
+ 1230              		.file 20 "modules/algorithm/user_lib.h"
+ 1231              		.file 21 "bsp/dwt/bsp_dwt.h"
+ 1232              		.file 22 "<built-in>"
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 30
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 HT04.c
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:21     .text.float_to_uint:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:26     .text.float_to_uint:00000000 float_to_uint
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:67     .text.uint_to_float:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:72     .text.uint_to_float:00000000 uint_to_float
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:111    .text.HTMotorSetMode:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:116    .text.HTMotorSetMode:00000000 HTMotorSetMode
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:165    .text.HTMotorSetMode:00000038 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:1178   .bss.zero_buff:00000000 zero_buff
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:170    .text.HTMotorLostCallback:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:175    .text.HTMotorLostCallback:00000000 HTMotorLostCallback
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:224    .text.HTMotorLostCallback:0000002c $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:229    .text.HTMotorDecode:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:234    .text.HTMotorDecode:00000000 HTMotorDecode
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:361    .text.HTMotorDecode:000000b0 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:372    .text.HTMotorTask:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:378    .text.HTMotorTask:00000000 HTMotorTask
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:633    .text.HTMotorTask:00000148 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:639    .text.HTMotorCalibEncoder:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:645    .text.HTMotorCalibEncoder:00000000 HTMotorCalibEncoder
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:798    .text.HTMotorCalibEncoder:000000e4 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:810    .text.HTMotorSetRef:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:816    .text.HTMotorSetRef:00000000 HTMotorSetRef
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:833    .text.HTMotorControlInit:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:839    .text.HTMotorControlInit:00000000 HTMotorControlInit
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:928    .text.HTMotorControlInit:00000068 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:1195   .bss.idx:00000000 idx
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:1190   .bss.ht_motor_instance:00000000 ht_motor_instance
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:1184   .bss.ht_task_handle:00000000 ht_task_handle
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:936    .text.HTMotorStop:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:942    .text.HTMotorStop:00000000 HTMotorStop
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:960    .text.HTMotorEnable:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:966    .text.HTMotorEnable:00000000 HTMotorEnable
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:984    .text.HTMotorInit:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:990    .text.HTMotorInit:00000000 HTMotorInit
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:1139   .text.HTMotorInit:000000d4 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:1148   .text.HTMotorOuterLoop:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:1154   .text.HTMotorOuterLoop:00000000 HTMotorOuterLoop
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:1171   .rodata.str1.4:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:1175   .bss.zero_buff:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:1181   .bss.ht_task_handle:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:1187   .bss.ht_motor_instance:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:1196   .bss.idx:00000000 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s:1198   .rodata:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:21     .text.float_to_uint:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:26     .text.float_to_uint:00000000 float_to_uint
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:67     .text.uint_to_float:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:72     .text.uint_to_float:00000000 uint_to_float
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:111    .text.HTMotorSetMode:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:116    .text.HTMotorSetMode:00000000 HTMotorSetMode
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:165    .text.HTMotorSetMode:00000038 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:1179   .bss.zero_buff:00000000 zero_buff
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:170    .text.HTMotorLostCallback:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:175    .text.HTMotorLostCallback:00000000 HTMotorLostCallback
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:224    .text.HTMotorLostCallback:0000002c $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:229    .text.HTMotorDecode:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:234    .text.HTMotorDecode:00000000 HTMotorDecode
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:361    .text.HTMotorDecode:000000b0 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:372    .text.HTMotorTask:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:378    .text.HTMotorTask:00000000 HTMotorTask
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:633    .text.HTMotorTask:00000148 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:639    .text.HTMotorCalibEncoder:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:645    .text.HTMotorCalibEncoder:00000000 HTMotorCalibEncoder
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:798    .text.HTMotorCalibEncoder:000000e4 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:810    .text.HTMotorSetRef:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:816    .text.HTMotorSetRef:00000000 HTMotorSetRef
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:833    .text.HTMotorControlInit:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:839    .text.HTMotorControlInit:00000000 HTMotorControlInit
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:928    .text.HTMotorControlInit:00000068 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:1196   .bss.idx:00000000 idx
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:1191   .bss.ht_motor_instance:00000000 ht_motor_instance
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:1185   .bss.ht_task_handle:00000000 ht_task_handle
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:936    .text.HTMotorStop:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:942    .text.HTMotorStop:00000000 HTMotorStop
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:960    .text.HTMotorEnable:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:966    .text.HTMotorEnable:00000000 HTMotorEnable
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:984    .text.HTMotorInit:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:990    .text.HTMotorInit:00000000 HTMotorInit
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:1140   .text.HTMotorInit:000000d0 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:1149   .text.HTMotorOuterLoop:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:1155   .text.HTMotorOuterLoop:00000000 HTMotorOuterLoop
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:1172   .rodata.str1.4:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:1176   .bss.zero_buff:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:1182   .bss.ht_task_handle:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:1188   .bss.ht_motor_instance:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:1197   .bss.idx:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s:1199   .rodata:00000000 $d
 
 UNDEFINED SYMBOLS
 CANTransmit
@@ -1790,7 +1792,7 @@ DWT_Delay
 __itoa
 strcat
 osThreadCreate
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLHFQW3.s 			page 31
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//ccLJyOBv.s 			page 31
 
 
 malloc

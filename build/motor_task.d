@@ -78,9 +78,9 @@ build/motor_task.o: modules/motor/motor_task.c modules/motor/motor_task.h \
  Middlewares/ST/ARM/DSP/Include/dsp/support_functions.h \
  Middlewares/ST/ARM/DSP/Include/dsp/quaternion_math_functions.h \
  Middlewares/ST/ARM/DSP/Include/dsp/window_functions.h \
- modules/motor/motor_def.h modules/daemon/daemon.h \
- modules/motor/HTmotor/HT04.h modules/motor/DJImotor/dji_motor.h \
- modules/motor/step_motor/step_motor.h \
+ modules/motor/motor_def.h modules/algorithm/smc_controller.h \
+ modules/daemon/daemon.h modules/motor/HTmotor/HT04.h \
+ modules/motor/DJImotor/dji_motor.h modules/motor/step_motor/step_motor.h \
  modules/motor/servo_motor/servo_motor.h Inc/tim.h bsp/pwm/bsp_pwm.h \
  Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h \
  bsp/usart/bsp_usart.h modules/motor/power_control.h \
@@ -174,6 +174,7 @@ Middlewares/ST/ARM/DSP/Include/dsp/support_functions.h:
 Middlewares/ST/ARM/DSP/Include/dsp/quaternion_math_functions.h:
 Middlewares/ST/ARM/DSP/Include/dsp/window_functions.h:
 modules/motor/motor_def.h:
+modules/algorithm/smc_controller.h:
 modules/daemon/daemon.h:
 modules/motor/HTmotor/HT04.h:
 modules/motor/DJImotor/dji_motor.h:

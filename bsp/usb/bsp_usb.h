@@ -10,6 +10,7 @@
  *
  */
 #pragma once
+#include "stdint.h"
 #include "usb_device.h"
 #include "usbd_cdc.h"
 #include "usbd_conf.h"
@@ -27,4 +28,4 @@ typedef struct
 
 uint8_t *USBInit(USB_Init_Config_s usb_conf); // bsp初始化时调用会重新枚举设备
 
-void USBTransmit(uint8_t *buffer, uint16_t len); // 通过usb发送数据
+uint8_t USBTransmit(uint8_t *buffer, uint16_t len); // 通过usb发送数据, 返回底层发送状态

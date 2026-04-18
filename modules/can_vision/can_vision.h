@@ -14,6 +14,7 @@
 /* CAN ID定义 */
 #define CAN_VISION_QUATERNION_ID 0x001  // 四元数发送ID
 #define CAN_VISION_COMMAND_ID 0xff      // 命令接收ID
+#define CAN_VISION_BULLET_SPEED_ID 0x110
 
 /**
  * @brief 上位机命令数据结构体
@@ -46,5 +47,10 @@ void CanVisionTask(void);
  */
 CanVisionCommand_t *CanVisionGetCommand(void);
 
-#endif // CAN_VISION_H
+void CanVisionSetBulletSpeed(float speed_mps);
 
+void CanVisionSetMode(uint8_t mode);
+void CanVisionSetShootMode(uint8_t shoot_mode);
+void CanVisionSetFeedforwardAngle(float ft_angle_rad);
+
+#endif // CAN_VISION_H

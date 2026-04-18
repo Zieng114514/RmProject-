@@ -63,6 +63,8 @@ typedef struct
     DaemonInstance* daemon;
     uint32_t feed_cnt;
     float dt;
+
+    uint8_t motor_idx;  // 电机在全局数组中的索引(用于频率监测)
 } DJIMotorInstance;
 
 /**

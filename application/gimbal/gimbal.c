@@ -1,5 +1,6 @@
 // 云台模块：负责 yaw/pitch 两轴的初始化与任务控制
 #include "gimbal.h"
+#include <math.h>
 // 机器人参数宏：尺寸、安装偏置、角度单位转换等
 #include "robot_def.h"
 #include "robot_cmd.h"
@@ -11,8 +12,7 @@
 #include "ins_task.h"
 // 发布订阅消息中心：云台与上层 cmd 模块通信
 #include "message_center.h"
-// CAN视觉通信模块：接收上位机命令
-#include "can_vision.h"
+#include "sp_vision/sp_vision.h"
 // 通用宏/类型
 #include "general_def.h"
 // BMI088 传感器接口（云台常用 IMU）
@@ -72,22 +72,15 @@ static void ClearPIDState(PIDInstance *pid)
     pid->Pout = 0;
 }
 
-static Publisher_t *gimbal_pub;                   // 云台应用消息发布者(云台反馈给cmd)
-static Subscriber_t *gimbal_sub;                  // cmd控制消息订阅者
-static Subscriber_t *vision_cmd_sub;            // 上位机视觉命令订阅者
-static Gimbal_Upload_Data_s gimbal_feedback_data; // 回传给cmd的云台状态信息
-static Gimbal_Ctrl_Cmd_s gimbal_cmd_recv;         // 来自cmd的控制信息
-static CanVisionCommand_t vision_cmd_recv;        // 来自上位机的视觉控制命令
+static Publisher_t *gimbal_pub;                    // 云台应用消息发布者(云台反馈给cmd)
+static Subscriber_t *gimbal_sub;                   // cmd控制消息订阅者
+static Gimbal_Upload_Data_s gimbal_feedback_data;  // 回传给cmd的云台状态信息
+static Gimbal_Ctrl_Cmd_s gimbal_cmd_recv;          // 来自cmd的控制信息
+static SP_Vision_Recv_s *sp_vision_cmd_recv = NULL; // 来自sp_vision上位机的视觉控制命令
 
-// 缓启动参数
-#define GIMBAL_RAMP_RATE_YAW 0.03f    // Yaw轴缓启动速度(rad/任务周期)，约10 rad/s = 1.6圈/s
-#define GIMBAL_RAMP_RATE_PITCH 0.04f  // Pitch轴缓启动速度(rad/任务周期)，约6 rad/s
-static gimbal_mode_e last_gimbal_mode = GIMBAL_ZERO_FORCE; // 上一次的云台模式
-static float ramp_yaw_ref = 0;        // 缓启动时的yaw目标值
-static float ramp_pitch_ref = 0;      // 缓启动时的pitch目标值
-static uint8_t ramp_active = 0;      // 缓启动激活标志
-static float vision_yaw_ref = 0;        // 缓启动时的yaw目标值
-static float  vision_yaw_pitch_ref = 0;      // 缓启动时的pitch目标值
+// 视觉控制目标
+static float vision_yaw_ref = 0;   // 视觉目标yaw（下位机坐标系，角度制）
+static float vision_pitch_ref = 0; // 视觉目标pitch（下位机坐标系，角度制）
 
 //static BMI088Instance *bmi088; // 云台IMU
 void GimbalInit()
@@ -104,43 +97,24 @@ void GimbalInit()
         },
         .controller_param_init_config = {
             // IMU角度环PID配置（四环串级控制的最外环）
-            .imu_angle_PID = {
-                .Kp = 1.5,
-                .Ki = 2,
-                .Kd = 0,
-                .MaxOut = 500,
-                .DeadBand = 0.0,
-                .Improve = PID_Trapezoid_Intergral | PID_Integral_Limit | PID_Derivative_On_Measurement,
-                .IntegralLimit = 100,
-            },
-            // IMU角速度环PID配置（第二环）
-            .imu_speed_PID = {
-                .Kp = 2,  // IMU角速度环PID，可根据需要调整
-                .Ki = 1,
-                .Kd = 0,
-                .MaxOut = 300,
-                .DeadBand = 0,
-                .Improve = PID_Trapezoid_Intergral | PID_Integral_Limit | PID_Derivative_On_Measurement,
-                .IntegralLimit = 100,
-            },
             // 电机位置环PID（第三环）
             .angle_PID = {
-                .Kp = 35, // 8
-                .Ki = 20,
-                .Kd = 0.00,
-                .DeadBand = 0.0,
+                .Kp = 1.0f, // 8
+                .Ki = 0,
+                .Kd = 0.00f,
+                .DeadBand = 0.0f,
                 .Improve = PID_Trapezoid_Intergral | PID_Integral_Limit | PID_Derivative_On_Measurement,
                 .IntegralLimit = 50,
-                .MaxOut = 450,
+                .MaxOut = 8450,
             },
             // 电机速度环PID（最内环）
             .speed_PID = {
-                .Kp = 35,  // 50
-                .Ki = 50, // 200
-                .Kd = 0.00,
+                .Kp =6000,  // 50
+                .Ki = 200, // 200
+                .Kd = 0.00f,
                 .Improve = PID_Trapezoid_Intergral | PID_Integral_Limit | PID_Derivative_On_Measurement,
                 .IntegralLimit = 1000,
-                .MaxOut = 7000,
+                .MaxOut = 13000,
             },
             // IMU反馈指针
             .other_angle_feedback_ptr = &gimba_IMU_data->YawTotalAngle,  // IMU角度反馈
@@ -165,21 +139,21 @@ void GimbalInit()
         },
         .controller_param_init_config = {
             .angle_PID = {
-                .Kp = 0.405,  // 角度环增益，根据实际调试调整
-                .Ki = 0.02,   // 积分项暂时关闭，避免漂移
-                .Kd = 0.0,  // 微分项
-                .DeadBand = 0.00,
+                .Kp = 0.850f,  // 角度环增益，根据实际调试调整
+                .Ki = 0.1000f,   // 积分项暂时关闭，避免漂移
+                .Kd = 0.0f,  // 微分项
+                .DeadBand = 0.00f,
                 .Improve = PID_Trapezoid_Intergral | PID_Integral_Limit | PID_Derivative_On_Measurement,
                 .IntegralLimit = 5,
-                .MaxOut = 10.25,
+                .MaxOut = 10.25f,
             },
             .speed_PID = {
-                .Kp = 0.05,  // 速度环增益
-                .Ki = 0.1,   // 积分项暂时关闭，避免漂移
-                .Kd = 0.0,  // 微分项
+                .Kp = 0.04f,  // 速度环增益
+                .Ki = 0.0f,   // 积分项暂时关闭，避免漂移
+                .Kd = 0.0f,  // 微分项
                 .Improve = PID_Trapezoid_Intergral | PID_Integral_Limit | PID_Derivative_On_Measurement,
                 .IntegralLimit = 2,
-                .MaxOut = 0.1,  // 限制最大输出（Nm）
+                .MaxOut = 1.5f,  // 限制最大输出（Nm）
             },
 			.other_angle_feedback_ptr = &gimba_IMU_data->Roll,  // 使用展开后的pitch角度反馈，避免±180°跳变
             .other_speed_feedback_ptr = &gimba_IMU_data->Gyro[1], // 使用pitch轴角速度反馈(Y轴)
@@ -189,7 +163,7 @@ void GimbalInit()
             .speed_feedback_source = OTHER_FEED,   // 使用IMU反馈
             .outer_loop_type = ANGLE_LOOP,
             .close_loop_type = ANGLE_LOOP | SPEED_LOOP,  // 位置+速度双环控制
-            .motor_reverse_flag = MOTOR_DIRECTION_NORMAL,
+            .motor_reverse_flag = MOTOR_DIRECTION_REVERSE,
         },
         .motor_type = MOTOR_TYPE_NONE};  // DM电机类型，使用通用类型
 
@@ -202,9 +176,7 @@ void GimbalInit()
 
     gimbal_pub = PubRegister("gimbal_feed", sizeof(Gimbal_Upload_Data_s));
     gimbal_sub = SubRegister("gimbal_cmd", sizeof(Gimbal_Ctrl_Cmd_s));
-    
-    // 订阅上位机视觉命令
-    vision_cmd_sub = SubRegister("vision_cmd", sizeof(CanVisionCommand_t));
+    sp_vision_cmd_recv = SP_VisionGetRecvData();
 }
 
 /**
@@ -249,197 +221,73 @@ void GimbalInit()
 /* 机器人云台控制核心任务,后续考虑只保留IMU控制,不再需要电机的反馈 */
 void GimbalTask()
 {
+    uint8_t vision_control_enabled = 0;
+
     // 获取云台控制数据（可在上层加入"未收到数据"的保护策略）
     SubGetMessage(gimbal_sub, &gimbal_cmd_recv);
-    
-    // 获取上位机视觉命令
-    if (SubGetMessage(vision_cmd_sub, &vision_cmd_recv))
+
+    if (sp_vision_online && sp_vision_cmd_recv != NULL && sp_vision_cmd_recv->mode != 0u)
     {
-        // 如果收到上位机控制命令且control标志为1，则使用上位机的yaw和pitch值
-        if (vision_cmd_recv.control)
+        if (isfinite(sp_vision_cmd_recv->yaw) && isfinite(sp_vision_cmd_recv->pitch))
         {
-            // 上位机发送的是弧度制，需要转换为角度制（度）
-            // 弧度转角度：乘以 180/π ≈ 57.295779513
-            vision_yaw_ref = vision_cmd_recv.yaw * 57.295779513f;
-            vision_yaw_pitch_ref = vision_cmd_recv.pitch * 57.295779513f;
-            // 注意：可以根据vision_cmd_recv.shoot等参数进一步处理发射控制
+            // sp_vision发送的是弧度制，下位机云台控制链内部使用角度制
+            vision_yaw_ref = sp_vision_cmd_recv->yaw * 57.295779513f;
+            vision_pitch_ref = -sp_vision_cmd_recv->pitch * 57.295779513f;
+            vision_control_enabled = 1u;
         }
     }
    // 说明：推荐统一使用 IMU 的姿态数据作为反馈源
    // yaw 的编码器 offset 仅用于与底盘的相对关系（底盘跟随/解耦）；视觉模式在 robot_cmd 中已处理为 yaw/pitch 期望
     switch (gimbal_cmd_recv.gimbal_mode) {
-        // 停止
         case GIMBAL_ZERO_FORCE:
             DJIMotorStop(yaw_motor);
-            // DM4310 MIT 模式停止控制（设置为零电流）
             if (pitch_motor != NULL) {
                 DMMotorStop(pitch_motor);
             }
-            // 清空yaw轴所有PID控制器的状态
             if (yaw_motor != NULL) {
                 ClearPIDState(&yaw_motor->motor_controller.current_PID);
                 ClearPIDState(&yaw_motor->motor_controller.speed_PID);
                 ClearPIDState(&yaw_motor->motor_controller.angle_PID);
-                ClearPIDState(&yaw_motor->motor_controller.imu_angle_PID);
-                ClearPIDState(&yaw_motor->motor_controller.imu_speed_PID);
             }
-            // 清空pitch轴所有PID控制器的状态
             if (pitch_motor != NULL) {
                 ClearPIDState(&pitch_motor->current_PID);
                 ClearPIDState(&pitch_motor->speed_PID);
                 ClearPIDState(&pitch_motor->angle_PID);
             }
-            // 重置缓启动标志
-            ramp_active = 0;
             break;
-            // 使用陀螺仪的反馈,底盘根据yaw电机的offset跟随云台或视觉模式采用ß
-        case GIMBAL_GYRO_MODE: // 后续只保留此模式
-            // 检测是否从ZERO_FORCE切换到GYRO_MODE，如果是则启动缓启动
-            if (last_gimbal_mode == GIMBAL_ZERO_FORCE && gimba_IMU_data != NULL)
-            {
-                // 记录当前IMU角度作为缓启动起始点
-                ramp_yaw_ref = gimba_IMU_data->YawTotalAngle;
-                ramp_pitch_ref = gimba_IMU_data->Roll; // Pitch使用Roll轴（根据初始化配置）
-                ramp_active = 1; // 激活缓启动
-            }
-            
-            // 缓启动逻辑：从起始角度逐渐过渡到目标角度
-            if (ramp_active)
-            {
-                float target_yaw = gimbal_cmd_recv.yaw;
-                float target_pitch = gimbal_cmd_recv.pitch;
-                
-                // Yaw轴缓启动
-                float yaw_diff = target_yaw - ramp_yaw_ref;
-                if (fabsf(yaw_diff) > GIMBAL_RAMP_RATE_YAW)
-                {
-                    // 限制单次变化量
-                    if (yaw_diff > 0)
-                        ramp_yaw_ref += GIMBAL_RAMP_RATE_YAW;
-                    else
-                        ramp_yaw_ref -= GIMBAL_RAMP_RATE_YAW;
-                }
-                else
-                {
-                    ramp_yaw_ref = target_yaw;
-                }
-                
-                // Pitch轴缓启动
-                float pitch_diff = target_pitch - ramp_pitch_ref;
-                if (fabsf(pitch_diff) > GIMBAL_RAMP_RATE_PITCH)
-                {
-                    // 限制单次变化量
-                    if (pitch_diff > 0)
-                        ramp_pitch_ref += GIMBAL_RAMP_RATE_PITCH;
-                    else
-                        ramp_pitch_ref -= GIMBAL_RAMP_RATE_PITCH;
-                }
-                else
-                {
-                    ramp_pitch_ref = target_pitch;
-                    // 如果yaw也到达目标，关闭缓启动
-                    if (fabsf(target_yaw - ramp_yaw_ref) <= GIMBAL_RAMP_RATE_YAW)
-                        ramp_active = 0;
-                }
-            }
-            else
-            {
-                // 缓启动完成，直接使用目标值
-                ramp_yaw_ref = gimbal_cmd_recv.yaw;
-                ramp_pitch_ref = gimbal_cmd_recv.pitch;
-            }
-            
-            // YAW轴控制 - 四环串级控制（IMU角度-IMU角速度-电机位置-电机速度）
-            // 控制流程在dji_motor.c的DJIMotorControl()中自动完成
+
+        case GIMBAL_GYRO_MODE:
+        case GIMBAL_FREE_MODE:
             DJIMotorEnable(yaw_motor);
-            DJIMotorChangeFeed(yaw_motor, ANGLE_LOOP, MOTOR_FEED);
-            DJIMotorChangeFeed(yaw_motor, SPEED_LOOP, MOTOR_FEED);
-            // 使用缓启动后的目标角度
-            DJIMotorSetRef(yaw_motor, ramp_yaw_ref);
+            DJIMotorChangeFeed(yaw_motor, ANGLE_LOOP, OTHER_FEED);
+            DJIMotorChangeFeed(yaw_motor, SPEED_LOOP, OTHER_FEED);
 
-            // PITCH轴控制 - DM4310电机使用位置+速度双环控制
-            // 注意：DM电机的反馈源在初始化时已设置为OTHER_FEED（IMU），运行时无需修改
-            DMMotorEnable(pitch_motor);  // 启用pitch电机
-            DMMotorOuterLoop(pitch_motor, ANGLE_LOOP);  // 设置外环为角度环控制
-            DMMotorSetRef(pitch_motor, ramp_pitch_ref);  // 使用缓启动后的目标角度
+            DMMotorEnable(pitch_motor);
+            DMMotorOuterLoop(pitch_motor, ANGLE_LOOP);
+
+            if (vision_control_enabled)
+            {
+                // sp_vision侧的yaw/pitch均为弧度制，且与当前下位机机械坐标系方向相反
+                DJIMotorSetRef(yaw_motor, -vision_yaw_ref);
+                DMMotorSetRef(pitch_motor, -vision_pitch_ref);
+            }
+            else if (gimbal_cmd_recv.gimbal_mode == GIMBAL_GYRO_MODE)
+            {
+                DJIMotorSetRef(yaw_motor, gimbal_cmd_recv.yaw);
+                DMMotorSetRef(pitch_motor, gimbal_cmd_recv.pitch);
+            }
+            else if (gimba_IMU_data != NULL)
+            {
+                DJIMotorSetRef(yaw_motor, gimba_IMU_data->YawTotalAngle);
+                DMMotorSetRef(pitch_motor, gimba_IMU_data->Roll);
+            }
             break;
 
-
-
-            case GIMBAL_FREE_MODE:
-                            // 检测是否从ZERO_FORCE切换到GYRO_MODE，如果是则启动缓启动
-            if (last_gimbal_mode == GIMBAL_ZERO_FORCE && gimba_IMU_data != NULL)
-            {
-                // 记录当前IMU角度作为缓启动起始点
-                ramp_yaw_ref = gimba_IMU_data->YawTotalAngle;
-                ramp_pitch_ref = gimba_IMU_data->Roll; // Pitch使用Roll轴（根据初始化配置）
-                ramp_active = 1; // 激活缓启动
-            }
-            
-            // 缓启动逻辑：从起始角度逐渐过渡到目标角度
-            if (ramp_active)
-            {
-                float target_yaw = gimbal_cmd_recv.yaw;
-                float target_pitch = gimbal_cmd_recv.pitch;
-                
-                // Yaw轴缓启动
-                float yaw_diff = target_yaw - ramp_yaw_ref;
-                if (fabsf(yaw_diff) > GIMBAL_RAMP_RATE_YAW)
-                {
-                    // 限制单次变化量
-                    if (yaw_diff > 0)
-                        ramp_yaw_ref += GIMBAL_RAMP_RATE_YAW;
-                    else
-                        ramp_yaw_ref -= GIMBAL_RAMP_RATE_YAW;
-                }
-                else
-                {
-                    ramp_yaw_ref = target_yaw;
-                }
-                
-                // Pitch轴缓启动
-                float pitch_diff = target_pitch - ramp_pitch_ref;
-                if (fabsf(pitch_diff) > GIMBAL_RAMP_RATE_PITCH)
-                {
-                    // 限制单次变化量
-                    if (pitch_diff > 0)
-                        ramp_pitch_ref += GIMBAL_RAMP_RATE_PITCH;
-                    else
-                        ramp_pitch_ref -= GIMBAL_RAMP_RATE_PITCH;
-                }
-                else
-                {
-                    ramp_pitch_ref = target_pitch;
-                    // 如果yaw也到达目标，关闭缓启动
-                    if (fabsf(target_yaw - ramp_yaw_ref) <= GIMBAL_RAMP_RATE_YAW)
-                        ramp_active = 0;
-                }
-            }
-            else
-            {
-                // 缓启动完成，直接使用目标值
-                ramp_yaw_ref = -vision_yaw_ref;
-                ramp_pitch_ref = vision_yaw_pitch_ref;
-            }
-            
-            // YAW轴控制 - 四环串级控制（IMU角度-IMU角速度-电机位置-电机速度）
-            // 控制流程在dji_motor.c的DJIMotorControl()中自动完成
-            DJIMotorEnable(yaw_motor);
-            DJIMotorChangeFeed(yaw_motor, ANGLE_LOOP, MOTOR_FEED);
-            DJIMotorChangeFeed(yaw_motor, SPEED_LOOP, MOTOR_FEED);
-            // 使用缓启动后的目标角度
-            DJIMotorSetRef(yaw_motor, ramp_yaw_ref);
-
-            // PITCH轴控制 - DM4310电机使用位置+速度双环控制
-            // 注意：DM电机的反馈源在初始化时已设置为OTHER_FEED（IMU），运行时无需修改
-            DMMotorEnable(pitch_motor);  // 启用pitch电机
-            DMMotorOuterLoop(pitch_motor, ANGLE_LOOP);  // 设置外环为角度环控制
-            DMMotorSetRef(pitch_motor, ramp_pitch_ref);  // 使用缓启动后的目标角度
-            break;
-            // 云台自由模式,使用编码器反馈,底盘和云台分离,仅云台旋转,一般用于调整云台姿态(英雄吊射等)/能量机关
         default:
             break;
     }
+
+    SP_Vision_Set_Mode(SP_VISION_MODE_AIM);
 
     // 在合适的地方添加pitch重力补偿前馈力矩
     // 根据IMU姿态/pitch电机角度反馈计算出当前配重下的重力矩
@@ -449,10 +297,22 @@ void GimbalTask()
     gimbal_feedback_data.gimbal_imu_data = *gimba_IMU_data;
     gimbal_feedback_data.yaw_motor_single_round_angle = yaw_motor->measure.angle_single_round;
 
+    SP_Vision_Set_BulletSpeed(23.0f);
+    SP_Vision_Set_BulletCount(0u);
+    SP_Vision_Set_EnemyColor(COLOR_RED);
+
+    if (gimba_IMU_data != NULL)
+    {
+        float q[4] = {QEKF_INS.q[0], QEKF_INS.q[1], QEKF_INS.q[2], QEKF_INS.q[3]};
+        SP_Vision_Set_GimbalAttitude(
+            gimba_IMU_data->YawTotalAngle / 180.0f * PI,
+            gimba_IMU_data->Gyro[2],
+            gimba_IMU_data->Roll / 180.0f * PI,
+            gimba_IMU_data->Gyro[1],
+            q);
+    }
 
 
-    // 更新上一次的模式状态
-    last_gimbal_mode = gimbal_cmd_recv.gimbal_mode;
 
     // 推送消息
     PubPushMessage(gimbal_pub, (void *)&gimbal_feedback_data);

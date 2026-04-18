@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cckcB0vl.s 			page 1
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc4z5fBG.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cckcB0vl.s 			page 1
   36              		.cfi_offset 14, -4
   37 0002 83B0     		sub	sp, sp, #12
   38              	.LCFI1:
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cckcB0vl.s 			page 2
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc4z5fBG.s 			page 2
 
 
   39              		.cfi_def_cfa_offset 16
@@ -101,7 +101,7 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cckcB0vl.s 			page 1
   72              	.LVL1:
   73              	.LFB240:
   27:bsp/usb/bsp_usb.c **** 
-  28:bsp/usb/bsp_usb.c **** void USBTransmit(uint8_t *buffer, uint16_t len)
+  28:bsp/usb/bsp_usb.c **** uint8_t USBTransmit(uint8_t *buffer, uint16_t len)
   29:bsp/usb/bsp_usb.c **** {
   74              		.loc 1 29 1 is_stmt 1 view -0
   75              		.cfi_startproc
@@ -113,40 +113,41 @@ ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cckcB0vl.s 			page 1
   81              		.cfi_def_cfa_offset 8
   82              		.cfi_offset 3, -8
   83              		.cfi_offset 14, -4
-  30:bsp/usb/bsp_usb.c ****     CDC_Transmit_FS(buffer, len); // 发送
+  30:bsp/usb/bsp_usb.c ****     return CDC_Transmit_FS(buffer, len); // 发送并返回底层状态
   84              		.loc 1 30 5 is_stmt 1 view .LVU9
-  85 0002 FFF7FEFF 		bl	CDC_Transmit_FS
-  86              	.LVL2:
+  85              		.loc 1 30 12 is_stmt 0 view .LVU10
+  86 0002 FFF7FEFF 		bl	CDC_Transmit_FS
+  87              	.LVL2:
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc4z5fBG.s 			page 3
+
+
   31:bsp/usb/bsp_usb.c **** }
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cckcB0vl.s 			page 3
-
-
-  87              		.loc 1 31 1 is_stmt 0 view .LVU10
-  88 0006 08BD     		pop	{r3, pc}
-  89              		.cfi_endproc
-  90              	.LFE240:
-  92              		.section	.bss.bsp_usb_rx_buffer,"aw",%nobits
-  93              		.align	2
-  96              	bsp_usb_rx_buffer:
-  97 0000 00000000 		.space	4
-  98              		.text
-  99              	.Letext0:
- 100              		.file 2 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_ty
- 101              		.file 3 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_stdint.h"
- 102              		.file 4 "Inc/usbd_cdc_if.h"
- 103              		.file 5 "bsp/usb/bsp_usb.h"
-ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cckcB0vl.s 			page 4
+  88              		.loc 1 31 1 view .LVU11
+  89 0006 08BD     		pop	{r3, pc}
+  90              		.cfi_endproc
+  91              	.LFE240:
+  93              		.section	.bss.bsp_usb_rx_buffer,"aw",%nobits
+  94              		.align	2
+  97              	bsp_usb_rx_buffer:
+  98 0000 00000000 		.space	4
+  99              		.text
+ 100              	.Letext0:
+ 101              		.file 2 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_ty
+ 102              		.file 3 "/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_stdint.h"
+ 103              		.file 4 "Inc/usbd_cdc_if.h"
+ 104              		.file 5 "bsp/usb/bsp_usb.h"
+ARM GAS  /var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc4z5fBG.s 			page 4
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 bsp_usb.c
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cckcB0vl.s:21     .text.USBInit:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cckcB0vl.s:27     .text.USBInit:00000000 USBInit
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cckcB0vl.s:60     .text.USBInit:00000018 $d
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cckcB0vl.s:96     .bss.bsp_usb_rx_buffer:00000000 bsp_usb_rx_buffer
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cckcB0vl.s:65     .text.USBTransmit:00000000 $t
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cckcB0vl.s:71     .text.USBTransmit:00000000 USBTransmit
-/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cckcB0vl.s:93     .bss.bsp_usb_rx_buffer:00000000 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc4z5fBG.s:21     .text.USBInit:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc4z5fBG.s:27     .text.USBInit:00000000 USBInit
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc4z5fBG.s:60     .text.USBInit:00000018 $d
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc4z5fBG.s:97     .bss.bsp_usb_rx_buffer:00000000 bsp_usb_rx_buffer
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc4z5fBG.s:65     .text.USBTransmit:00000000 $t
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc4z5fBG.s:71     .text.USBTransmit:00000000 USBTransmit
+/var/folders/kr/_85zhnz53vldd5tqwnc25svm0000gn/T//cc4z5fBG.s:94     .bss.bsp_usb_rx_buffer:00000000 $d
 
 UNDEFINED SYMBOLS
 CDCInitRxbufferNcallback
