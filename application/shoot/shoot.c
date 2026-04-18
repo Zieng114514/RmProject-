@@ -104,7 +104,7 @@ void ShootInit()
         .controller_param_init_config = {
             .angle_PID = {
                 // 如果启用位置环来控制发弹,需要较大的I值保证输出力矩的线性度否则出现接近拨出的力矩大幅下降
-                .Kp = 688, // 10
+                .Kp = 1688, // 10
                 .Ki = 0,
                 .Kd = 0,
                 .MaxOut = 10000,
@@ -118,8 +118,8 @@ void ShootInit()
                 .MaxOut = 16000,
             },
             .current_PID = {
-                .Kp = 0.5, // 0.7
-                .Ki = 0.1, // 0.1
+                .Kp = 0.55, // 0.7
+                .Ki = 0.0, // 0.1
                 .Kd = 0,
                 .Improve = PID_Integral_Limit,
                 .IntegralLimit = 5000,

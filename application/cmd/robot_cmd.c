@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 // app
 #include "robot_def.h"
 #include "robot_cmd.h"
@@ -77,6 +79,7 @@ static Publisher_t *gimbal_cmd_pub;            // 云台控制消息发布者
 static Subscriber_t *gimbal_feed_sub;          // 云台反馈信息订阅者
 static Gimbal_Ctrl_Cmd_s gimbal_cmd_send;      // 传递给云台的控制信息
 static Gimbal_Upload_Data_s gimbal_fetch_data; // 从云台获取的反馈信息
+static gimbal_mode_e last_gimbal_mode = GIMBAL_ZERO_FORCE; // 记录上一次云台模式，用于模式切换时同步目标值
 
 static Publisher_t *shoot_cmd_pub;           // 发射控制消息发布者
 static Subscriber_t *shoot_feed_sub;         // 发射反馈信息订阅者
@@ -89,8 +92,8 @@ static Robot_Status_e robot_state; // 机器人整体工作状态
 static SP_Vision_Recv_s *vision_cmd_recv = NULL; // 上位机视觉命令缓存
 
 // 视觉单发控制节流/保持时间
-#define VISION_SHOT_INTERVAL_MS 80u           // 两次单发的最小间隔(毫秒)
-#define VISION_SINGLE_SHOT_HOLD_MS 80u        // 单发命令保持时间(毫秒)，确保角度环执行完成
+#define VISION_SHOT_INTERVAL_MS 40u           // 两次单发的最小间隔(毫秒)
+#define VISION_SINGLE_SHOT_HOLD_MS 40u        // 单发命令保持时间(毫秒)，确保角度环执行完成
 static uint32_t vision_last_shot_ms = 0;       // 上一次触发单发的时间戳
 static uint32_t vision_single_shot_until = 0;  // 当前单发保持截止时间戳
 static uint8_t  vision_single_shot_active = 0; // 是否处于单发执行期
@@ -178,28 +181,40 @@ static void CalcOffsetAngle()
 
 static void RemoteControlSet()
 {
-
 #if defined USE_SBUS
-
+    gimbal_mode_e current_gimbal_mode = GIMBAL_ZERO_FORCE;
 
     // 控制底盘和云台运行模式,云台待添加,云台是否始终使用IMU数据?
     if (switch_is_down(rc_data[TEMP].rc.switch_right)) // 右侧开关状态[下],底盘跟随云台
     {
-        gimbal_cmd_send.gimbal_mode = GIMBAL_FREE_MODE;
-
+        current_gimbal_mode = GIMBAL_FREE_MODE;
     }
     else if (switch_is_mid(rc_data[TEMP].rc.switch_right)) // 右侧开关状态[中],底盘和云台分离,底盘保持不转动
     {
-        gimbal_cmd_send.gimbal_mode = GIMBAL_GYRO_MODE;
+        current_gimbal_mode = GIMBAL_GYRO_MODE;
+    }
+    else if (switch_is_up(rc_data[TEMP].rc.switch_right)) // 右侧开关状态[上],底盘和云台分离,底盘保持不转动
+    {
+        current_gimbal_mode = GIMBAL_ZERO_FORCE;
+    }
+
+    if (last_gimbal_mode == GIMBAL_ZERO_FORCE && current_gimbal_mode != GIMBAL_ZERO_FORCE)
+    {
+        gimbal_cmd_send.yaw = gimbal_fetch_data.gimbal_imu_data.YawTotalAngle;
+        gimbal_cmd_send.pitch = gimbal_fetch_data.gimbal_imu_data.Roll;
+        LIMIT_MIN_MAX(gimbal_cmd_send.pitch, pitch_limit_up, pitch_limit_down);
+    }
+
+    gimbal_cmd_send.gimbal_mode = current_gimbal_mode;
+
+    if (current_gimbal_mode == GIMBAL_GYRO_MODE)
+    {
         gimbal_cmd_send.yaw += 0.0005f * (float)rc_data[TEMP].rc.rocker_l_;
         gimbal_cmd_send.pitch += 0.0005f * (float)rc_data[TEMP].rc.rocker_l1;
         LIMIT_MIN_MAX(gimbal_cmd_send.pitch, pitch_limit_up, pitch_limit_down);
     }
-    else if (switch_is_up(rc_data[TEMP].rc.switch_right)) // 右侧开关状态[上],底盘和云台分离,底盘保持不转动
-    {
-        gimbal_cmd_send.gimbal_mode = GIMBAL_ZERO_FORCE;
 
-    }
+    last_gimbal_mode = current_gimbal_mode;
         ; // 弹舱舵机控制,待添加servo_motor模块,关闭
 
     // 摩擦轮开关由右侧三段拨杆控制：中/下=开启，其余=关闭
