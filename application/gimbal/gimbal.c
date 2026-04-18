@@ -139,8 +139,8 @@ void GimbalInit()
         },
         .controller_param_init_config = {
             .angle_PID = {
-                .Kp = 0.850f,  // 角度环增益，根据实际调试调整
-                .Ki = 0.1000f,   // 积分项暂时关闭，避免漂移
+                .Kp = 0.02f,  // 角度环增益，根据实际调试调整
+                .Ki = 0.0f,   // 积分项暂时关闭，避免漂移
                 .Kd = 0.0f,  // 微分项
                 .DeadBand = 0.00f,
                 .Improve = PID_Trapezoid_Intergral | PID_Integral_Limit | PID_Derivative_On_Measurement,
@@ -148,15 +148,15 @@ void GimbalInit()
                 .MaxOut = 10.25f,
             },
             .speed_PID = {
-                .Kp = 0.04f,  // 速度环增益
+                .Kp = 0.08f,  // 速度环增益
                 .Ki = 0.0f,   // 积分项暂时关闭，避免漂移
                 .Kd = 0.0f,  // 微分项
                 .Improve = PID_Trapezoid_Intergral | PID_Integral_Limit | PID_Derivative_On_Measurement,
                 .IntegralLimit = 2,
                 .MaxOut = 1.5f,  // 限制最大输出（Nm）
             },
-			.other_angle_feedback_ptr = &gimba_IMU_data->Roll,  // 使用展开后的pitch角度反馈，避免±180°跳变
-            .other_speed_feedback_ptr = &gimba_IMU_data->Gyro[1], // 使用pitch轴角速度反馈(Y轴)
+			.other_angle_feedback_ptr = &gimba_IMU_data->Roll,  // 控制板安装方向导致Roll轴实际对应机械pitch轴
+            .other_speed_feedback_ptr = &gimba_IMU_data->Gyro[1], // 与Roll保持同一物理轴，避免角度环/速度环轴不一致
         },
         .controller_setting_init_config = {
             .angle_feedback_source = OTHER_FEED,  // 使用IMU反馈

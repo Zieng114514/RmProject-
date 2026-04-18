@@ -222,25 +222,14 @@ void DMMotorTask(void const *argument)
             // 限制输出范围
             LIMIT_MIN_MAX(pid_ref, DM_T_MIN, DM_T_MAX);
             
-            // 设置发送数据
-            // 对于MIT模式，position_des和velocity_des应该是期望值，而不是当前测量值
-            // 这里我们使用PID计算后的结果作为期望值
-            if (setting->outer_loop_type == ANGLE_LOOP) {
-                // 位置控制模式：position_des为目标位置，velocity_des为PID输出的速度期望
-                motor_send_mailbox.position_des = float_to_uint(motor->pid_ref, DM_P_MIN, DM_P_MAX, 16);
-                motor_send_mailbox.velocity_des = float_to_uint(pid_ref, DM_V_MIN, DM_V_MAX, 12);
-            } else if (setting->outer_loop_type == SPEED_LOOP) {
-                // 速度控制模式：velocity_des为目标速度
-                motor_send_mailbox.position_des = float_to_uint(measure->position, DM_P_MIN, DM_P_MAX, 16);
-                motor_send_mailbox.velocity_des = float_to_uint(motor->pid_ref, DM_V_MIN, DM_V_MAX, 12);
-            } else {
-                // 电流控制模式：torque_des为目标电流
-                motor_send_mailbox.position_des = float_to_uint(measure->position, DM_P_MIN, DM_P_MAX, 16);
-                motor_send_mailbox.velocity_des = float_to_uint(measure->velocity, DM_V_MIN, DM_V_MAX, 12);
-            }
-            
+            // 发送数据:
+            // MCU侧完成角度环/速度环闭环后，最终输出pid_ref直接作为MIT力矩指令。
+            // 不再通过MIT的position_des / velocity_des继续做位置或速度控制，
+            // 避免电机内部控制行为与MCU外部双环叠加，造成响应发软、震荡或毛刺。
+            motor_send_mailbox.position_des = float_to_uint(measure->position, DM_P_MIN, DM_P_MAX, 16);
+            motor_send_mailbox.velocity_des = float_to_uint(measure->velocity, DM_V_MIN, DM_V_MAX, 12);
             motor_send_mailbox.torque_des = float_to_uint(pid_ref, DM_T_MIN, DM_T_MAX, 12);
-            motor_send_mailbox.Kp = 0; // DM电机MIT模式不需要Kp/Kd
+            motor_send_mailbox.Kp = 0;
             motor_send_mailbox.Kd = 0;
         }
 
